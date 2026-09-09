@@ -1,5 +1,5 @@
 # Tribble Tribune (SportsMed)
-Dabbling in the world of Orthopaedic Market Data Insights &amp; Trends, focusing on Upper Extremity solutions.
+Dabbling in the world of Orthopaedic Market Data Insights &amp; Trends, focusing on Upper Extremity solutions.  
 <br />
-<p style="font-family: cursive;">By Alvin Kuek
+*By Alvin Kuek*
 </p>
