@@ -6,6 +6,28 @@
 </body>
 </html>
 
+<!-- Container where README will render -->
+<div id="readme-content" style="max-width: 1100px; margin: 0 auto 24px auto; font-family: sans-serif; line-height: 1.6;">
+    <em>Loading project documentation...</em>
+</div>
+ 
+<!-- Marked library for parsing Markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    fetch('./README.md')
+        .then(response => {
+            if (!response.ok) throw new Error('Could not load README.md');
+            return response.text();
+        })
+        .then(markdownText => {
+            document.getElementById('readme-content').innerHTML = marked.parse(markdownText);
+        })
+        .catch(err => {
+            document.getElementById('readme-content').innerHTML = '';
+        });
+</script>
+ 
+
 # How-to : Interactive Charts
 Based on latest up-to-date web scraping (with the help of my dear friend Gemini). Balls size represents market share, along with ultimate load to failure range documented (representing the anchors' confidence intervals).
 All-suture adoption to date has advanced significantly faster compared to medial-row adoption, highlighting a slight difference in clinical acceptance at pathology level comparing Bankart (labral) repairs versus rotator cuffs.
