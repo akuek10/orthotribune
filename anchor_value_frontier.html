@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoulder Anchor Value Frontier</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 40px 20px 80px 20px;
+        }
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+        }
+        .header {
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+        p.subtitle {
+            margin: 0;
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: #475569;
+        }
+        .chart-block {
+            margin-bottom: 32px;
+        }
+        .takeaway-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+        .takeaway-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 18px 22px;
+        }
+        .takeaway-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .takeaway-card p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Shoulder Suture Anchor Economics &amp; Value Frontier</h1>
+            <p class="subtitle">
+                Evaluating the relationship between construct market selling prices ($ USD), secondary failure/revision rates (%), 
+                and clinical improvement on the ASES score (represented by bubble diameter).
+            </p>
+        </div>
+
+        <div class="chart-block">
+            <div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.5.0.min.js" integrity="sha256-fHbNLP+GlIXN+efbQec78UkemUz3NJp7UmfGxC1tNxs=" crossorigin="anonymous"></script>                <div id="739e942a-d4be-4020-9826-50269d2a5791" class="plotly-graph-div" style="height:560px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("739e942a-d4be-4020-9826-50269d2a5791")) {                    Plotly.newPlot(                        "739e942a-d4be-4020-9826-50269d2a5791",                        [{"customdata":[["2x Knotted Metal\u002fPLLA",32.0,"Achieves MCID (+32.0 pts)","Historical 2-anchor standard; higher recurrent instability."],["3x PEEK\u002fBiocomposite",38.5,"Achieves MCID (+38.5 pts)","Intermediate solid anchor standard; reduced re-dislocation."],["3-4x Knotless\u002fAll-Suture",43.4,"Achieves MCID (+43.4 pts)","Modern bone-preserving standard; lowest recurrence (\u003c8%)."]],"hovertemplate":"\u003cb\u003e%{customdata[0]}\u003c\u002fb\u003e\u003cbr\u003eMarket Selling Cost: \u003cb\u003e$%{x:,.0f} USD\u003c\u002fb\u003e\u003cbr\u003eFailure \u002f Re-tear Rate: \u003cb\u003e%{y:.1f}%\u003c\u002fb\u003e\u003cbr\u003eNet ASES Gain: \u003cb\u003e+%{customdata[1]:.1f} pts\u003c\u002fb\u003e\u003cbr\u003eMCID Validation: \u003cb\u003e%{customdata[2]}\u003c\u002fb\u003e\u003cbr\u003e\u003ci\u003e%{customdata[3]}\u003c\u002fi\u003e\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#7EA8BE","line":{"color":"#475569","width":1.5},"opacity":0.88,"size":{"dtype":"f8","bdata":"AAAAAAAAQEAAAAAAAEBDQDMzMzMzs0VA"},"sizemode":"diameter","sizeref":1.0},"mode":"markers+text","name":"Bankart Instability","text":["2x Knotted Metal\u002fPLLA","3x PEEK\u002fBiocomposite","3-4x Knotless\u002fAll-Suture"],"textfont":{"color":"#1e293b","family":"Inter, -apple-system, sans-serif","size":11},"textposition":"top center","x":{"dtype":"i2","bdata":"vAIOBpIJ"},"y":{"dtype":"f8","bdata":"AAAAAACAMkAAAAAAAAAmQM3MzMzMzBxA"},"type":"scatter"},{"customdata":[["Single-Row (2x Knotted)",31.4,"Achieves MCID (+31.4 pts)","Historical medial row repair; elevated structural re-tear rate."],["Double-Row (Knotted\u002fKnotless)",38.8,"Achieves MCID (+38.8 pts)","Improved anatomical footprint compression and contact area."],["Knotless SutureBridge (TOE)",44.8,"Achieves MCID (+44.8 pts)","Gold-standard transosseous-equivalent footprint compression."]],"hovertemplate":"\u003cb\u003e%{customdata[0]}\u003c\u002fb\u003e\u003cbr\u003eMarket Selling Cost: \u003cb\u003e$%{x:,.0f} USD\u003c\u002fb\u003e\u003cbr\u003eFailure \u002f Re-tear Rate: \u003cb\u003e%{y:.1f}%\u003c\u002fb\u003e\u003cbr\u003eNet ASES Gain: \u003cb\u003e+%{customdata[1]:.1f} pts\u003c\u002fb\u003e\u003cbr\u003eMCID Validation: \u003cb\u003e%{customdata[2]}\u003c\u002fb\u003e\u003cbr\u003e\u003ci\u003e%{customdata[3]}\u003c\u002fi\u003e\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#95B8A2","line":{"color":"#475569","width":1.5},"opacity":0.88,"size":{"dtype":"f8","bdata":"ZmZmZmZmP0BmZmZmZmZDQGZmZmZmZkZA"},"sizemode":"diameter","sizeref":1.0},"mode":"markers+text","name":"Rotator Cuff Repair","text":["Single-Row (2x Knotted)","Double-Row (Knotted\u002fKnotless)","Knotless SutureBridge (TOE)"],"textfont":{"color":"#1e293b","family":"Inter, -apple-system, sans-serif","size":11},"textposition":"top center","x":{"dtype":"i2","bdata":"1ANgCbIM"},"y":{"dtype":"f8","bdata":"AAAAAACAOkAAAAAAAAAuQAAAAAAAACNA"},"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"shapes":[{"line":{"color":"#94a3b8","dash":"dot","width":1.5},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":10.0,"y1":10.0,"yref":"y"}],"annotations":[{"font":{"color":"#64748b","size":10.5},"showarrow":false,"text":"High-Efficacy Threshold (\u003c10% Failure)","x":1,"xanchor":"right","xref":"x domain","y":10.0,"yanchor":"top","yref":"y"}],"updatemenus":[{"buttons":[{"args":[{"visible":[true,true]}],"label":"All Anchor Fixation Constructs","method":"update"},{"args":[{"visible":[true,false]}],"label":"Bankart Instability Anchors Only","method":"update"},{"args":[{"visible":[false,true]}],"label":"Rotator Cuff Footprint Anchors Only","method":"update"}],"direction":"down","font":{"family":"Inter, -apple-system, sans-serif","size":11},"showactive":true,"type":"dropdown","x":0.01,"y":1.14}],"title":{"font":{"family":"Inter, -apple-system, sans-serif","size":15},"text":"\u003cb\u003eShoulder Anchor Value Frontier: Construct Cost (USD) vs. Structural Failure &amp; PROMs\u003c\u002fb\u003e","x":0.01,"y":0.98},"margin":{"l":50,"r":40,"t":105,"b":90},"legend":{"font":{"family":"Inter, -apple-system, sans-serif","size":11},"orientation":"h","yanchor":"top","y":-0.16,"xanchor":"center","x":0.5},"hoverlabel":{"font":{"size":11},"bgcolor":"white"},"plot_bgcolor":"rgba(0,0,0,0)","paper_bgcolor":"white","height":560,"xaxis":{"title":{"text":"Construct Market Selling Cost ($ USD)"},"tickprefix":"$","range":[400,3800],"dtick":500,"showgrid":true,"gridcolor":"#ebebeb","linecolor":"#d1d5db"},"yaxis":{"title":{"text":"Secondary Revision \u002f Failure Rate (%)"},"range":[0,32],"dtick":5,"showgrid":true,"gridcolor":"#ebebeb","linecolor":"#d1d5db"}},                        {"responsive": true}                    )                };            </script>        </div>
+        </div>
+
+        <div class="takeaway-grid">
+            <div class="takeaway-card" style="border-left: 3px solid #7EA8BE;">
+                <h4>Bankart Labral Anchors</h4>
+                <p>
+                    Transitioning from 2 knotted metallic anchors ($700 USD) to 3–4 modern knotless or all-suture anchors ($2,450 USD) 
+                    reduces recurrence rates from 18.5% down to 7.2%, avoiding high-cost secondary bone-graft revisions (Latarjet: $24,000+ USD).
+                </p>
+            </div>
+            <div class="takeaway-card" style="border-left: 3px solid #95B8A2;">
+                <h4>Rotator Cuff Footprint Fixation</h4>
+                <p>
+                    Upgrading from a single-row repair ($980 USD) to a transosseous-equivalent Knotless SutureBridge construct ($3,250 USD) 
+                    drops MRI-confirmed re-tear rates from 26.5% to 9.5%, while driving ASES functional recovery up to 44.8 net points.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
