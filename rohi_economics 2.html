@@ -64,31 +64,51 @@
             color: #0f172a;
         }
         .ref-card {
-            margin-top: 32px;
-            padding: 24px 28px;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-        }
-        .ref-title {
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-size: 15px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-        .ref-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            font-size: 12.5px;
-            line-height: 1.6;
-            color: #475569;
-        }
-        .ref-grid ul {
-            padding-left: 18px;
-            margin: 8px 0 0 0;
-        }
+    margin-top: 36px;
+    padding: 28px 32px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+.ref-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+}
+.ref-intro {
+    margin: 0 0 20px 0;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+}
+.ref-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Explicit 50/50 two-column split on desktop */
+    gap: 32px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #475569;
+}
+.ref-grid ul {
+    padding-left: 18px;
+    margin: 8px 0 0 0;
+}
+.ref-grid li {
+    margin-bottom: 10px;
+}
+ 
+/* On mobile/tablets (< 768px), stack the two columns gracefully */
+@media (max-width: 768px) {
+    .ref-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+ 
     </style>
 </head>
 <body>
