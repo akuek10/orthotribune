@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suture Anchor Science: Microarchitecture &amp; Footprint Mechanics</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 24px 14px 60px 14px; }
+        .container { max-width: 1120px; margin: 0 auto; background: #ffffff; padding: 32px 28px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
+        .header { margin-bottom: 20px; }
+        h1 { margin: 0 0 6px 0; font-size: 26px; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; }
+        .subtitle { margin: 0 0 6px 0; font-size: 14.5px; color: #475569; }
+        .author { margin: 0; font-size: 13px; font-style: italic; color: #64748b; }
+        
+        /* Master Navigation */
+        .master-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 24px 0; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+        .master-nav a { text-decoration: none; font-weight: 500; color: #475569; background-color: #ffffff; padding: 6px 14px; border-radius: 6px; border: 1px solid #e2e8f0; }
+        .master-nav a.active { font-weight: 600; color: #0f172a; background-color: #f1f5f9; border-color: #cbd5e1; }
+        
+        .chart-block { margin-bottom: 32px; padding: 18px 18px 24px 18px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .chart-caption { margin-top: 14px; font-size: 13px; line-height: 1.6; color: #475569; background-color: #f8fafc; padding: 14px 18px; border-radius: 8px; border-left: 3px solid #7EA8BE; }
+        .chart-caption strong { color: #0f172a; }
+
+        /* Evidence Translation Table */
+        .evidence-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 13px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+        .evidence-table th { background-color: #f1f5f9; color: #0f172a; font-weight: 600; text-align: left; padding: 12px 16px; border-bottom: 1px solid #cbd5e1; }
+        .evidence-table td { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #475569; line-height: 1.5; vertical-align: top; }
+        .evidence-table tr:last-child td { border-bottom: none; }
+
+        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 24px; margin-bottom: 24px; }
+        .matrix-card { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; font-size: 13px; line-height: 1.6; color: #475569; }
+        .matrix-card h4 { margin: 0 0 8px 0; font-size: 14.5px; font-weight: 700; color: #0f172a; }
+
+        .ref-card { margin-top: 32px; padding: 24px 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; width: 100%; box-sizing: border-box; }
+        .ref-title { margin-top: 0; margin-bottom: 10px; font-size: 15px; font-weight: 700; color: #0f172a; }
+        .ref-intro { margin: 0 0 16px 0; font-size: 13px; color: #64748b; line-height: 1.5; }
+        .ref-grid { display: flex; flex-wrap: wrap; gap: 28px; font-size: 12.5px; line-height: 1.6; color: #475569; }
+        .ref-col { flex: 1 1 320px; }
+        .ref-col ul { padding-left: 18px; margin: 8px 0 0 0; }
+        .ref-col li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>Suture Anchor Science: Microarchitecture &amp; Footprint Mechanics</h1>
+            <p class="subtitle">Matching anchor fixation mechanisms to regional cortical thickness and trabecular density across the rotator cuff and glenoid footprints.</p>
+            <p class="author">By Alvin Kuek</p>
+        </div>
+
+        <!-- Master Suite Navigation -->
+        <nav class="master-nav">
+            <a href="./index.html">🦴 Cuff &amp; Instability (Home)</a>
+            <a href="./economics.html">Suture Anchor Economics</a>
+            <a href="./anchor_footprints.html" class="active">🔬 Footprint Microarchitecture</a>
+            <a href="./graft_economics.html">RC Graft Clinical Evidence &amp; Indications</a>
+            <a href="./graft_economics 2.html">RC Graft Economics</a>
+            <a href="./rohi_economics 2.html">ROHI Selective Augmentation Economics</a>
+            <a href="./arthroplasty.html">🦾 TSA Economics (Executive Suite)</a>
+            <a href="./biceps.html" style="color: #94a3b8; background-color: #f8fafc; border: 1px dashed #cbd5e1;">Proximal Biceps (Soon)</a>
+        </nav>
+
+        <!-- Chart 1: Heatmap Grid -->
+        <div class="chart-block">
+            <div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.5.0.min.js" integrity="sha256-fHbNLP+GlIXN+efbQec78UkemUz3NJp7UmfGxC1tNxs=" crossorigin="anonymous"></script>                <div id="c2082921-c784-4a43-999c-11b5b25fa416" class="plotly-graph-div" style="height:410px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("c2082921-c784-4a43-999c-11b5b25fa416")) {                    Plotly.newPlot(                        "c2082921-c784-4a43-999c-11b5b25fa416",                        [{"colorbar":{"len":0.9,"thickness":14,"ticksuffix":"%","title":{"side":"top","text":"Trabecular\u003cbr\u003eBV\u002fTV (%)"}},"colorscale":[[0.0,"#D8A49B"],[0.5,"#F2C299"],[1.0,"#7EA8BE"]],"hoverinfo":"text","hovertext":[["\u003cb\u003eG1-P (Anterior-Proximal)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 26.4% (Dense Subchondral Plate)\u003cbr\u003eClinical: Medial Biceps Margin\u003cbr\u003eFixation: Subcortical All-Suture or Threaded Medial Anchor","\u003cb\u003eG2-P (Central-Proximal)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 29.8% (Highest Trabecular Density)\u003cbr\u003eClinical: Primary Supraspinatus Medial Row\u003cbr\u003eFixation: Ideal Zone for Primary Medial Purchase","\u003cb\u003eG3-P (Posterior-Proximal)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 22.1% (Good Trabecular Density)\u003cbr\u003eClinical: Infraspinatus Junction\u003cbr\u003eFixation: Standard Medial Row Anchor"],["\u003cb\u003eG1-I (Anterior-Intermediate)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 22.8% (Moderate Trabeculae)\u003cbr\u003eClinical: Anterior Footprint Center\u003cbr\u003eFixation: Threaded Biocomposite \u002f PEEK","\u003cb\u003eG2-I (Central-Intermediate)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 27.5% (Robust Trabeculae)\u003cbr\u003eClinical: Central Compression Bed\u003cbr\u003eFixation: Broad-Pitch Cancellous Anchor","\u003cb\u003eG3-I (Posterior-Intermediate)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 18.4% (Transitional)\u003cbr\u003eClinical: Infraspinatus Bed\u003cbr\u003eFixation: Standard Threaded Anchor"],["\u003cb\u003eG1-D (Anterior-Distal)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 15.2% (Low Trabecular Volume)\u003cbr\u003eClinical: Distal Lateral Cortex\u003cbr\u003eFixation: Requires Cortical Interference Purchase","\u003cb\u003eG2-D (Central-Distal)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 16.9% (Low Trabecular Volume)\u003cbr\u003eClinical: Lateral Row SutureBridge Site\u003cbr\u003eFixation: Knotless Cortical Interference Anchor","\u003cb\u003eG3-D (Posterior-Distal)\u003c\u002fb\u003e\u003cbr\u003eBV\u002fTV: 13.8% (Lowest Trabecular Volume)\u003cbr\u003eClinical: Posterolateral Gutter\u003cbr\u003eFixation: Rely on Lateral Cortical Wall Integrity"]],"text":[["26.4%","29.8%","22.1%"],["22.8%","27.5%","18.4%"],["15.2%","16.9%","13.8%"]],"texttemplate":"\u003cb\u003e%{text}\u003c\u002fb\u003e","x":["G1\u003cbr\u003e(Anterior)","G2\u003cbr\u003e(Central)","G3\u003cbr\u003e(Posterior)"],"y":["Proximal (Medial Margin)","Intermediate (Mid Footprint)","Distal (Lateral Margin)"],"z":[[26.4,29.8,22.1],[22.8,27.5,18.4],[15.2,16.9,13.8]],"type":"heatmap"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"title":{"font":{"family":"Inter, sans-serif","size":13},"text":"\u003cb\u003eGraphic 1: Greater Tuberosity Microarchitecture (Trabecular BV\u002fTV)\u003c\u002fb\u003e\u003cbr\u003e\u003csup\u003eSource: Kholinne et al. (2018). Highest trabecular density resides proximally\u002fcentrally (G2); lowest distally.\u003c\u002fsup\u003e","x":0.01,"y":0.96},"margin":{"l":175,"r":20,"t":80,"b":55},"hoverlabel":{"font":{"size":11},"bgcolor":"white"},"plot_bgcolor":"rgba(0,0,0,0)","paper_bgcolor":"white","height":410,"xaxis":{"tickangle":0,"linecolor":"#D1D5DB"},"yaxis":{"autorange":"reversed","linecolor":"#D1D5DB"}},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+            <div class="chart-caption" style="border-left-color: #7EA8BE;">
+                <strong>Footprint Density Mapping (Kholinne et al., 2018):</strong> Trabecular bone mineral density and volume fraction (BV/TV) are concentrated proximally along the subchondral margin and centrally within the main supraspinatus footprint (<strong>G2-P: 29.8%</strong>, <strong>G2-I: 27.5%</strong>). Conversely, trabecular density drops substantially along the distal margin and lateral sulcus (<strong>G1-D to G3-D: 13.8%–16.9%</strong>). Medial row anchors leverage denser subchondral and proximal trabeculae, whereas lateral row fixation relies primarily on lateral cortical wall interference rather than cancellous shear.
+            </div>
+        </div>
+
+        <!-- Chart 2: Empirical Regional Pullout -->
+        <div class="chart-block">
+            <div>                            <div id="03f3a4a7-e85b-40b0-adff-ddb64a60eaa9" class="plotly-graph-div" style="height:390px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("03f3a4a7-e85b-40b0-adff-ddb64a60eaa9")) {                    Plotly.newPlot(                        "03f3a4a7-e85b-40b0-adff-ddb64a60eaa9",                        [{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eMean Failure Load (Tingart et al.): \u003cb\u003e%{y} N\u003c\u002fb\u003e\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#7EA8BE","#D8A49B"]},"text":["273 N","184 N"],"textposition":"outside","width":0.45,"x":["Proximal Greater Tuberosity\u003cbr\u003e(Medial Row \u2014 Subchondral)","Distal Greater Tuberosity\u003cbr\u003e(Lateral Row \u2014 Thin Cancellous)"],"y":[273,184],"type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"title":{"font":{"family":"Inter, sans-serif","size":13},"text":"\u003cb\u003eGraphic 2: Empirical Regional Pullout Load by Footprint Zone (Tingart et al.)\u003c\u002fb\u003e\u003cbr\u003e\u003csup\u003eCadaveric proximal humerus testing (AJSM): Placement location and local bone quality significantly alter failure load.\u003c\u002fsup\u003e","x":0.01,"y":0.95},"margin":{"l":65,"r":30,"t":85,"b":65},"hoverlabel":{"font":{"size":11},"bgcolor":"white"},"plot_bgcolor":"rgba(0,0,0,0)","paper_bgcolor":"white","height":390,"yaxis":{"title":{"text":"Mean Ultimate Failure Load (Newtons)"},"range":[0,340],"dtick":50,"showgrid":true,"gridcolor":"#EBEBEB"},"xaxis":{"tickangle":0,"linecolor":"#D1D5DB"}},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+            <div class="chart-caption" style="border-left-color: #95B8A2;">
+                <strong>Fixation Resilience in Low-Quality Bone: Cortical Thickness vs. Trabecular Purchase:</strong> Cadaveric testing (Tingart et al.) demonstrates that anatomical placement significantly impacts failure load (<strong>273 N proximally vs. 184 N distally</strong>). Crucially, conventional threaded anchors rely substantially on cancellous thread purchase, whereas <strong>subcortical all-suture anchors</strong> deploy beneath the cortical shell. Biomechanical studies show that adjacent <em>cortical thickness</em> (with ~0.4 mm needed to withstand 200 N in human humerus models) rather than local trabecular BMD alone governs all-suture anchor pullout resistance—though absolute failure loads vary widely by construct design, insertion angle, and testing setup.
+            </div>
+        </div>
+
+        <!-- Evidence to Commercial Implication Translation Table -->
+        <h3 style="margin: 28px 0 12px 0; font-size: 16px; font-weight: 700; color: #0f172a;">Translating Biomechanical Literature into Clinical &amp; Value Decisions</h3>
+        <table class="evidence-table">
+            <thead>
+                <tr>
+                    <th style="width: 34%;">Empirical Biomechanical Finding</th>
+                    <th style="width: 33%;">Mechanistic Interpretation</th>
+                    <th style="width: 33%;">Clinical &amp; Economic Implication</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Regional Bone Quality Varies Markedly</strong><br><em>(Tingart et al.; Kholinne et al.)</em></td>
+                    <td>Proximal/central GT exhibits higher trabecular density than distal/lateral zones.</td>
+                    <td>Anchor selection cannot be one-size-fits-all; medial and lateral rows face distinct osseous environments.</td>
+                </tr>
+                <tr>
+                    <td><strong>Subcortical Cortical Engagement</strong><br><em>(Human Humerus Cortical Thickness Studies)</em></td>
+                    <td>All-suture anchors toggle beneath the cortex; adjacent cortical thickness (~0.4 mm threshold for 200 N) drives pullout resistance rather than local trabecular BMD alone.</td>
+                    <td>Preserving the cortical shell (avoiding aggressive decortication) is vital when deploying subcortical soft anchors.</td>
+                </tr>
+                <tr>
+                    <td><strong>Smaller Failure Defects</strong><br><em>(Cadaveric Pullout Cavity Analysis, 2020)</em></td>
+                    <td>Upon catastrophic pullout, all-suture anchors leave smaller cortical holes and cavitating bone defects than rigid threaded screws.</td>
+                    <td>Protects native bone stock, simplifying revision surgery and reducing the need for structural bone grafting.</td>
+                </tr>
+                <tr>
+                    <td><strong>High Construct &amp; Model Variability</strong><br><em>(Multi-Study Biomechanical Reviews)</em></td>
+                    <td>Published ASA failure loads span ~133 N to >600 N depending on testing axis, cortical thickness, and suture eyelet design.</td>
+                    <td>Avoid claiming a universal pullout force advantage; evaluate systems within matched anatomical footprints.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Footprint Strategic Columns -->
+        <div class="matrix-grid">
+            <div class="matrix-card" style="border-left: 3px solid #7EA8BE;">
+                <h4>Central-Proximal Zone (G2-P / G1-P): Prime Medial Row</h4>
+                <p>
+                    • <strong>Osseous Microarchitecture:</strong> Highest trabecular volume fraction (BV/TV up to 29.8%) and intact subchondral bone plate.<br>
+                    • <strong>Anchor Selection:</strong> Accommodates subcortical all-suture anchors (preserving footprint biology) or fully threaded 4.5–5.5 mm screws.<br>
+                    • <strong>Failure Mode:</strong> Typically suture cut-through through degenerated tendon rather than anchor pullout when bone stock is intact.
+                </p>
+            </div>
+            <div class="matrix-card" style="border-left: 3px solid #F2C299;">
+                <h4>Intermediate Zone (G1-I to G3-I): Central Compression Bed</h4>
+                <p>
+                    • <strong>Osseous Microarchitecture:</strong> Transitional cancellous architecture (18.4%–27.5% BV/TV), with central G2-I maintaining solid support.<br>
+                    • <strong>Anchor Selection:</strong> Broad-pitch cancellous screws or expandable soft anchors; avoid over-tapping in osteopenic bone.<br>
+                    • <strong>Failure Mode:</strong> Cancellous stripping if pilot holes are oversized relative to local trabecular density.
+                </p>
+            </div>
+            <div class="matrix-card" style="border-left: 3px solid #D8A49B;">
+                <h4>Distal Zone (G1-D to G3-D): Lateral Cortical Wall</h4>
+                <p>
+                    • <strong>Osseous Microarchitecture:</strong> Lowest trabecular volume fraction (13.8%–16.9% BV/TV), bordered by the dense lateral humeral cortex.<br>
+                    • <strong>Anchor Selection:</strong> Rigid knotless interference anchors (3.5 mm to 5.5 mm) designed to wedge suture tape against the cortical collar.<br>
+                    • <strong>Failure Mode:</strong> Cortical wall fracture or pullout if placed too close to the articular edge or in thin lateral walls.
+                </p>
+            </div>
+        </div>
+
+        <!-- Glenoid Microarchitecture Callout -->
+        <div style="margin-top: 16px; padding: 20px 24px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 13px; line-height: 1.6; color: #475569;">
+            <h4 style="margin: 0 0 8px 0; font-size: 14.5px; font-weight: 700; color: #0f172a;">Glenoid Rim Microarchitecture (Bankart / Instability Fixation)</h4>
+            <p style="margin: 0 0 8px 0;">
+                The glenoid rim presents tight spatial constraints (narrow anterior-posterior vault width, particularly in Asian cohorts). As documented by <strong>Lee &amp; Shin (OJSM 2025)</strong>:
+            </p>
+            <ul style="padding-left: 18px; margin: 0;">
+                <li><strong>In Vivo Regional Expansion:</strong> Subcortical all-suture anchors expand significantly wider in the softer <em>inferior glenoid rim</em> (mean 3.3 mm deployed diameter) compared to the denser <em>superior rim</em> (mean 2.9 mm), adapting to regional bone density differences without compromising labral healing rates.</li>
+                <li><strong>Rim Preservation:</strong> Small pilot holes (1.3–1.7 mm) conserve critical glenoid rim bone stock compared to larger rigid anchors.</li>
+            </ul>
+        </div>
+
+        <!-- Academic References Card -->
+        <div class="ref-card">
+            <h3 class="ref-title">Literature Citations &amp; Microarchitecture Methodology</h3>
+            <p class="ref-intro">Synthesized from peer-reviewed micro-CT footprint evaluations and cadaveric biomechanical testing:</p>
+            <div class="ref-grid">
+                <div class="ref-col">
+                    <strong style="color: #0f172a; font-size: 13px;">Footprint Bone Density &amp; Micro-CT:</strong>
+                    <ul>
+                        <li><strong>Kholinne E, Lee HJ, Kim SJ, Park SH, Jeon IH.</strong> (2018). <em>The relationship between age, rotator cuff integrity, and osseous microarchitecture of greater tuberosity: Where should we put anchor?</em> <strong>Acta Orthop Traumatol Turc</strong>.</li>
+                        <li><strong>Tingart MJ, Apreleva M, Zurakowski D, Warner JJ.</strong> (2003). <em>Pullout strength of suture anchors used in rotator cuff repair.</em> <strong>J Bone Joint Surg Am</strong> / <strong>AJSM</strong>.</li>
+                    </ul>
+                </div>
+                <div class="ref-col">
+                    <strong style="color: #0f172a; font-size: 13px;">Footprint Bone Density &amp; Micro-CT:</strong>
+                    <ul>
+                        <li><strong>Kholinne E, Lee HJ, Kim SJ, Park SH, Jeon IH.</strong> (2018). <em>The relationship between age, rotator cuff integrity, and osseous microarchitecture of greater tuberosity: Where should we put anchor?</em> <strong>Acta Orthop Traumatol Turc</strong>.</li>
+                        <li><strong>Tingart MJ, Apreleva M, Zurakowski D, Warner JJ.</strong> (2003). <em>Pullout strength of suture anchors used in rotator cuff repair.</em> <strong>J Bone Joint Surg Am</strong> / <strong>AJSM</strong>.</li>
+                    </ul>
+                </div>
+                <div class="ref-col">
+                    <strong style="color: #0f172a; font-size: 13px;">Cortical Thickness, Defect Size &amp; Deployment:</strong>
+                    <ul>
+                        <li><strong>Ntalos D, et al.</strong> (2020). <em>Biomechanical evaluation of all-suture anchors vs. conventional anchors in human cadaveric humeri: Role of cortical thickness and failure defect size.</em> <strong>Arthroscopy / JSES</strong>.</li>
+                        <li><strong>Barber FA, Herbert MA.</strong> (2013). <em>Cyclic loading biomechanical analysis of the pullout strengths of rotator cuff and glenoid anchors.</em> <strong>Arthroscopy</strong>.</li>
+                        <li><strong>Lee JH, Shin SJ.</strong> (2025). <em>All-suture anchor deployment configurations in arthroscopic Bankart repair.</em> <strong>Orthop J Sports Med</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
