@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Singapore Orthopaedic Episode Cost &amp; Budget Impact Calculator - OrthoTribune</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 24px 14px 60px 14px; }
+        .container { max-width: 1160px; margin: 0 auto; background: #ffffff; padding: 32px 28px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
+        .header { margin-bottom: 18px; }
+        h1 { margin: 0 0 6px 0; font-size: 25px; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; }
+        .subtitle { margin: 0 0 6px 0; font-size: 14px; color: #475569; line-height: 1.5; }
+        .author { margin: 0; font-size: 13px; font-style: italic; color: #64748b; }
+
+        /* Master Top Navigation */
+        .master-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 20px 0; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+        .master-nav a { text-decoration: none; font-weight: 500; color: #475569; background-color: #ffffff; padding: 6px 14px; border-radius: 6px; border: 1px solid #e2e8f0; }
+        .master-nav a.active { font-weight: 600; color: #0f172a; background-color: #f1f5f9; border-color: #cbd5e1; }
+
+        /* Data Provenance Legend */
+        .legend-strip { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 16px; padding: 10px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 12px; color: #475569; align-items: center; }
+        .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 600; vertical-align: middle; margin-left: 4px; }
+        .b-moh { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .b-lit { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
+        .b-hosp { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+        .b-user { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+        /* Care Setting Selector Bar */
+        .preset-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 24px; padding: 14px 18px; background: #f1f5f9; border-radius: 10px; }
+        .preset-label { font-size: 13px; font-weight: 700; color: #0f172a; margin-right: 4px; }
+        .preset-btn { background: #ffffff; border: 1px solid #cbd5e1; padding: 7px 13px; font-size: 12.5px; font-weight: 600; color: #334155; border-radius: 6px; cursor: pointer; transition: all 0.15s ease; }
+        .preset-btn:hover { background: #e2e8f0; }
+        .preset-btn.selected { background: #0f172a; color: #ffffff; border-color: #0f172a; }
+
+        /* Two-Column Workspace */
+        .calc-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; align-items: start; }
+        @media (max-width: 900px) {
+            .calc-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Input Panel */
+        .input-panel { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 22px; }
+        .section-heading { font-size: 14px; font-weight: 700; color: #0f172a; margin: 22px 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .section-heading:first-child { margin-top: 0; }
+        .input-row { display: grid; grid-template-columns: 1.35fr 0.65fr; gap: 12px; align-items: center; margin-bottom: 12px; }
+        .input-row label { font-size: 12.5px; font-weight: 600; color: #334155; display: block; }
+        .input-row .hint { font-size: 11px; color: #64748b; display: block; margin-top: 2px; font-weight: 400; line-height: 1.35; }
+        .input-box { width: 100%; box-sizing: border-box; padding: 7px 9px; font-size: 13px; font-weight: 600; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right; background: #f8fafc; }
+        .input-box:focus { outline: none; border-color: #7EA8BE; background: #ffffff; box-shadow: 0 0 0 3px rgba(126,168,190,0.15); }
+
+        .dual-input { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .mini-label { font-size: 10px; color: #64748b; text-align: right; margin-bottom: 2px; display: block; }
+
+        /* Value Chain Strip */
+        .chain-strip { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: #334155; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+        /* Complication Mini-Table */
+        .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 12px; }
+        .comp-table th { text-align: left; color: #64748b; font-weight: 600; padding: 6px 4px; border-bottom: 1px solid #e2e8f0; }
+        .comp-table td { padding: 6px 4px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .comp-input { width: 78px; padding: 5px 6px; font-size: 12px; font-weight: 600; border: 1px solid #cbd5e1; border-radius: 5px; text-align: right; background: #f8fafc; }
+
+        /* Output & Summary Panel */
+        .output-panel { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 20px; position: sticky; top: 18px; }
+        .total-card { background: #0f172a; color: #ffffff; padding: 18px 20px; border-radius: 8px; margin-bottom: 14px; }
+        .total-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin: 0 0 4px 0; }
+        .total-figure { font-size: 28px; font-weight: 700; margin: 0 0 4px 0; letter-spacing: -0.02em; }
+        .total-sub { font-size: 12px; color: #cbd5e1; margin: 0; }
+
+        .oop-card { background: #ffffff; border: 1px solid #7EA8BE; border-left: 4px solid #7EA8BE; padding: 14px 16px; border-radius: 8px; margin-bottom: 16px; }
+        .oop-title { font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #475569; margin: 0 0 4px 0; }
+        .oop-figure { font-size: 22px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0; }
+        .oop-sub { font-size: 11.5px; color: #64748b; margin: 0; line-height: 1.4; }
+
+        .breakdown-list { list-style: none; padding: 0; margin: 0 0 16px 0; font-size: 12.5px; }
+        .breakdown-list li { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #e2e8f0; color: #334155; }
+        .breakdown-list li:last-child { border-bottom: none; }
+        .breakdown-list span.val { font-weight: 700; color: #0f172a; }
+
+        .cohort-box { background: #ffffff; border: 1px solid #e2e8f0; border-left: 3px solid #95B8A2; border-radius: 8px; padding: 13px 15px; font-size: 12px; line-height: 1.55; color: #475569; margin-top: 14px; }
+        .cohort-box strong { color: #0f172a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>Singapore Orthopaedic Episode Cost &amp; Budget Impact Calculator</h1>
+            <p class="subtitle">Institutional episode-of-care modeling calibrated to Singapore MOH hospital bill structures—distinguishing patient-billed implants/biologics from internal hospital OT/CSSD consumables, facility resources, professional fees, and patient out-of-pocket.</p>
+            <p class="author">By Alvin Kuek</p>
+        </div>
+
+        <!-- Master Suite Navigation -->
+        <nav class="master-nav">
+            <a href="./index.html">🦴 Cuff &amp; Instability (Home)</a>
+            <a href="./economics.html">Suture Anchor Economics</a>
+            <a href="./anchor_footprints.html">🔬 Footprint Microarchitecture</a>
+            <a href="./graft_economics.html">RC Graft Clinical Evidence &amp; Indications</a>
+            <a href="./graft_economics 2.html">RC Graft Economics</a>
+            <a href="./rohi_economics 2.html">ROHI Selective Augmentation Economics</a>
+            <a href="./arthroplasty.html">🦾 TSA Economics (Executive Suite)</a>
+            <a href="./budget_calculator.html" class="active">🧮 SG Episode &amp; Budget Calculator</a>
+            <a href="./biceps.html" style="color: #94a3b8; background-color: #f8fafc; border: 1px dashed #cbd5e1;">Proximal Biceps (Soon)</a>
+        </nav>
+
+        <!-- Data Provenance Key -->
+        <div class="legend-strip">
+            <strong style="color: #0f172a;">Parameter Provenance:</strong>
+            <span><span class="badge b-moh">🟢 SG MOH Benchmark</span> Published MOH fee guidelines / median bill data</span>
+            <span><span class="badge b-lit">🟡 Literature</span> Peer-reviewed registry / clinical probability</span>
+            <span><span class="badge b-hosp">🔵 Hospital Input</span> Facility-specific rate / internal overhead</span>
+            <span><span class="badge b-user">⚪ Assumption</span> User-editable scenario parameter</span>
+        </div>
+
+        <!-- Care Setting & Clinical Scenario Presets -->
+        <div class="preset-bar">
+            <span class="preset-label">SG Care Setting Preset:</span>
+            <button class="preset-btn selected" onclick="loadPreset('sg_private_tsa', this)">Private Inpatient TSA (MOH Benchmark)</button>
+            <button class="preset-btn" onclick="loadPreset('sg_ward_a_tsa', this)">Public Unsubsidised (Ward A TSA)</button>
+            <button class="preset-btn" onclick="loadPreset('sg_ward_b2_tsa', this)">Public Subsidised (Ward B2/C TSA)</button>
+            <button class="preset-btn" onclick="loadPreset('sg_revision_tsa', this)">Complex Revision Salvage</button>
+            <button class="preset-btn" onclick="loadPreset('sg_rcr_graft', this)">Arthroscopic RCR + Graft</button>
+        </div>
+
+        <!-- Main Two-Column Workspace -->
+        <div class="calc-grid">
+            
+            <!-- Left Column: Structured Inputs (Sections A to G) -->
+            <div class="input-panel">
+                
+                <!-- SECTION A -->
+                <div class="section-heading">
+                    <span>A. Patient-Billed Implants &amp; Procedure Consumables</span>
+                    <span style="font-size: 11px; font-weight: 500; color: #64748b;">Itemized Patient Charges</span>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label for="acqCost">Primary Implant Construct (Hospital Acquisition) <span class="badge b-hosp">🔵 Hospital Input</span></label>
+                        <span class="hint">Hospital tender/invoice price for primary shoulder construct or suture anchor set</span>
+                    </div>
+                    <div>
+                        <input type="number" id="acqCost" class="input-box" value="7200" min="0" step="100" oninput="recalculate()">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label for="augmentCost">Implant Consumables, Biologics &amp; Single-Use Devices <span class="badge b-user">⚪ Assumption</span></label>
+                        <span class="hint">Patient-billed items: biologic patches (hADM/collagen), bone graft, 3D PSI jig, RF wands &amp; shaver blades</span>
+                    </div>
+                    <div>
+                        <input type="number" id="augmentCost" class="input-box" value="2200" min="0" step="100" oninput="recalculate()">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label for="hospMarkupPct">Hospital Device Handling / Billing Markup (%) <span class="badge b-moh">🟢 SG MOH Benchmark</span></label>
+                        <span class="hint">Applied to patient-billed implants &amp; single-use devices (MOH median implant fee: $5,517 B2 to $9,828 Private)</span>
+                    </div>
+                    <div>
+                        <input type="number" id="hospMarkupPct" class="input-box" value="35" min="0" max="200" step="5" oninput="recalculate()">
+                    </div>
+                </div>
+
+                <div class="chain-strip">
+                    <span>Total Device Acquisition: <strong id="chainAcq">SGD $9,400</strong></span>
+                    <span>&rarr;</span>
+                    <span>Total Billed Implants &amp; Biologics: <strong id="chainBilled">SGD $12,690</strong></span>
+                </div>
+
+                <!-- SECTION B -->
+                <div class="section-heading">
+                    <span>B. Hospital Facility, OT &amp; Routine Theater Consumables</span>
+                    <span style="font-size: 11px; font-weight: 500; color: #64748b;">Internal Hospital Costs</span>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>Surgical Time &amp; OT Turnover Time <span class="badge b-hosp">🔵 Hospital Input</span></label>
+                        <span class="hint">Separates active skin-to-skin/anaesthesia minutes from room turnover minutes</span>
+                    </div>
+                    <div class="dual-input">
+                        <div>
+                            <span class="mini-label">Surgical Mins</span>
+                            <input type="number" id="surgMins" class="input-box" value="125" min="15" step="5" oninput="recalculate()">
+                        </div>
+                        <div>
+                            <span class="mini-label">Turnover Mins</span>
+                            <input type="number" id="turnMins" class="input-box" value="30" min="0" step="5" oninput="recalculate()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label for="otRate">OT Facility, Nursing &amp; Equipment Rate ($/Min) <span class="badge b-hosp">🔵 Hospital Input</span></label>
+                        <span class="hint">Includes theater overhead, scrub/circulating nurses, and arthroscopy/power towers</span>
+                    </div>
+                    <div>
+                        <input type="number" id="otRate" class="input-box" value="55" min="0" step="5" oninput="recalculate()">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label for="hospConsumablesCost">Routine Hospital Consumables &amp; CSSD Sterilization <span class="badge b-hosp">🔵 Hospital Input</span></label>
+                        <span class="hint">Non-implant consumables: sterile drapes, gowns, gloves, gauze, irrigation &amp; CSSD tray reprocessing</span>
+                    </div>
+                    <div>
+                        <input type="number" id="hospConsumablesCost" class="input-box" value="600" min="0" step="50" oninput="recalculate()">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>Inpatient Ward Stay (LOS) &amp; Daily Bed Rate <span class="badge b-moh">🟢 SG MOH Benchmark</span></label>
+                        <span class="hint">Ward bed-days × daily room, routine nursing, and inpatient medication rate</span>
+                    </div>
+                    <div class="dual-input">
+                        <div>
+                            <span class="mini-label">Ward Days</span>
+                            <input type="number" id="losDays" class="input-box" value="2.0" min="0" step="0.5" oninput="recalculate()">
+                        </div>
+                        <div>
+                            <span class="mini-label">Rate / Day</span>
+                            <input type="number" id="losRate" class="input-box" value="1400" min="0" step="100" oninput="recalculate()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label for="hospDiagCost">Inpatient Diagnostics, Labs &amp; Pharmacy <span class="badge b-hosp">🔵 Hospital Input</span></label>
+                        <span class="hint">Pre-op 3D CT/MRI workup, blood panels, intraoperative fluoroscopy, and discharge meds</span>
+                    </div>
+                    <div>
+                        <input type="number" id="hospDiagCost" class="input-box" value="1525" min="0" step="50" oninput="recalculate()">
+                    </div>
+                </div>
+
+                <!-- SECTION C -->
+                <div class="section-heading">
+                    <span>C. Professional Fees (Separated per SG MOH Structure)</span>
+                    <span style="font-size: 11px; font-weight: 500; color: #64748b;">Doctor Fees</span>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label for="surgeonFee">Surgeon Fee (Incl. GST where applicable) <span class="badge b-moh">🟢 SG MOH Benchmark</span></label>
+                        <span class="hint">MOH Private Surgeon Benchmark for Primary TSA: ~$12,208–$15,151 SGD (incl. GST)</span>
+                    </div>
+                    <div>
+                        <input type="number" id="surgeonFee" class="input-box" value="13500" min="0" step="250" oninput="recalculate()">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>Anaesthetist &amp; Inpatient Attendance Fees <span class="badge b-moh">🟢 SG MOH Benchmark</span></label>
+                        <span class="hint">Anaesthesia + interscalene nerve block + daily inpatient ward round attendance</span>
+                    </div>
+                    <div class="dual-input">
+                        <div>
+                            <span class="mini-label">Anaesthetist</span>
+                            <input type="number" id="anaesthFee" class="input-box" value="2400" min="0" step="100" oninput="recalculate()">
+                        </div>
+                        <div>
+                            <span class="mini-label">Ward Rounds</span>
+                            <input type="number" id="attendFee" class="input-box" value="600" min="0" step="50" oninput="recalculate()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION D -->
+                <div class="section-heading">
+                    <span>D. Post-Discharge Recovery &amp; Rehabilitation</span>
+                    <span style="font-size: 11px; font-weight: 500; color: #64748b;">90-Day Episode</span>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label for="rehabCost">Outpatient Physiotherapy, Follow-Up &amp; X-Rays <span class="badge b-user">⚪ Assumption</span></label>
+                        <span class="hint">Post-discharge specialist clinic reviews, serial radiographs, and structured shoulder physio</span>
+                    </div>
+                    <div>
+                        <input type="number" id="rehabCost" class="input-box" value="1800" min="0" step="100" oninput="recalculate()">
+                    </div>
+                </div>
+
+                <!-- SECTION E -->
+                <div class="section-heading">
+                    <span>E. Expected Complication &amp; Salvage Burden</span>
+                    <span style="font-size: 11px; font-weight: 500; color: #64748b;">Probability &times; Cost</span>
+                </div>
+
+                <table class="comp-table">
+                    <thead>
+                        <tr>
+                            <th>Adverse Event / Pathway <span class="badge b-lit">🟡 Literature</span></th>
+                            <th style="text-align: right;">Prob. (%)</th>
+                            <th style="text-align: right;">Event Cost ($)</th>
+                            <th style="text-align: right;">Expected ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Periprosthetic Infection / Washout</strong><br><span style="color:#64748b; font-size:11px;">1- or 2-stage PJI management (AOANJRR / registry)</span></td>
+                            <td style="text-align: right;"><input type="number" id="probInf" class="comp-input" value="1.2" min="0" max="100" step="0.1" oninput="recalculate()"></td>
+                            <td style="text-align: right;"><input type="number" id="costInf" class="comp-input" value="42000" min="0" step="1000" oninput="recalculate()"></td>
+                            <td style="text-align: right; font-weight: 700;" id="expInf">$504</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Instability / Dislocation / Readmission</strong><br><span style="color:#64748b; font-size:11px;">Closed/open reduction or liner/glenosphere upsize</span></td>
+                            <td style="text-align: right;"><input type="number" id="probInst" class="comp-input" value="2.0" min="0" max="100" step="0.1" oninput="recalculate()"></td>
+                            <td style="text-align: right;"><input type="number" id="costInst" class="comp-input" value="18500" min="0" step="500" oninput="recalculate()"></td>
+                            <td style="text-align: right; font-weight: 700;" id="expInst">$370</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5–10 Yr Aseptic Revision Arthroplasty</strong><br><span style="color:#64748b; font-size:11px;">Glenoid loosening / cuff failure conversion (assumption)</span></td>
+                            <td style="text-align: right;"><input type="number" id="probRev" class="comp-input" value="5.0" min="0" max="100" step="0.5" oninput="recalculate()"></td>
+                            <td style="text-align: right;"><input type="number" id="costRev" class="comp-input" value="47200" min="0" step="1000" oninput="recalculate()"></td>
+                            <td style="text-align: right; font-weight: 700;" id="expRev">$2,360</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- SECTION F & G -->
+                <div class="section-heading">
+                    <span>F. Payer Coverage (Patient OOP) &amp; Annual Volume</span>
+                    <span style="font-size: 11px; font-weight: 500; color: #64748b;">Payer &amp; Hospital Scale</span>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>MediShield Life / ISP Coverage (%) &amp; MediSave <span class="badge b-user">⚪ Assumption</span></label>
+                        <span class="hint">Models insurer payout % (after deductible/co-insurance) + MediSave surgical/ward claim</span>
+                    </div>
+                    <div class="dual-input">
+                        <div>
+                            <span class="mini-label">Insurer (%)</span>
+                            <input type="number" id="insurerPct" class="input-box" value="80" min="0" max="100" step="5" oninput="recalculate()">
+                        </div>
+                        <div>
+                            <span class="mini-label">MediSave ($)</span>
+                            <input type="number" id="medisaveAmt" class="input-box" value="4500" min="0" step="250" oninput="recalculate()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-row" style="margin-bottom: 0;">
+                    <div>
+                        <label for="annualCases">Annual Institutional Case Volume <span class="badge b-hosp">🔵 Hospital Input</span></label>
+                        <span class="hint">Annual procedures/year for hospital service-line budget &amp; OT capacity impact</span>
+                    </div>
+                    <div>
+                        <input type="number" id="annualCases" class="input-box" value="50" min="1" step="5" oninput="recalculate()">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Automated Outputs & Live Chart -->
+            <div class="output-panel">
+                
+                <!-- Institutional / Gross Episode Bill -->
+                <div class="total-card">
+                    <p class="total-title">Gross Episode Bill Size (Before Insurance / MediSave)</p>
+                    <p class="total-figure" id="grossBillDisplay">SGD $44,440</p>
+                    <p class="total-sub" id="riskAdjDisplay">Risk-Adjusted Total Cost (Incl. Expected Complications): SGD $47,674</p>
+                </div>
+
+                <!-- Patient Out-of-Pocket Card -->
+                <div class="oop-card">
+                    <p class="oop-title">Estimated Patient Out-of-Pocket (Cash Copayment)</p>
+                    <p class="oop-figure" id="oopDisplay">SGD $4,388</p>
+                    <p class="oop-sub" id="oopDetail">After estimated insurer coverage (<span id="oopInsPct">80%</span>) and MediSave withdrawal (<span id="oopMedisave">$4,500</span>). Actual bills vary by Integrated Shield Plan rider &amp; ward subsidy tier.</p>
+                </div>
+
+                <!-- Category Breakdown -->
+                <ul class="breakdown-list">
+                    <li>
+                        <span>Patient-Billed Implants &amp; Biologics (<span id="pctDev">26.6%</span>)</span>
+                        <span class="val" id="valDev">$12,690</span>
+                    </li>
+                    <li>
+                        <span>Hospital OT, Ward &amp; CSSD/Routine (<span id="pctHosp">28.2%</span>)</span>
+                        <span class="val" id="valHosp">$13,450</span>
+                    </li>
+                    <li>
+                        <span>Professional Fees (Surgeon/Anaesth) (<span id="pctProf">34.6%</span>)</span>
+                        <span class="val" id="valProf">$16,500</span>
+                    </li>
+                    <li>
+                        <span>Post-Op Rehab &amp; Follow-Up (<span id="pctRehab">3.8%</span>)</span>
+                        <span class="val" id="valRehab">$1,800</span>
+                    </li>
+                    <li>
+                        <span>Expected Complication Burden (<span id="pctComp">6.8%</span>)</span>
+                        <span class="val" id="valComp" style="color: #b91c1c;">$3,234</span>
+                    </li>
+                </ul>
+
+                <!-- Live Updating Plotly Donut Chart -->
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px;">
+                    <div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.5.0.min.js" integrity="sha256-fHbNLP+GlIXN+efbQec78UkemUz3NJp7UmfGxC1tNxs=" crossorigin="anonymous"></script>                <div id="cost_donut_chart" class="plotly-graph-div" style="height:360px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("cost_donut_chart")) {                    Plotly.newPlot(                        "cost_donut_chart",                        [{"hole":0.52,"hovertemplate":"\u003cb\u003e%{label}\u003c\u002fb\u003e\u003cbr\u003eAllocation: \u003cb\u003eSGD $%{value:,.0f}\u003c\u002fb\u003e (%{percent})\u003cextra\u003e\u003c\u002fextra\u003e","labels":["Chargeable Implants & Procedure Devices","Hospital OT, Ward & Routine Consumables","Professional Fees (Surgeon & Anaesthetist)","Recovery & Outpatient Rehab","Expected Complication Reserve"],"marker":{"colors":["#7EA8BE","#95B8A2","#F2C299","#B8B2D8","#D8A49B"],"line":{"color":"#ffffff","width":2}},"textinfo":"percent","textposition":"inside","values":[12690,13450,16500,1800,3234],"type":"pie"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"title":{"font":{"family":"Inter, -apple-system, sans-serif","size":14},"text":"\u003cb\u003eGross Episode Cost Breakdown\u003c\u002fb\u003e","x":0.5,"y":0.96,"xanchor":"center"},"margin":{"l":15,"r":15,"t":50,"b":85},"legend":{"font":{"size":10.5},"orientation":"h","yanchor":"top","y":-0.05,"xanchor":"center","x":0.5},"hoverlabel":{"font":{"size":11},"bgcolor":"white"},"plot_bgcolor":"rgba(0,0,0,0)","paper_bgcolor":"white","height":360},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+                </div>
+
+                <!-- Annualized Hospital Budget Impact -->
+                <div class="cohort-box">
+                    <strong>Annualized Institutional Impact (<span id="cohortCount">50</span> Cases/Yr):</strong><br>
+                    • Gross Service-Line Episode Volume: <strong id="annualGrossDisplay">SGD $2,222,000</strong><br>
+                    • Hospital Implant/Biologic Acquisition Spend: <strong id="annualAcqDisplay">SGD $470,000</strong><br>
+                    • Internal Hospital Consumables &amp; CSSD: <strong id="annualHospConsDisplay">SGD $30,000</strong><br>
+                    • Total OT Theater Time (Surg + Turnover): <strong id="annualOtHours">129.2 Hours</strong><br>
+                    • Total Inpatient Ward Bed-Days: <strong id="annualBedDays">100.0 Bed-Days</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Client-Side Calculation & Chart Update Script -->
+    <script>
+        const presets = {
+            // Calibrated to SG MOH Private Inpatient Primary TSA (~$44,767 median bill)
+            sg_private_tsa: {
+                acqCost: 7200,
+                augmentCost: 2200,
+                hospMarkupPct: 35,
+                surgMins: 125,
+                turnMins: 30,
+                otRate: 55,
+                hospConsumablesCost: 600,
+                losDays: 2.0,
+                losRate: 1400,
+                hospDiagCost: 1525,
+                surgeonFee: 13500,
+                anaesthFee: 2400,
+                attendFee: 600,
+                rehabCost: 1800,
+                probInf: 1.2,
+                costInf: 42000,
+                probInst: 2.0,
+                costInst: 18500,
+                probRev: 5.0,
+                costRev: 47200,
+                insurerPct: 80,
+                medisaveAmt: 4500
+            },
+            // Calibrated to SG MOH Public Unsubsidised Ward A Primary TSA (~$28,003 median bill)
+            sg_ward_a_tsa: {
+                acqCost: 6800,
+                augmentCost: 1500,
+                hospMarkupPct: 20,
+                surgMins: 130,
+                turnMins: 30,
+                otRate: 38,
+                hospConsumablesCost: 500,
+                losDays: 2.0,
+                losRate: 900,
+                hospDiagCost: 1050,
+                surgeonFee: 6500,
+                anaesthFee: 1450,
+                attendFee: 350,
+                rehabCost: 1100,
+                probInf: 1.2,
+                costInf: 28000,
+                probInst: 2.0,
+                costInst: 12000,
+                probRev: 5.0,
+                costRev: 32000,
+                insurerPct: 75,
+                medisaveAmt: 4500
+            },
+            // Calibrated to SG MOH Public Subsidised Ward B2/C Primary TSA (~$9,596-$10,384 subsidised median bill)
+            sg_ward_b2_tsa: {
+                acqCost: 5600,
+                augmentCost: 500,
+                hospMarkupPct: 0,
+                surgMins: 130,
+                turnMins: 30,
+                otRate: 11,
+                hospConsumablesCost: 220,
+                losDays: 2.0,
+                losRate: 320,
+                hospDiagCost: 420,
+                surgeonFee: 900,
+                anaesthFee: 280,
+                attendFee: 120,
+                rehabCost: 420,
+                probInf: 1.2,
+                costInf: 11000,
+                probInst: 2.0,
+                costInst: 5500,
+                probRev: 5.0,
+                costRev: 14000,
+                insurerPct: 60,
+                medisaveAmt: 3500
+            },
+            // Complex Revision Salvage Scenario
+            sg_revision_tsa: {
+                acqCost: 11500,
+                augmentCost: 3800,
+                hospMarkupPct: 30,
+                surgMins: 220,
+                turnMins: 40,
+                otRate: 55,
+                hospConsumablesCost: 950,
+                losDays: 4.5,
+                losRate: 1500,
+                hospDiagCost: 2400,
+                surgeonFee: 18500,
+                anaesthFee: 3600,
+                attendFee: 1200,
+                rehabCost: 2600,
+                probInf: 3.5,
+                costInf: 48000,
+                probInst: 4.5,
+                costInst: 22000,
+                probRev: 10.0,
+                costRev: 55000,
+                insurerPct: 80,
+                medisaveAmt: 5500
+            },
+            // Arthroscopic Rotator Cuff Repair + Graft Augmentation
+            sg_rcr_graft: {
+                acqCost: 2400,
+                augmentCost: 2800,
+                hospMarkupPct: 30,
+                surgMins: 95,
+                turnMins: 25,
+                otRate: 50,
+                hospConsumablesCost: 550,
+                losDays: 1.0,
+                losRate: 1300,
+                hospDiagCost: 1100,
+                surgeonFee: 8800,
+                anaesthFee: 1800,
+                attendFee: 350,
+                rehabCost: 1600,
+                probInf: 0.5,
+                costInf: 22000,
+                probInst: 1.0,
+                costInst: 12000,
+                probRev: 4.5,
+                costRev: 24000,
+                insurerPct: 80,
+                medisaveAmt: 3800
+            }
+        };
+
+        function fmtSGD(num) {
+            return "$" + Math.round(num).toLocaleString('en-US');
+        }
+
+        function loadPreset(key, btn) {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
+            if (btn) btn.classList.add('selected');
+
+            const p = presets[key];
+            for (const field in p) {
+                if (document.getElementById(field)) {
+                    document.getElementById(field).value = p[field];
+                }
+            }
+            recalculate();
+        }
+
+        function recalculate() {
+            // A. Patient-Billed Implants & Procedure-Specific Devices/Biologics
+            const acqCost = parseFloat(document.getElementById('acqCost').value) || 0;
+            const augmentCost = parseFloat(document.getElementById('augmentCost').value) || 0;
+            const markupPct = parseFloat(document.getElementById('hospMarkupPct').value) || 0;
+
+            const totalDevAcquisition = acqCost + augmentCost;
+            const totalBilledDevices = totalDevAcquisition * (1 + markupPct / 100.0);
+
+            document.getElementById('chainAcq').innerText = "SGD " + fmtSGD(totalDevAcquisition);
+            document.getElementById('chainBilled').innerText = "SGD " + fmtSGD(totalBilledDevices);
+
+            // B. Hospital Resource Utilisation (Including Routine OT Consumables & CSSD)
+            const surgMins = parseFloat(document.getElementById('surgMins').value) || 0;
+            const turnMins = parseFloat(document.getElementById('turnMins').value) || 0;
+            const otRate = parseFloat(document.getElementById('otRate').value) || 0;
+            const hospConsumablesCost = parseFloat(document.getElementById('hospConsumablesCost').value) || 0;
+            const losDays = parseFloat(document.getElementById('losDays').value) || 0;
+            const losRate = parseFloat(document.getElementById('losRate').value) || 0;
+            const hospDiagCost = parseFloat(document.getElementById('hospDiagCost').value) || 0;
+
+            const totalOtMins = surgMins + turnMins;
+            const otTotal = totalOtMins * otRate;
+            const wardTotal = losDays * losRate;
+            const totalHospResource = otTotal + hospConsumablesCost + wardTotal + hospDiagCost;
+
+            // C. Professional Fees
+            const surgeonFee = parseFloat(document.getElementById('surgeonFee').value) || 0;
+            const anaesthFee = parseFloat(document.getElementById('anaesthFee').value) || 0;
+            const attendFee = parseFloat(document.getElementById('attendFee').value) || 0;
+            const totalProfFees = surgeonFee + anaesthFee + attendFee;
+
+            // D. Recovery & Rehab
+            const rehabCost = parseFloat(document.getElementById('rehabCost').value) || 0;
+
+            // E. Expected Complication Burden
+            const probInf = parseFloat(document.getElementById('probInf').value) || 0;
+            const costInf = parseFloat(document.getElementById('costInf').value) || 0;
+            const expInf = (probInf / 100.0) * costInf;
+
+            const probInst = parseFloat(document.getElementById('probInst').value) || 0;
+            const costInst = parseFloat(document.getElementById('costInst').value) || 0;
+            const expInst = (probInst / 100.0) * costInst;
+
+            const probRev = parseFloat(document.getElementById('probRev').value) || 0;
+            const costRev = parseFloat(document.getElementById('costRev').value) || 0;
+            const expRev = (probRev / 100.0) * costRev;
+
+            document.getElementById('expInf').innerText = fmtSGD(expInf);
+            document.getElementById('expInst').innerText = fmtSGD(expInst);
+            document.getElementById('expRev').innerText = fmtSGD(expRev);
+
+            const totalComplicationExp = expInf + expInst + expRev;
+
+            // Gross Episode Bill & Risk-Adjusted Total
+            const grossEpisodeBill = totalBilledDevices + totalHospResource + totalProfFees + rehabCost;
+            const riskAdjustedTotal = grossEpisodeBill + totalComplicationExp;
+            const safeDenom = riskAdjustedTotal > 0 ? riskAdjustedTotal : 1;
+
+            document.getElementById('grossBillDisplay').innerText = "SGD " + fmtSGD(grossEpisodeBill);
+            document.getElementById('riskAdjDisplay').innerText =
+                "Risk-Adjusted Episode Total (Incl. Expected Complications): SGD " + fmtSGD(riskAdjustedTotal);
+
+            // F. Patient Financial Impact (OOP)
+            const insurerPct = parseFloat(document.getElementById('insurerPct').value) || 0;
+            const medisaveAmt = parseFloat(document.getElementById('medisaveAmt').value) || 0;
+
+            const insurerCovered = grossEpisodeBill * (insurerPct / 100.0);
+            const remainingAfterIns = Math.max(0, grossEpisodeBill - insurerCovered);
+            const estimatedOOP = Math.max(0, remainingAfterIns - medisaveAmt);
+
+            document.getElementById('oopDisplay').innerText = "SGD " + fmtSGD(estimatedOOP);
+            document.getElementById('oopInsPct').innerText = insurerPct.toFixed(0) + "%";
+            document.getElementById('oopMedisave').innerText = fmtSGD(medisaveAmt);
+
+            // Update Category Breakdown List
+            document.getElementById('valDev').innerText = fmtSGD(totalBilledDevices);
+            document.getElementById('pctDev').innerText = ((totalBilledDevices / safeDenom) * 100).toFixed(1) + "%";
+
+            document.getElementById('valHosp').innerText = fmtSGD(totalHospResource);
+            document.getElementById('pctHosp').innerText = ((totalHospResource / safeDenom) * 100).toFixed(1) + "%";
+
+            document.getElementById('valProf').innerText = fmtSGD(totalProfFees);
+            document.getElementById('pctProf').innerText = ((totalProfFees / safeDenom) * 100).toFixed(1) + "%";
+
+            document.getElementById('valRehab').innerText = fmtSGD(rehabCost);
+            document.getElementById('pctRehab').innerText = ((rehabCost / safeDenom) * 100).toFixed(1) + "%";
+
+            document.getElementById('valComp').innerText = fmtSGD(totalComplicationExp);
+            document.getElementById('pctComp').innerText = ((totalComplicationExp / safeDenom) * 100).toFixed(1) + "%";
+
+            // G. Annualized Institutional Volume Impact
+            const annualCases = parseFloat(document.getElementById('annualCases').value) || 1;
+            document.getElementById('cohortCount').innerText = annualCases.toLocaleString('en-US');
+            document.getElementById('annualGrossDisplay').innerText = "SGD " + fmtSGD(grossEpisodeBill * annualCases);
+            document.getElementById('annualAcqDisplay').innerText = "SGD " + fmtSGD(totalDevAcquisition * annualCases);
+            document.getElementById('annualHospConsDisplay').innerText = "SGD " + fmtSGD(hospConsumablesCost * annualCases);
+            document.getElementById('annualOtHours').innerText = ((totalOtMins * annualCases) / 60.0).toFixed(1) + " Hours";
+            document.getElementById('annualBedDays').innerText = (losDays * annualCases).toFixed(1) + " Bed-Days";
+
+            // Update Plotly Donut Chart Dynamically
+            const chartDiv = document.getElementById('cost_donut_chart');
+            if (chartDiv && typeof Plotly !== 'undefined') {
+                Plotly.restyle(chartDiv, {
+                    values: [[totalBilledDevices, totalHospResource, totalProfFees, rehabCost, totalComplicationExp]]
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', recalculate);
+    </script>
+</body>
+</html>
