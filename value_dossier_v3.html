@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orthopaedic Value Dossier Generator - OrthoTribune</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 24px 14px 60px 14px; }
+        .container { max-width: 1180px; margin: 0 auto; background: #ffffff; padding: 32px 28px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
+        .header { margin-bottom: 18px; }
+        h1 { margin: 0 0 6px 0; font-size: 25px; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; }
+        .subtitle { margin: 0 0 6px 0; font-size: 14px; color: #475569; line-height: 1.5; }
+        .author { margin: 0; font-size: 13px; font-style: italic; color: #64748b; }
+
+        /* Master Top Navigation */
+        .master-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 22px 0; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+        .master-nav a { text-decoration: none; font-weight: 500; color: #475569; background-color: #ffffff; padding: 6px 14px; border-radius: 6px; border: 1px solid #e2e8f0; }
+        .master-nav a.active { font-weight: 600; color: #0f172a; background-color: #f1f5f9; border-color: #cbd5e1; }
+
+        /* Dossier Builder Controls */
+        .builder-panel { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 22px; margin-bottom: 26px; }
+        .builder-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #0f172a; margin: 0 0 12px 0; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .builder-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
+        .builder-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 18px; }
+
+        .control-group label { display: block; font-size: 11.5px; font-weight: 600; color: #334155; margin-bottom: 4px; }
+        .control-select, .control-input, .control-textarea { width: 100%; box-sizing: border-box; padding: 7px 9px; font-size: 13px; font-weight: 500; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; font-family: inherit; }
+        .control-input[type="number"] { text-align: right; font-weight: 600; }
+        .control-textarea { resize: vertical; min-height: 56px; line-height: 1.4; }
+        .control-select:focus, .control-input:focus, .control-textarea:focus { outline: none; border-color: #7EA8BE; box-shadow: 0 0 0 3px rgba(126,168,190,0.15); }
+
+        .reset-btn { background: #ffffff; color: #475569; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 5px; font-size: 11.5px; font-weight: 600; cursor: pointer; }
+        .reset-btn:hover { background: #f1f5f9; color: #0f172a; }
+
+        /* Parameter Evidence Matrix Table */
+        .param-table-wrap { overflow-x: auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .param-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+        .param-table th { background: #f1f5f9; color: #334155; font-weight: 700; text-align: left; padding: 9px 12px; border-bottom: 1px solid #cbd5e1; white-space: nowrap; }
+        .param-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .param-table tr:last-child td { border-bottom: none; }
+        .param-name { font-weight: 600; color: #0f172a; }
+        .param-sub { display: block; font-size: 11px; color: #64748b; font-weight: 400; }
+        .tbl-num-input { width: 105px; box-sizing: border-box; padding: 6px 8px; font-size: 13px; font-weight: 600; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 5px; text-align: right; background: #f8fafc; }
+        .tbl-num-input:focus { outline: none; border-color: #7EA8BE; background: #ffffff; }
+        .ev-select { padding: 5px 8px; font-size: 11.5px; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #ffffff; color: #1e293b; cursor: pointer; }
+
+        /* Generated Executive Dossier Document */
+        .dossier-sheet { border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; overflow: hidden; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04); }
+        .dossier-banner { background: #0f172a; color: #ffffff; padding: 20px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+        .dossier-banner h2 { margin: 0 0 4px 0; font-size: 19px; font-weight: 700; }
+        .dossier-banner p { margin: 0; font-size: 13px; color: #cbd5e1; }
+        .grade-pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; }
+        .grade-high { background: #dcfce7; color: #166534; }
+        .grade-mod { background: #fef9c3; color: #854d0e; }
+        .grade-low { background: #fee2e2; color: #991b1b; }
+
+        /* Break-Even Callout Box */
+        .breakeven-box { background: #f8fafc; border-bottom: 1px solid #e2e8f0; border-left: 5px solid #7EA8BE; padding: 18px 24px; }
+        .breakeven-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0 0 6px 0; }
+        .breakeven-statement { font-size: 15px; font-weight: 600; color: #0f172a; line-height: 1.6; margin: 0; }
+        .highlight-val { background: #e0f2fe; color: #0369a1; padding: 1px 6px; border-radius: 4px; font-weight: 700; }
+
+        /* Four-Pillar Dossier Grid */
+        .pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 24px; }
+        @media (max-width: 860px) {
+            .pillars-grid { grid-template-columns: 1fr; }
+        }
+        .pillar-card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px 20px; background: #ffffff; }
+        .pillar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9; }
+        .pillar-title { font-size: 14.5px; font-weight: 700; color: #0f172a; margin: 0; }
+        .pillar-tag { font-size: 11px; font-weight: 600; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; }
+
+        .metric-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .metric-table td { padding: 7px 0; border-bottom: 1px solid #f8fafc; vertical-align: top; }
+        .metric-table tr:last-child td { border-bottom: none; }
+        .metric-label { color: #64748b; width: 46%; font-weight: 500; }
+        .metric-val { color: #0f172a; font-weight: 600; text-align: right; }
+        .ev-chip { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: #f1f5f9; color: #475569; margin-top: 2px; }
+        .delta-pos { color: #15803d; font-size: 11.5px; font-weight: 600; display: block; }
+        .delta-neg { color: #b91c1c; font-size: 11.5px; font-weight: 600; display: block; }
+        .delta-neu { color: #475569; font-size: 11.5px; font-weight: 500; display: block; }
+
+        .narrative-block { font-size: 13px; line-height: 1.55; color: #334155; margin-bottom: 10px; }
+        .narrative-block strong { color: #0f172a; }
+
+        /* Audit Provenance Summary Strip inside Dossier */
+        .audit-strip { margin: 0 24px 20px 24px; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 12px; color: #475569; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+
+        .action-bar { padding: 16px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: #64748b; }
+        .print-btn { background: #0f172a; color: #ffffff; border: none; padding: 9px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .print-btn:hover { background: #334155; }
+
+        @media print {
+            body { background: #ffffff; padding: 0; }
+            .container { border: none; box-shadow: none; padding: 0; }
+            .master-nav, .builder-panel, .print-btn { display: none !important; }
+            .dossier-sheet { border: 1px solid #cbd5e1; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>Orthopaedic Value Dossier Generator</h1>
+            <p class="subtitle">Transparent Value Analysis Committee (VAC) dossier builder—separating index episode costs, acute complication probability, and downstream revision risk with input-level evidence tagging.</p>
+            <p class="author">By Alvin Kuek</p>
+        </div>
+
+        <!-- Master Suite Navigation -->
+        <nav class="master-nav">
+            <a href="./index.html">🦴 Cuff &amp; Instability (Home)</a>
+            <a href="./economics.html">Suture Anchor Economics</a>
+            <a href="./anchor_footprints.html">🔬 Footprint Microarchitecture</a>
+            <a href="./graft_economics.html">RC Graft Clinical Evidence &amp; Indications</a>
+            <a href="./graft_economics 2.html">RC Graft Economics</a>
+            <a href="./rohi_economics 2.html">ROHI Selective Augmentation Economics</a>
+            <a href="./arthroplasty.html">🦾 TSA Economics (Executive Suite)</a>
+            <a href="./budget_calculator.html">🧮 Episode &amp; Budget Calculator</a>
+            <a href="./value_dossier.html" class="active">📋 Value Dossier Generator</a>
+        </nav>
+
+        <!-- Clean User-Driven Input Panel -->
+        <div class="builder-panel">
+            
+            <!-- 1. Procedure & Technology Pairing -->
+            <div class="builder-section-title">
+                <span>1. Procedure, Technology Pairing &amp; Currency</span>
+                <button type="button" class="reset-btn" onclick="clearAllFields()">Clear All Fields</button>
+            </div>
+            <div class="builder-grid-3">
+                <div class="control-group">
+                    <label for="procName">Clinical Procedure</label>
+                    <input type="text" id="procName" class="control-input" placeholder="e.g., Reverse TSA, Rotator Cuff Repair" oninput="updateDossier()">
+                </div>
+                <div class="control-group">
+                    <label for="newTechName">Proposed / New Technology</label>
+                    <input type="text" id="newTechName" class="control-input" placeholder="e.g., Augmented Modular Baseplate" oninput="updateDossier()">
+                </div>
+                <div class="control-group">
+                    <label for="compTechName">Existing Comparator</label>
+                    <input type="text" id="compTechName" class="control-input" placeholder="e.g., Standard Stemmed rTSA" oninput="updateDossier()">
+                </div>
+                <div class="control-group">
+                    <label for="currencySymbol">Currency Symbol</label>
+                    <input type="text" id="currencySymbol" class="control-input" value="$" placeholder="e.g., $, SGD $, USD $" oninput="updateDossier()">
+                </div>
+                <div class="control-group">
+                    <label for="evidenceQuality">Overall Clinical Evidence Grade</label>
+                    <select id="evidenceQuality" class="control-select" onchange="updateDossier()">
+                        <option value="high">High (Level I RCTs / Meta-Analyses / National Registries)</option>
+                        <option value="mod" selected>Moderate (Level II–III Comparative Cohorts / Systematic Reviews)</option>
+                        <option value="low">Low / Exploratory (Case Series / Biomechanical / Modeled)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="evidenceLevelTag">Primary Study Design / Source</label>
+                    <input type="text" id="evidenceLevelTag" class="control-input" placeholder="e.g., Level II Cohort / AOANJRR" oninput="updateDossier()">
+                </div>
+            </div>
+
+            <!-- 2. Clinical & Operational Qualitative Inputs -->
+            <div class="builder-section-title">
+                <span>2. Clinical Summary &amp; Workflow Notes</span>
+            </div>
+            <div class="builder-grid-3">
+                <div class="control-group">
+                    <label for="indicationsInput">Target Indications</label>
+                    <textarea id="indicationsInput" class="control-textarea" placeholder="Specify patient selection criteria, tear size, or glenoid morphology..." oninput="updateDossier()"></textarea>
+                </div>
+                <div class="control-group">
+                    <label for="evidenceSummaryInput">Evidence Summary</label>
+                    <textarea id="evidenceSummaryInput" class="control-textarea" placeholder="Summarize key clinical/radiological findings comparing New Tech vs. Comparator..." oninput="updateDossier()"></textarea>
+                </div>
+                <div class="control-group">
+                    <label for="outcomesInput">Clinical Outcomes &amp; Survivorship</label>
+                    <textarea id="outcomesInput" class="control-textarea" placeholder="Summarize PROMs, healing rates, or revision survivorship..." oninput="updateDossier()"></textarea>
+                </div>
+            </div>
+            <div class="builder-grid-2">
+                <div class="control-group">
+                    <label for="trayNotesInput">Tray &amp; CSSD Footprint Comparison</label>
+                    <input type="text" id="trayNotesInput" class="control-input" placeholder="e.g., 4 modular trays vs. 7 standard trays" oninput="updateDossier()">
+                </div>
+                <div class="control-group">
+                    <label for="rehabNotesInput">Rehabilitation &amp; Recovery Protocol</label>
+                    <input type="text" id="rehabNotesInput" class="control-input" placeholder="e.g., Standard 12-week protocol / Early active-assisted ROM" oninput="updateDossier()">
+                </div>
+            </div>
+
+            <!-- 3. Quantitative Parameter Matrix with Input-Level Evidence Tagging -->
+            <div class="builder-section-title">
+                <span>3. Economic, Operational &amp; Risk Parameters (With Input-Level Evidence Tags)</span>
+            </div>
+            <div class="param-table-wrap">
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 34%;">Parameter</th>
+                            <th style="text-align: right;">Comparator</th>
+                            <th style="text-align: right;">New Technology</th>
+                            <th>Evidence / Source Classification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Acquisition Cost -->
+                        <tr>
+                            <td>
+                                <span class="param-name">Implant Acquisition Cost</span>
+                                <span class="param-sub">Direct device tender / invoice cost per case</span>
+                            </td>
+                            <td style="text-align: right;"><input type="number" id="compAcq" class="tbl-num-input" placeholder="0" min="0" step="100" oninput="updateDossier()"></td>
+                            <td style="text-align: right;"><input type="number" id="newAcq" class="tbl-num-input" placeholder="0" min="0" step="100" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evAcq" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟢 Hospital data" selected>🟢 Hospital data</option>
+                                    <option value="🟢 Published data">🟢 Published data</option>
+                                    <option value="🟡 Modelled">🟡 Modelled</option>
+                                    <option value="🟡 Assumption">🟡 Assumption</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- OR Time -->
+                        <tr>
+                            <td>
+                                <span class="param-name">Operating Theater (OR) Time (Mins)</span>
+                                <span class="param-sub">Skin-to-skin / anesthesia theater duration</span>
+                            </td>
+                            <td style="text-align: right;"><input type="number" id="compOrMins" class="tbl-num-input" placeholder="0" min="0" step="5" oninput="updateDossier()"></td>
+                            <td style="text-align: right;"><input type="number" id="newOrMins" class="tbl-num-input" placeholder="0" min="0" step="5" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evOrTime" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟢 Published data" selected>🟢 Published data</option>
+                                    <option value="🟢 Hospital data">🟢 Hospital data</option>
+                                    <option value="🟡 Assumption">🟡 Assumption</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- OR Cost / Min -->
+                        <tr>
+                            <td>
+                                <span class="param-name">OR Facility &amp; Staffing Rate ($/Min)</span>
+                                <span class="param-sub">Institutional theater overhead rate per minute</span>
+                            </td>
+                            <td colspan="2" style="text-align: right;"><input type="number" id="otRate" class="tbl-num-input" placeholder="0" min="0" step="5" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evOtRate" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟡 Assumption" selected>🟡 Assumption</option>
+                                    <option value="🟢 Hospital data">🟢 Hospital data</option>
+                                    <option value="🟢 Published data">🟢 Published data</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- Length of Stay -->
+                        <tr>
+                            <td>
+                                <span class="param-name">Inpatient Length of Stay (Ward Days)</span>
+                                <span class="param-sub">Post-operative inpatient bed-days</span>
+                            </td>
+                            <td style="text-align: right;"><input type="number" id="compLosDays" class="tbl-num-input" placeholder="0" min="0" step="0.1" oninput="updateDossier()"></td>
+                            <td style="text-align: right;"><input type="number" id="newLosDays" class="tbl-num-input" placeholder="0" min="0" step="0.1" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evLos" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟢 Published data" selected>🟢 Published data</option>
+                                    <option value="🟢 Hospital data">🟢 Hospital data</option>
+                                    <option value="🟡 Assumption">🟡 Assumption</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- Ward Rate / Day -->
+                        <tr>
+                            <td>
+                                <span class="param-name">Inpatient Ward Bed Rate ($/Day)</span>
+                                <span class="param-sub">Daily inpatient bed, nursing &amp; routine care cost</span>
+                            </td>
+                            <td colspan="2" style="text-align: right;"><input type="number" id="wardRate" class="tbl-num-input" placeholder="0" min="0" step="100" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evWardRate" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟢 Hospital data" selected>🟢 Hospital data</option>
+                                    <option value="🟢 Published data">🟢 Published data</option>
+                                    <option value="🟡 Assumption">🟡 Assumption</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- SEPARATED: Acute Complication Rate -->
+                        <tr style="background-color: #fffbeb;">
+                            <td>
+                                <span class="param-name">Acute / Non-Revision Complication Rate (%)</span>
+                                <span class="param-sub">Infection washout, dislocation/instability, fracture, readmission</span>
+                            </td>
+                            <td style="text-align: right;"><input type="number" id="compCompRate" class="tbl-num-input" placeholder="0" min="0" max="100" step="0.1" oninput="updateDossier()"></td>
+                            <td style="text-align: right;"><input type="number" id="newCompRate" class="tbl-num-input" placeholder="0" min="0" max="100" step="0.1" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evCompRate" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟢 Published data" selected>🟢 Published data</option>
+                                    <option value="🟢 Registry">🟢 Registry</option>
+                                    <option value="🟡 Assumption">🟡 Assumption</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- SEPARATED: Cost per Complication -->
+                        <tr style="background-color: #fffbeb;">
+                            <td>
+                                <span class="param-name">Episode Cost per Complication ($)</span>
+                                <span class="param-sub">Direct hospital cost to manage a non-revision complication</span>
+                            </td>
+                            <td colspan="2" style="text-align: right;"><input type="number" id="compUnitCost" class="tbl-num-input" placeholder="0" min="0" step="500" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evCompCost" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟡 Modelled" selected>🟡 Modelled</option>
+                                    <option value="🟢 Hospital data">🟢 Hospital data</option>
+                                    <option value="🟡 Assumption">🟡 Assumption</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- SEPARATED: Revision Probability -->
+                        <tr style="background-color: #fef2f2;">
+                            <td>
+                                <span class="param-name">5–10 Yr Revision Probability (%)</span>
+                                <span class="param-sub">Implant loosening / structural failure requiring revision surgery</span>
+                            </td>
+                            <td style="text-align: right;"><input type="number" id="compRevRate" class="tbl-num-input" placeholder="0" min="0" max="100" step="0.1" oninput="updateDossier()"></td>
+                            <td style="text-align: right;"><input type="number" id="newRevRate" class="tbl-num-input" placeholder="0" min="0" max="100" step="0.1" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evRevRate" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟢 Registry" selected>🟢 Registry</option>
+                                    <option value="🟢 Published data">🟢 Published data</option>
+                                    <option value="🟡 Assumption">🟡 Assumption</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- SEPARATED: Cost per Revision -->
+                        <tr style="background-color: #fef2f2;">
+                            <td>
+                                <span class="param-name">Episode Cost per Revision Surgery ($)</span>
+                                <span class="param-sub">Full salvage arthroplasty / re-operation episode cost</span>
+                            </td>
+                            <td colspan="2" style="text-align: right;"><input type="number" id="revUnitCost" class="tbl-num-input" placeholder="0" min="0" step="500" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evRevCost" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟡 Modelled" selected>🟡 Modelled</option>
+                                    <option value="🟢 Hospital data">🟢 Hospital data</option>
+                                    <option value="🟢 Published data">🟢 Published data</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- Annual Volume -->
+                        <tr>
+                            <td>
+                                <span class="param-name">Annual Institutional Case Volume</span>
+                                <span class="param-sub">Projected procedures performed per year</span>
+                            </td>
+                            <td colspan="2" style="text-align: right;"><input type="number" id="annualVolume" class="tbl-num-input" placeholder="0" min="0" step="5" oninput="updateDossier()"></td>
+                            <td>
+                                <select id="evVolume" class="ev-select" onchange="updateDossier()">
+                                    <option value="🟢 Hospital data" selected>🟢 Hospital data</option>
+                                    <option value="🟡 Assumption">🟡 Assumption</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Executive Value Dossier Output Sheet -->
+        <div class="dossier-sheet">
+            
+            <!-- Dossier Banner -->
+            <div class="dossier-banner">
+                <div>
+                    <h2 id="dossierTitle">Value Dossier: [Procedure] — [Proposed Technology]</h2>
+                    <p id="dossierSubtitle">Comparator: [Existing Comparator]</p>
+                </div>
+                <span id="evidenceBadge" class="grade-pill grade-mod">Evidence Quality: Moderate</span>
+            </div>
+
+            <!-- Bottom-Line Cost-Neutrality Statement -->
+            <div class="breakeven-box">
+                <p class="breakeven-label">Executive Value Analysis Committee (VAC) Bottom Line</p>
+                <p class="breakeven-statement" id="breakevenText">
+                    Enter acquisition costs, OR rate, complication cost, and revision cost above to generate the automated break-even threshold statement.
+                </p>
+            </div>
+
+            <!-- Four-Pillar Assessment Grid -->
+            <div class="pillars-grid">
+                
+                <!-- PILLAR 1: CLINICAL -->
+                <div class="pillar-card" style="border-top: 3px solid #7EA8BE;">
+                    <div class="pillar-header">
+                        <h3 class="pillar-title">1. Clinical Evidence &amp; Indications</h3>
+                        <span class="pillar-tag" id="clinEvidenceTag">—</span>
+                    </div>
+                    <div class="narrative-block">
+                        <strong>Indications:</strong> <span id="clinIndications" style="color: #64748b;">Awaiting user input...</span>
+                    </div>
+                    <div class="narrative-block">
+                        <strong>Evidence Summary:</strong> <span id="clinSummary" style="color: #64748b;">Awaiting user input...</span>
+                    </div>
+                    <div class="narrative-block" style="margin-bottom: 0;">
+                        <strong>Clinical Outcomes:</strong> <span id="clinOutcomes" style="color: #64748b;">Awaiting user input...</span>
+                    </div>
+                </div>
+
+                <!-- PILLAR 2: OPERATIONAL -->
+                <div class="pillar-card" style="border-top: 3px solid #95B8A2;">
+                    <div class="pillar-header">
+                        <h3 class="pillar-title">2. Operational &amp; Workflow Impact</h3>
+                        <span class="pillar-tag">Theater &amp; Ward</span>
+                    </div>
+                    <table class="metric-table">
+                        <tr>
+                            <td class="metric-label">
+                                OR Time
+                                <span class="ev-chip" id="tagOrTime">🟢 Published data</span>
+                            </td>
+                            <td class="metric-val">
+                                <span id="opOrVal">0 mins vs. 0 mins</span>
+                                <span id="opOrDelta" class="delta-neu">0 mins delta</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">
+                                Length of Stay (LOS)
+                                <span class="ev-chip" id="tagLos">🟢 Published data</span>
+                            </td>
+                            <td class="metric-val">
+                                <span id="opLosVal">0.0 days vs. 0.0 days</span>
+                                <span id="opLosDelta" class="delta-neu">0.0 bed-days delta</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">Tray &amp; CSSD Footprint</td>
+                            <td class="metric-val">
+                                <span id="opTrayVal">—</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">Rehabilitation</td>
+                            <td class="metric-val">
+                                <span id="opRehabVal">—</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- PILLAR 3: ECONOMIC (RECONCILED MATH: INDEX + EXPECTED DOWNSTREAM = TOTAL) -->
+                <div class="pillar-card" style="border-top: 3px solid #F2C299;">
+                    <div class="pillar-header">
+                        <h3 class="pillar-title">3. Episode-of-Care Economics (Per Case)</h3>
+                        <span class="pillar-tag" id="econCurrencyTag">$</span>
+                    </div>
+                    <table class="metric-table">
+                        <tr>
+                            <td class="metric-label">
+                                Acquisition Cost
+                                <span class="ev-chip" id="tagAcq">🟢 Hospital data</span>
+                            </td>
+                            <td class="metric-val">
+                                <span id="econAcqVal">$0 vs. $0</span>
+                                <span id="econAcqDelta" class="delta-neu">$0 incremental</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">
+                                Index Episode Cost (Implant + OT + Ward)
+                                <span class="ev-chip" id="tagIndexSub">Excl. downstream risk</span>
+                            </td>
+                            <td class="metric-val">
+                                <span id="econIndexVal">$0 vs. $0</span>
+                                <span id="econIndexDelta" class="delta-neu">$0 index delta</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">
+                                Expected Complication Cost (Prob &times; Cost)
+                                <span class="ev-chip" id="tagComp">🟢 Published data / 🟡 Modelled</span>
+                            </td>
+                            <td class="metric-val">
+                                <span id="econCompVal">$0 vs. $0</span>
+                                <span id="econCompDelta" class="delta-neu">$0 delta</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">
+                                Expected Revision Cost (Prob &times; Cost)
+                                <span class="ev-chip" id="tagRev">🟢 Registry / 🟡 Modelled</span>
+                            </td>
+                            <td class="metric-val">
+                                <span id="econRevVal">$0 vs. $0</span>
+                                <span id="econRevDelta" class="delta-neu">$0 delta</span>
+                            </td>
+                        </tr>
+                        <tr style="border-top: 2px solid #cbd5e1; background-color: #f8fafc;">
+                            <td class="metric-label" style="font-weight: 700; color: #0f172a; padding-top: 9px;">
+                                Total Risk-Adjusted Episode Cost
+                                <span class="param-sub" style="font-size: 10.5px;">Index Episode + Total Expected Downstream</span>
+                            </td>
+                            <td class="metric-val" style="padding-top: 9px;">
+                                <span id="econTotalVal" style="font-size: 14px;">$0 vs. $0</span>
+                                <span id="econTotalDelta" class="delta-neu">$0 net episode delta</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- PILLAR 4: INSTITUTIONAL -->
+                <div class="pillar-card" style="border-top: 3px solid #B8B2D8;">
+                    <div class="pillar-header">
+                        <h3 class="pillar-title">4. Institutional &amp; VAC Budget Impact</h3>
+                        <span class="pillar-tag" id="instVolTag">0 Cases / Year</span>
+                    </div>
+                    <table class="metric-table">
+                        <tr>
+                            <td class="metric-label">
+                                Annual Volume
+                                <span class="ev-chip" id="tagVol">🟢 Hospital data</span>
+                            </td>
+                            <td class="metric-val">
+                                <span id="instVolVal">0 procedures / year</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">Annual Index Budget Delta (Direct Outlay)</td>
+                            <td class="metric-val">
+                                <span id="instIndexBudgetVal">$0</span>
+                                <span class="delta-neu">Implant + OT + Ward delta &times; Volume</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">Total Annual Risk-Adjusted Budget Impact</td>
+                            <td class="metric-val">
+                                <span id="instBudgetVal">$0</span>
+                                <span id="instBudgetSub" class="delta-neu">Enter parameters to compute</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">Capacity Impact (OR Theater Hours)</td>
+                            <td class="metric-val">
+                                <span id="instOrCapVal">0.0 OT Hours / year</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="metric-label">Capacity Impact (Inpatient Bed-Days)</td>
+                            <td class="metric-val">
+                                <span id="instBedCapVal">0.0 Bed-Days / year</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- Parameter Evidence Provenance Summary -->
+            <div class="audit-strip" id="auditSummaryStrip">
+                <span><strong>Parameter Evidence Audit:</strong> OR Rate (<span id="audOtRate">🟡 Assumption</span>) &bull; Ward Rate (<span id="audWardRate">🟢 Hospital data</span>) &bull; Complication Cost (<span id="audCompCost">🟡 Modelled</span>) &bull; Revision Cost (<span id="audRevCost">🟡 Modelled</span>)</span>
+                <span>All figures represent decision-analytic estimates for VAC evaluation.</span>
+            </div>
+
+            <!-- Footer Governance & Export Action -->
+            <div class="action-bar">
+                <span>Formula Verification: Total Risk-Adjusted Episode Cost = [Acquisition + (OR Mins &times; OR Rate) + (LOS &times; Ward Rate)] + [(Complication % &times; Complication Cost) + (Revision % &times; Revision Cost)].</span>
+                <button class="print-btn" onclick="window.print()">🖨️ Export / Print VAC Dossier (PDF)</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Client-Side Dossier Engine -->
+    <script>
+        function fmtMoney(val, curr) {
+            return curr + Math.round(Math.abs(val)).toLocaleString("en-US");
+        }
+
+        function clearAllFields() {
+            const textInputs = [
+                "procName", "newTechName", "compTechName", "evidenceLevelTag",
+                "indicationsInput", "evidenceSummaryInput", "outcomesInput",
+                "trayNotesInput", "rehabNotesInput"
+            ];
+            textInputs.forEach(id => {
+                document.getElementById(id).value = "";
+            });
+
+            const numInputs = [
+                "compAcq", "newAcq", "compOrMins", "newOrMins", "otRate",
+                "compLosDays", "newLosDays", "wardRate",
+                "compCompRate", "newCompRate", "compUnitCost",
+                "compRevRate", "newRevRate", "revUnitCost", "annualVolume"
+            ];
+            numInputs.forEach(id => {
+                document.getElementById(id).value = "";
+            });
+
+            document.getElementById("currencySymbol").value = "$";
+            document.getElementById("evidenceQuality").value = "mod";
+            updateDossier();
+        }
+
+        function updateDossier() {
+            const curr = document.getElementById("currencySymbol").value || "$";
+            document.getElementById("econCurrencyTag").innerText = curr.trim();
+
+            // 1. Qualitative & Header Fields
+            const proc = document.getElementById("procName").value.trim() || "[Procedure]";
+            const newTech = document.getElementById("newTechName").value.trim() || "[Proposed Technology]";
+            const compTech = document.getElementById("compTechName").value.trim() || "[Existing Comparator]";
+            const evTag = document.getElementById("evidenceLevelTag").value.trim() || "User-Defined";
+
+            document.getElementById("dossierTitle").innerText = `Value Dossier: ${proc} — ${newTech}`;
+            document.getElementById("dossierSubtitle").innerText = `Comparator: ${compTech}`;
+            document.getElementById("clinEvidenceTag").innerText = evTag;
+
+            const evQual = document.getElementById("evidenceQuality").value;
+            const badge = document.getElementById("evidenceBadge");
+            if (evQual === "high") {
+                badge.innerText = "Evidence Quality: High";
+                badge.className = "grade-pill grade-high";
+            } else if (evQual === "low") {
+                badge.innerText = "Evidence Quality: Low";
+                badge.className = "grade-pill grade-low";
+            } else {
+                badge.innerText = "Evidence Quality: Moderate";
+                badge.className = "grade-pill grade-mod";
+            }
+
+            // Sync Evidence Tags from Input Matrix to Dossier Cards
+            document.getElementById("tagAcq").innerText = document.getElementById("evAcq").value;
+            document.getElementById("tagOrTime").innerText = document.getElementById("evOrTime").value;
+            document.getElementById("tagLos").innerText = document.getElementById("evLos").value;
+            document.getElementById("tagComp").innerText = `${document.getElementById("evCompRate").value} / ${document.getElementById("evCompCost").value}`;
+            document.getElementById("tagRev").innerText = `${document.getElementById("evRevRate").value} / ${document.getElementById("evRevCost").value}`;
+            document.getElementById("tagVol").innerText = document.getElementById("evVolume").value;
+
+            document.getElementById("audOtRate").innerText = document.getElementById("evOtRate").value;
+            document.getElementById("audWardRate").innerText = document.getElementById("evWardRate").value;
+            document.getElementById("audCompCost").innerText = document.getElementById("evCompCost").value;
+            document.getElementById("audRevCost").innerText = document.getElementById("evRevCost").value;
+
+            const indText = document.getElementById("indicationsInput").value.trim();
+            const indEl = document.getElementById("clinIndications");
+            indEl.innerText = indText || "Awaiting user input...";
+            indEl.style.color = indText ? "#334155" : "#94a3b8";
+
+            const sumText = document.getElementById("evidenceSummaryInput").value.trim();
+            const sumEl = document.getElementById("clinSummary");
+            sumEl.innerText = sumText || "Awaiting user input...";
+            sumEl.style.color = sumText ? "#334155" : "#94a3b8";
+
+            const outText = document.getElementById("outcomesInput").value.trim();
+            const outEl = document.getElementById("clinOutcomes");
+            outEl.innerText = outText || "Awaiting user input...";
+            outEl.style.color = outText ? "#334155" : "#94a3b8";
+
+            document.getElementById("opTrayVal").innerText = document.getElementById("trayNotesInput").value.trim() || "—";
+            document.getElementById("opRehabVal").innerText = document.getElementById("rehabNotesInput").value.trim() || "—";
+
+            // 2. Quantitative Inputs
+            const compAcq = parseFloat(document.getElementById("compAcq").value) || 0;
+            const newAcq = parseFloat(document.getElementById("newAcq").value) || 0;
+            const compOr = parseFloat(document.getElementById("compOrMins").value) || 0;
+            const newOr = parseFloat(document.getElementById("newOrMins").value) || 0;
+            const otRate = parseFloat(document.getElementById("otRate").value) || 0;
+            const compLos = parseFloat(document.getElementById("compLosDays").value) || 0;
+            const newLos = parseFloat(document.getElementById("newLosDays").value) || 0;
+            const wardRate = parseFloat(document.getElementById("wardRate").value) || 0;
+
+            // Separated Complication vs. Revision Inputs
+            const compCompRate = parseFloat(document.getElementById("compCompRate").value) || 0;
+            const newCompRate = parseFloat(document.getElementById("newCompRate").value) || 0;
+            const compUnitCost = parseFloat(document.getElementById("compUnitCost").value) || 0;
+
+            const compRevRate = parseFloat(document.getElementById("compRevRate").value) || 0;
+            const newRevRate = parseFloat(document.getElementById("newRevRate").value) || 0;
+            const revUnitCost = parseFloat(document.getElementById("revUnitCost").value) || 0;
+
+            const annualVol = parseFloat(document.getElementById("annualVolume").value) || 0;
+
+            // Operational Deltas
+            const orSaved = compOr - newOr;
+            const losSaved = compLos - newLos;
+
+            document.getElementById("opOrVal").innerText = `${newOr.toFixed(0)} mins vs. ${compOr.toFixed(0)} mins`;
+            const opOrEl = document.getElementById("opOrDelta");
+            if (orSaved > 0) {
+                opOrEl.innerText = `-${orSaved.toFixed(0)} mins saved per case`;
+                opOrEl.className = "delta-pos";
+            } else if (orSaved < 0) {
+                opOrEl.innerText = `+${Math.abs(orSaved).toFixed(0)} mins added per case`;
+                opOrEl.className = "delta-neg";
+            } else {
+                opOrEl.innerText = "0 mins delta";
+                opOrEl.className = "delta-neu";
+            }
+
+            document.getElementById("opLosVal").innerText = `${newLos.toFixed(1)} days vs. ${compLos.toFixed(1)} days`;
+            const opLosEl = document.getElementById("opLosDelta");
+            if (losSaved > 0) {
+                opLosEl.innerText = `-${losSaved.toFixed(1)} bed-days saved per case`;
+                opLosEl.className = "delta-pos";
+            } else if (losSaved < 0) {
+                opLosEl.innerText = `+${Math.abs(losSaved).toFixed(1)} bed-days added per case`;
+                opLosEl.className = "delta-neg";
+            } else {
+                opLosEl.innerText = "0.0 bed-days delta";
+                opLosEl.className = "delta-neu";
+            }
+
+            // Reconciled Economic Calculations
+            const incAcq = newAcq - compAcq;
+
+            // Index Episode = Acquisition + (OR Mins * OR Rate) + (LOS Days * Ward Rate)
+            const compIndexEp = compAcq + (compOr * otRate) + (compLos * wardRate);
+            const newIndexEp = newAcq + (newOr * otRate) + (newLos * wardRate);
+            const netIndexDelta = newIndexEp - compIndexEp;
+
+            // Expected Complication Cost = Complication Rate * Complication Cost
+            const compExpComp = (compCompRate / 100.0) * compUnitCost;
+            const newExpComp = (newCompRate / 100.0) * compUnitCost;
+            const netCompDelta = newExpComp - compExpComp;
+
+            // Expected Revision Cost = Revision Rate * Revision Cost
+            const compExpRev = (compRevRate / 100.0) * revUnitCost;
+            const newExpRev = (newRevRate / 100.0) * revUnitCost;
+            const netRevDelta = newExpRev - compExpRev;
+
+            // Total Risk-Adjusted Episode Cost = Index Episode + Expected Complication + Expected Revision
+            const compTotalEp = compIndexEp + compExpComp + compExpRev;
+            const newTotalEp = newIndexEp + newExpComp + newExpRev;
+            const netTotalDelta = newTotalEp - compTotalEp;
+
+            // Annual Institutional Budget Impact
+            const annualIndexImpact = netIndexDelta * annualVol;
+            const annualTotalImpact = netTotalDelta * annualVol;
+
+            // Update Economic Table
+            document.getElementById("econAcqVal").innerText = `${fmtMoney(newAcq, curr)} vs. ${fmtMoney(compAcq, curr)}`;
+            const acqEl = document.getElementById("econAcqDelta");
+            if (incAcq > 0) {
+                acqEl.innerText = `+${fmtMoney(incAcq, curr)} incremental`;
+                acqEl.className = "delta-neg";
+            } else if (incAcq < 0) {
+                acqEl.innerText = `-${fmtMoney(incAcq, curr)} acquisition savings`;
+                acqEl.className = "delta-pos";
+            } else {
+                acqEl.innerText = `${curr}0 incremental`;
+                acqEl.className = "delta-neu";
+            }
+
+            document.getElementById("econIndexVal").innerText = `${fmtMoney(newIndexEp, curr)} vs. ${fmtMoney(compIndexEp, curr)}`;
+            const idxEl = document.getElementById("econIndexDelta");
+            if (netIndexDelta > 0) {
+                idxEl.innerText = `+${fmtMoney(netIndexDelta, curr)} index delta`;
+                idxEl.className = "delta-neg";
+            } else if (netIndexDelta < 0) {
+                idxEl.innerText = `-${fmtMoney(netIndexDelta, curr)} index savings`;
+                idxEl.className = "delta-pos";
+            } else {
+                idxEl.innerText = `${curr}0 index delta`;
+                idxEl.className = "delta-neu";
+            }
+
+            document.getElementById("econCompVal").innerText = `${fmtMoney(newExpComp, curr)} vs. ${fmtMoney(compExpComp, curr)}`;
+            const compEl = document.getElementById("econCompDelta");
+            if (netCompDelta < 0) {
+                compEl.innerText = `-${fmtMoney(netCompDelta, curr)} expected savings`;
+                compEl.className = "delta-pos";
+            } else if (netCompDelta > 0) {
+                compEl.innerText = `+${fmtMoney(netCompDelta, curr)} expected increase`;
+                compEl.className = "delta-neg";
+            } else {
+                compEl.innerText = `${curr}0 expected delta`;
+                compEl.className = "delta-neu";
+            }
+
+            document.getElementById("econRevVal").innerText = `${fmtMoney(newExpRev, curr)} vs. ${fmtMoney(compExpRev, curr)}`;
+            const revEl = document.getElementById("econRevDelta");
+            if (netRevDelta < 0) {
+                revEl.innerText = `-${fmtMoney(netRevDelta, curr)} expected savings`;
+                revEl.className = "delta-pos";
+            } else if (netRevDelta > 0) {
+                revEl.innerText = `+${fmtMoney(netRevDelta, curr)} expected increase`;
+                revEl.className = "delta-neg";
+            } else {
+                revEl.innerText = `${curr}0 expected delta`;
+                revEl.className = "delta-neu";
+            }
+
+            document.getElementById("econTotalVal").innerText = `${fmtMoney(newTotalEp, curr)} vs. ${fmtMoney(compTotalEp, curr)}`;
+            const totEl = document.getElementById("econTotalDelta");
+            if (netTotalDelta < 0) {
+                totEl.innerText = `-${fmtMoney(netTotalDelta, curr)} net episode savings`;
+                totEl.className = "delta-pos";
+            } else if (netTotalDelta > 0) {
+                totEl.innerText = `+${fmtMoney(netTotalDelta, curr)} net episode increase`;
+                totEl.className = "delta-neg";
+            } else {
+                totEl.innerText = `${curr}0 net episode delta`;
+                totEl.className = "delta-neu";
+            }
+
+            // Update Institutional Table
+            document.getElementById("instVolTag").innerText = `${annualVol.toLocaleString("en-US")} Cases / Year`;
+            document.getElementById("instVolVal").innerText = `${annualVol.toLocaleString("en-US")} procedures / year`;
+
+            const idxBudEl = document.getElementById("instIndexBudgetVal");
+            if (annualIndexImpact < 0) {
+                idxBudEl.innerText = `-${fmtMoney(annualIndexImpact, curr)} (Index Savings)`;
+                idxBudEl.style.color = "#15803d";
+            } else if (annualIndexImpact > 0) {
+                idxBudEl.innerText = `+${fmtMoney(annualIndexImpact, curr)} (Index Outlay)`;
+                idxBudEl.style.color = "#b91c1c";
+            } else {
+                idxBudEl.innerText = `${curr}0`;
+                idxBudEl.style.color = "#0f172a";
+            }
+
+            const budValEl = document.getElementById("instBudgetVal");
+            const budSubEl = document.getElementById("instBudgetSub");
+            if (annualVol === 0 || (compTotalEp === 0 && newTotalEp === 0)) {
+                budValEl.innerText = `${curr}0`;
+                budValEl.style.color = "#0f172a";
+                budSubEl.innerText = "Enter parameters to compute";
+                budSubEl.className = "delta-neu";
+            } else if (annualTotalImpact < 0) {
+                budValEl.innerText = `-${fmtMoney(annualTotalImpact, curr)} (Net Annual Savings)`;
+                budValEl.style.color = "#15803d";
+                budSubEl.innerText = "Cost-saving across index + complication + revision horizon";
+                budSubEl.className = "delta-pos";
+            } else if (annualTotalImpact > 0) {
+                budValEl.innerText = `+${fmtMoney(annualTotalImpact, curr)} (Net Annual Outlay)`;
+                budValEl.style.color = "#b91c1c";
+                budSubEl.innerText = "Net annual budget impact after operational & risk offsets";
+                budSubEl.className = "delta-neg";
+            } else {
+                budValEl.innerText = `${curr}0 (Cost-Neutral)`;
+                budValEl.style.color = "#0f172a";
+                budSubEl.innerText = "Exact budget neutrality achieved";
+                budSubEl.className = "delta-neu";
+            }
+
+            const totalOrHours = (orSaved * annualVol) / 60.0;
+            const orCapEl = document.getElementById("instOrCapVal");
+            orCapEl.innerText = `${totalOrHours > 0 ? "+" : ""}${totalOrHours.toFixed(1)} OT Hours / year`;
+            orCapEl.style.color = totalOrHours > 0 ? "#15803d" : (totalOrHours < 0 ? "#b91c1c" : "#0f172a");
+
+            const totalBedDays = losSaved * annualVol;
+            const bedCapEl = document.getElementById("instBedCapVal");
+            bedCapEl.innerText = `${totalBedDays > 0 ? "+" : ""}${totalBedDays.toFixed(1)} Bed-Days / year`;
+            bedCapEl.style.color = totalBedDays > 0 ? "#15803d" : (totalBedDays < 0 ? "#b91c1c" : "#0f172a");
+
+            // Bottom-Line Cost-Neutrality Statement (Three Independent Break-Even Levers)
+            const beEl = document.getElementById("breakevenText");
+            if (incAcq > 0) {
+                const minsText = otRate > 0 ? `${(incAcq / otRate).toFixed(1)} minutes` : "[Enter OR Rate]";
+                const compPctText = compUnitCost > 0 ? `${((incAcq / compUnitCost) * 100.0).toFixed(1)}%` : "[Enter Complication Cost]";
+                const revPctText = revUnitCost > 0 ? `${((incAcq / revUnitCost) * 100.0).toFixed(1)}%` : "[Enter Revision Cost]";
+                beEl.innerHTML = `At an incremental acquisition cost of <span class="highlight-val">${fmtMoney(incAcq, curr)}</span>, the technology becomes cost-neutral at <span class="highlight-val">${minsText}</span> of OR time saved, a <span class="highlight-val">${compPctText}</span> reduction in acute complication rate, OR a <span class="highlight-val">${revPctText}</span> reduction in revision probability.`;
+            } else if (incAcq < 0) {
+                beEl.innerHTML = `At an acquisition savings of <span class="highlight-val">${fmtMoney(incAcq, curr)}</span> per case, the technology is immediately cost-saving prior to factoring in OR time, complication, or revision offsets.`;
+            } else {
+                beEl.innerText = "Enter acquisition costs, OR rate, complication cost, and revision cost above to generate the automated break-even threshold statement.";
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", updateDossier);
+    </script>
+</body>
+</html>
