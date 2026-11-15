@@ -5,8 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const navContainer = document.getElementById("master-nav");
     if (!navContainer) return;
 
-    const currentFile = decodeURIComponent(window.location.pathname.split("/").pop() || "index.html");
-    const isApacPage = (currentFile === "apac_markets.html");
+// Replace lines 6–7 in nav.js with:
+const rawFile = decodeURIComponent(window.location.pathname.split("/").pop() || "index.html");
+const currentFile = rawFile.endsWith(".html")
 
     // Top-Left Global Section Switcher (expandable for future non-shoulder sections)
     const globalSections = [
