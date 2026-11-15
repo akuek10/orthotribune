@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
             accent: "#7EA8BE",
             items: [
                 {
-                    name: "🦴 Cuff & Instability Overview (Home)",
+                    name: "🦴 Cuff & Instability Overview",
                     desc: "Core shoulder repair & instability summary",
                     href: "index.html"
                 },
