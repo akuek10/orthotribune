@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proximal Biceps: Evidence, Technique &amp; Economics - OrthoTribune</title>
+    <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 24px 14px 60px 14px; }
+        .container { max-width: 1200px; margin: 0 auto; background: #ffffff; padding: 28px 28px 36px 28px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
+        .header { margin-bottom: 22px; }
+        h1 { margin: 0 0 6px 0; font-size: 25px; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; }
+        .subtitle { margin: 0 0 6px 0; font-size: 14px; color: #475569; line-height: 1.5; }
+        .author { margin: 0; font-size: 13px; font-style: italic; color: #64748b; }
+
+        /* Section Titles */
+        .sec-title { font-size: 17px; font-weight: 700; color: #0f172a; margin: 28px 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 8px; }
+
+        /* Decision Matrix Table */
+        .table-wrap { overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03); }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 780px; }
+        .data-table th { background: #0f172a; color: #ffffff; font-weight: 700; text-align: left; padding: 12px 14px; border-right: 1px solid #1e293b; }
+        .data-table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; border-right: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; color: #334155; }
+        .data-table tr:nth-child(even) td { background: #fcfdfe; }
+        .data-table tr:last-child td { border-bottom: none; }
+
+        .ev-badge { display: inline-block; padding: 2px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; margin-top: 5px; }
+        .ev-high { background: #dcfce7; color: #166534; }
+        .ev-mod { background: #fef9c3; color: #854d0e; }
+        .ev-low { background: #fee2e2; color: #991b1b; }
+
+        /* Established vs Uncertain Split Grid */
+        .epistemic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 26px; }
+        @media (max-width: 820px) { .epistemic-grid { grid-template-columns: 1fr; } }
+        .ep-card { padding: 18px 20px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; }
+        .ep-card.established { border-left: 4px solid #16a34a; }
+        .ep-card.uncertain { border-left: 4px solid #d97706; }
+        .ep-card h3 { margin: 0 0 10px 0; font-size: 14.5px; color: #0f172a; }
+        .ep-card ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; color: #334155; }
+        .ep-card li { margin-bottom: 6px; }
+
+        /* Evidence Graphic Split Grid (Popeye Incidence vs Cramping Odds Ratio) */
+        .chart-block { margin: 24px 0; padding: 20px 20px 24px 20px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; }
+        .evidence-header { margin-bottom: 14px; }
+        .evidence-header h3 { margin: 0 0 4px 0; font-size: 15.5px; font-weight: 700; color: #0f172a; }
+        .evidence-header p { margin: 0; font-size: 12.5px; color: #64748b; }
+        .split-ev-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 18px; align-items: stretch; }
+        @media (max-width: 840px) { .split-ev-grid { grid-template-columns: 1fr; } }
+        .sub-ev-box { border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; background: #ffffff; display: flex; flex-direction: column; justify-content: space-between; }
+        .cramping-panel { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px 18px; display: flex; flex-direction: column; justify-content: space-between; }
+        .cramping-title { font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+        .cramping-sub { font-size: 12px; color: #475569; margin-bottom: 14px; line-height: 1.45; }
+        .or-callout { background: #ffffff; border: 1px solid #cbd5e1; border-left: 4px solid #D8A49B; border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; }
+        .or-metric { font-size: 24px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 3px; }
+        .or-label { font-size: 12.5px; font-weight: 600; color: #334155; }
+        .cramping-note { font-size: 11.5px; color: #64748b; line-height: 1.5; background: #ffffff; padding: 10px 12px; border-radius: 6px; border: 1px dashed #cbd5e1; }
+        .chart-caption { margin-top: 14px; font-size: 13px; line-height: 1.6; color: #334155; background: #f8fafc; padding: 14px 18px; border-radius: 8px; border-left: 3px solid #95B8A2; }
+
+        /* Detail Cards */
+        .detail-block { padding: 18px 20px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff; margin-bottom: 18px; }
+        .detail-block h4 { margin: 0 0 8px 0; font-size: 15px; color: #0f172a; }
+        .detail-block p { margin: 0 0 10px 0; font-size: 13.5px; line-height: 1.6; color: #334155; }
+        .detail-block p:last-child { margin-bottom: 0; }
+        .callout-quote { background: #f1f5f9; border-left: 3px solid #7EA8BE; padding: 11px 15px; border-radius: 6px; font-size: 13px; color: #1e293b; font-weight: 500; margin-top: 10px; }
+
+        .gov-note { margin-top: 24px; padding: 16px 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7EA8BE; border-radius: 8px; font-size: 12.5px; line-height: 1.6; color: #475569; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Global Navigation -->
+        <div id="master-nav"></div>
+        <script src="./nav2.js"></script>
+
+        <div class="header">
+            <h1>Proximal Biceps: Evidence &rarr; Technique &rarr; Economics</h1>
+            <p class="subtitle">A balanced clinical, biomechanical, and economic synthesis of long head of the biceps (LHB) tenotomy vs. tenodesis, fixation constructs, onlay vs. inlay strategies, and anatomical footprint locations.</p>
+        </div>
+
+        <!-- Master 4-Decision Trade-Off Matrix -->
+        <div class="sec-title">1. Executive Decision Matrix: Clinical &amp; Economic Trade-Offs</div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 21%;">Surgical Decision</th>
+                        <th style="width: 23%;">Core Trade-Off</th>
+                        <th style="width: 38%;">Evidence Synthesis</th>
+                        <th style="width: 18%;">Evidence Strength</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Tenotomy vs. Tenodesis</strong></td>
+                        <td>Implant cost &amp; OR time <em>vs.</em> cosmetic contour &amp; cramping risk</td>
+                        <td>Randomized evidence consistently shows higher cosmetic Popeye deformity after tenotomy (~23.3% vs. ~6.8% in Level-I pooled data). Pain, ASES, and biceps strength are generally similar, while some meta-analyses report statistically better Constant/SST scores with tenodesis (likely small clinically). Tenotomy avoids implant cost and saves ~15 min OR time (high heterogeneity).</td>
+                        <td><span class="ev-badge ev-high">🟢 Strong (Level I RCTs)</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>All-Suture Anchor vs. Cortical Button vs. Interference Screw</strong></td>
+                        <td>Cortical bone preservation <em>vs.</em> time-zero fixation mechanics</td>
+                        <td>Fixation constructs differ in stiffness and cyclic displacement, but comparative biomechanical studies show conflicting load-to-failure rankings and do not establish a universally superior implant clinically.</td>
+                        <td><span class="ev-badge ev-mod">🟡 Moderate (Mixed Cadaveric / Clinical)</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Onlay vs. Inlay Fixation</strong></td>
+                        <td>Minimal cortical defect &amp; tensioning ease <em>vs.</em> socket tendon-bone contact</td>
+                        <td>Inlay socket fixation provides circumferential cancellous contact, but superior biomechanical pullout over cortical onlay fixation has not been consistently demonstrated, and clinical outcomes appear comparable.</td>
+                        <td><span class="ev-badge ev-mod">🟡 Moderate (Cadaveric &amp; Cohort)</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Suprapectoral vs. Subpectoral Location</strong></td>
+                        <td>All-arthroscopic workflow <em>vs.</em> bypassing bicipital groove pathology</td>
+                        <td>Comparative studies and meta-analyses generally show similar functional scores (Constant, VAS, clinically equivalent ASES) and Popeye rates. Subpectoral placement bypasses the bicipital groove, though the magnitude of clinical pain reduction remains uncertain.</td>
+                        <td><span class="ev-badge ev-mod">🟡 Moderate (RCTs &amp; Meta-Analyses)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Epistemic Clarity: What is Established vs What Remains Uncertain -->
+        <div class="sec-title">2. Evidence Calibration: Established Consensus vs. Open Questions</div>
+        <div class="epistemic-grid">
+            <div class="ep-card established">
+                <h3>What Is Well Established</h3>
+                <ul>
+                    <li><strong>Broadly Comparable Pain &amp; Strength:</strong> Both tenotomy and tenodesis deliver reliable pain relief, ASES scores, and biceps strength recovery.</li>
+                    <li><strong>Cosmetic Protection:</strong> Tenodesis substantially lowers the risk of Popeye deformity (~6.8% vs. ~23.3% in Level-I pooled trials; ~3.1–3.3&times; lower odds/risk).</li>
+                    <li><strong>Resource &amp; Time Efficiency:</strong> Tenotomy eliminates implant expenditure and shortens operative time (~15 min pooled mean difference, though technique-dependent).</li>
+                    <li><strong>Biomechanical Construct Differences:</strong> Interference screws, cortical buttons, and all-suture anchors vary in initial stiffness, cyclic displacement, and cortical defect size.</li>
+                    <li><strong>Cortical Stress Risers:</strong> Larger subpectoral bone tunnels reduce torsional bone strength in biomechanical testing, creating a potential stress riser.</li>
+                    <li><strong>Location Equivalence on PROMs:</strong> Arthroscopic suprapectoral and mini-open subpectoral tenodesis generally yield similar patient-reported outcomes.</li>
+                </ul>
+            </div>
+            <div class="ep-card uncertain">
+                <h3>What Remains Uncertain</h3>
+                <ul>
+                    <li><strong>Clinical Superiority of Any Single Implant:</strong> Whether differences in time-zero stiffness or cyclic displacement translate into fewer clinical failures.</li>
+                    <li><strong>Subpectoral Pain Advantage:</strong> Whether distal subpectoral placement meaningfully reduces persistent anterior shoulder pain compared with suprapectoral fixation.</li>
+                    <li><strong>Optimal Patient Selection Thresholds:</strong> Exact age, BMI, or activity cutoffs defining which subgroup derives the clearest net benefit from tenodesis over tenotomy.</li>
+                    <li><strong>Fracture Risk Reduction via Smaller Tunnels:</strong> Whether smaller-footprint onlay or unicortical techniques translate into measurably lower clinical fracture rates given the already rare baseline incidence (~0.08% in large series).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Graphic: Split Popeye Pooled Incidence vs. Bicipital Cramping Odds Ratio -->
+        <div class="chart-block">
+            <div class="evidence-header">
+                <h3>Level I Randomized Evidence: Cosmetic Deformity &amp; Bicipital Symptoms</h3>
+                <p>Selected pooled RCT evidence (combining Level-I-only incidence estimates for Popeye deformity with RCT meta-analysis odds ratios for cramping).</p>
+            </div>
+
+            <div class="split-ev-grid">
+                <!-- Left Panel: Popeye Deformity Pooled Incidence -->
+                <div class="sub-ev-box">
+                    <div id="chart_popeye_rct" style="height:290px; width:100%;"></div>
+                </div>
+
+                <!-- Right Panel: Bicipital Cramping Odds Ratio (No inferred incidence) -->
+                <div class="cramping-panel">
+                    <div>
+                        <div class="cramping-title">Bicipital Cramping (Relative Odds)</div>
+                        <div class="cramping-sub">Pooled RCT meta-analysis suggests higher odds of bicipital cramping with tenotomy versus tenodesis, though findings vary across individual reviews.</div>
+                        <div class="or-callout">
+                            <div class="or-metric">OR &approx; 3.36</div>
+                            <div class="or-label">Higher odds with tenotomy in pooled RCT analysis (vs. tenodesis)</div>
+                        </div>
+                    </div>
+                    <div class="cramping-note">
+                        <strong>Methodological Note:</strong> Baseline cramping incidence estimates vary considerably between randomized studies (and some meta-analyses report no statistically significant difference); pooled incidence should not be inferred directly from an odds ratio.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-caption">
+                <strong>Interpreting the Evidence:</strong> Randomized evidence consistently demonstrates a substantially higher risk of Popeye deformity after tenotomy (~23.3% vs. ~6.8% in Level-I pooled data; &approx;3.1&times; higher risk). Pain, ASES scores, and biceps strength are generally similar, although some meta-analyses report statistically better Constant/SST scores after tenodesis; these differences appear small and may not be clinically meaningful. The choice therefore involves a trade-off between cosmetic/biceps-related symptoms, operative time, implant use, and <strong>shared decision-making based on patient preferences</strong>.
+            </div>
+        </div>
+
+        <!-- Deep Dive Sections -->
+        <div class="sec-title">3. Detailed Domain Synthesis</div>
+
+        <div class="detail-block">
+            <h4>A. Tenotomy vs. Tenodesis: Clinical &amp; Economic Selection</h4>
+            <p>Across randomized evidence, pain, ASES scores, and elbow flexion/supination strength are generally similar between tenotomy and tenodesis, while tenodesis substantially reduces cosmetic Popeye deformity (~6.8% vs. ~23.3% in Level-I pooled trials) and may reduce bicipital cramping (OR &approx; 3.36 in pooled RCT analysis, though results vary across reviews). While some meta-analyses report statistically better Constant or SST scores with tenodesis, the absolute point differences appear small and may not be clinically meaningful.</p>
+            <p><strong>Operative Time &amp; Patient Selection:</strong> Tenotomy is typically faster; pooled evidence suggests approximately 15 minutes shorter operative time, although estimates vary substantially by technique and surgical setting (high statistical heterogeneity). Tenotomy may remain an attractive option in older, lower-demand patients or when minimizing operative time and implant use is prioritized, whereas tenodesis is often favored when preservation of arm contour is important, in younger or active patients, or based on explicit patient preference.</p>
+        </div>
+
+        <div class="detail-block">
+            <h4>B. Fixation Constructs: All-Suture Anchors, Cortical Buttons &amp; Interference Screws</h4>
+            <p>Rather than following a rigid mechanical hierarchy, comparative biomechanical studies show conflicting load-to-failure rankings depending on testing setup:</p>
+            <ul style="margin: 6px 0 10px 0; padding-left: 20px; font-size: 13.5px; line-height: 1.6; color: #334155;">
+                <li><strong>Interference Screws (PEEK / Biocomposite):</strong> Frequently demonstrate high initial stiffness and strong fixation in biomechanical testing, but comparative studies do not establish a universally superior fixation construct.</li>
+                <li><strong>All-Suture Anchors:</strong> Reported ultimate failure loads vary substantially with anchor design, number and configuration of sutures, tendon quality, and testing protocol—with some cadaveric models showing comparable or higher ultimate load than interference screws alongside greater cyclic displacement.</li>
+                <li><strong>Cortical Buttons (Suspensory Fixation):</strong> Utilize a small drill hole with unicortical or bicortical suspensory button fixation (terminology varies by technique). Cadaveric studies demonstrate viable failure loads comparable to interference screws; bicortical drilling carries a technical/anatomic risk to posterior neurovascular structures if over-drilled, which unicortical anterior techniques aim to avoid.</li>
+            </ul>
+            <p><strong>Humeral Fracture Context:</strong> Large subpectoral bone tunnels can create a humeral stress riser; clinically apparent humeral fracture remains rare (~0.08% in large multi-thousand-case series) but potentially serious, and has been reported across multiple fixation methods (interference screws, cortical buttons, and suture anchors).</p>
+            <div class="callout-quote">
+                "Biomechanical superiority is construct- and technique-dependent, and has not consistently translated into clinically meaningful differences."
+            </div>
+        </div>
+
+        <div class="detail-block">
+            <h4>C. Onlay vs. Inlay Fixation</h4>
+            <p><strong>Inlay Fixation (Socket or Bone-Tunnel Docking):</strong> Docks the biceps tendon into a prepared bone socket (typically 6–8 mm diameter for interference screws) or smaller transosseous/all-suture bone tunnels. While inlay docking provides tendon-bone contact inside a prepared channel, biomechanical superiority over cortical onlay fixation is mixed and construct-dependent: a small matched-pair cadaveric study at the superior groove (Cagle et al., 2018; <em>n</em> = 6 pairs) reported comparable mean ultimate loads for interference-screw inlay (215 N; range 60–329 N) versus suture-anchor onlay (210 N), whereas a 2024 subpectoral cadaveric model reported higher failure load for an implantless all-suture inlay technique (588 N) compared with a unicortical metal-button onlay (376 N).</p>
+            <p><strong>Onlay Fixation (Cortical Surface):</strong> Secures the tendon directly against prepared cortical bone using all-suture anchors or a cortical button. The theoretical rationale for cortical onlay fixation is minimizing cortical defect size (potentially reducing diaphyseal stress risers compared with larger subpectoral sockets) and facilitating direct visual length-tension adjustment, though these remain biomechanical/technical rationales rather than proven clinical differences; comparative clinical failure rates remain low across both strategies.</p>
+        </div>
+
+        <div class="detail-block">
+            <h4>D. Anatomical Footprint Location: Intra-Articular, Top-of-Groove, Suprapectoral &amp; Subpectoral</h4>
+            <p><strong>Intra-Articular / Soft-Tissue Tenodesis vs. Top-of-Groove Bone Fixation:</strong> Incorporating the biceps tendon directly into an anterior rotator cuff repair suture/anchor constitutes a <em>soft-tissue tenodesis</em> at the articular margin—saving operative time and an additional implant during concurrent cuff repair—whereas dedicated <em>top-of-groove</em> fixation secures the tendon into bone at the proximal entrance of the bicipital groove. Both leave tendon distal to the fixation point within the bicipital sheath.</p>
+            <p><strong>Suprapectoral (In-Groove / Distal Groove) vs. Subpectoral Tenodesis:</strong> Comparative evidence generally demonstrates similar functional and pain outcomes (VAS, Constant, Popeye rates, and clinically equivalent ASES scores) between arthroscopic suprapectoral and mini-open subpectoral tenodesis. Subpectoral fixation places the tenodesis distal to the bicipital tunnel and may theoretically or clinically offer an advantage when residual groove pathology is a concern, though the magnitude and clinical importance of this difference remain uncertain. Conversely, the open subpectoral approach carries distinct procedural risks—including rare neurovascular injury (musculocutaneous or radial nerve), diaphyseal humeral fracture, and wound infection—that must be weighed against all-arthroscopic suprapectoral workflows.</p>
+        </div>
+
+        <!-- Governance Note -->
+        <div class="gov-note">
+            <strong>Methodological Governance Note (As of 2026):</strong> Clinical comparisons synthesize peer-reviewed Level I/II randomized trials, systematic reviews, and cadaveric biomechanical studies on long head of the biceps (LHB) pathology. Because meta-analyses vary in inclusion criteria, follow-up periods, and outcome definitions, pooled percentages and odds ratios are presented separately without inferring baseline incidence from odds ratios. Time-zero cadaveric failure loads depend heavily on specimen bone mineral density, suture configuration, and cyclic loading protocols and should not be interpreted as direct clinical failure thresholds.
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cfg = { displayModeBar: false, responsive: true };
+
+            Plotly.newPlot("chart_popeye_rct", [
+                {
+                    x: ["Biceps Tenotomy", "Biceps Tenodesis"],
+                    y: [23.3, 6.8],
+                    type: "bar",
+                    width: [0.46, 0.46],
+                    marker: { color: ["#D8A49B", "#7EA8BE"] },
+                    text: ["23.3%", "6.8%"],
+                    textposition: "outside",
+                    hovertemplate: "<b>%{x}</b><br>Level-I Pooled Popeye Incidence: <b>%{y}%</b><extra></extra>"
+                }
+            ], {
+                title: {
+                    text: "<b>Cosmetic Popeye Deformity (Level-I Pooled Incidence)</b><br><sup>&approx;3.1&times; higher risk with tenotomy vs. tenodesis.</sup>",
+                    font: { family: "Inter, -apple-system, sans-serif", size: 12.5 },
+                    x: 0.01, y: 0.95
+                },
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: "white",
+                margin: { l: 50, r: 20, t: 65, b: 45 },
+                showlegend: false,
+                hoverlabel: { bgcolor: "white", font: { size: 11 } },
+                yaxis: { title: "Pooled Incidence (%)", range: [0, 30], dtick: 5, showgrid: true, gridcolor: "#EBEBEB" },
+                xaxis: { linecolor: "#D1D5DB", tickfont: { size: 12 } }
+            }, cfg);
+        });
+    </script>
+</body>
+</html>
