@@ -1,13 +1,11 @@
-
-
 // nav.js — Global Top-Left Section Switcher & Context-Aware Sub-Navigation for OrthoTribune
 document.addEventListener("DOMContentLoaded", function () {
     const navContainer = document.getElementById("master-nav");
     if (!navContainer) return;
 
-// Replace lines 6–7 in nav.js with:
-const rawFile = decodeURIComponent(window.location.pathname.split("/").pop() || "index.html");
-const currentFile = rawFile.endsWith(".html")
+    const rawFile = decodeURIComponent(window.location.pathname.split("/").pop() || "index.html");
+    const currentFile = rawFile.endsWith(".html") ? rawFile : rawFile + ".html";
+    const isMarketsPage = (currentFile === "apac_markets.html" || currentFile === "sea_gc_markets.html");
 
     // Top-Left Global Section Switcher (expandable for future non-shoulder sections)
     const globalSections = [
@@ -18,9 +16,9 @@ const currentFile = rawFile.endsWith(".html")
             href: "index.html"
         },
         {
-            id: "apac-markets",
-            name: "🌏 APAC Markets Comparison",
-            subtitle: "General Orthopaedic Sports Market Profile (SG, MY, TH, ID, TW, HK)",
+            id: "regional-markets",
+            name: "🌏 SEA & Greater China Markets",
+            subtitle: "Orthopaedic Sports Market Profile (SG, MY, TH, ID, TW, HK)",
             href: "apac_markets.html"
         }
     ];
@@ -32,7 +30,7 @@ const currentFile = rawFile.endsWith(".html")
             label: "🔬 Implant Evidence",
             items: [
                 {
-                    name: "🦴 Cuff & Instability Overview",
+                    name: "🦴 Cuff & Instability Overview (Home)",
                     desc: "Core shoulder repair & instability summary",
                     href: "index.html"
                 },
@@ -47,7 +45,7 @@ const currentFile = rawFile.endsWith(".html")
                     href: "graft_economics.html"
                 },
                 {
-                    name: "💪 Proximal Biceps : Evidence & Trade-Offs",
+                    name: "💪 Proximal Biceps: Evidence & Trade-Offs",
                     desc: "Tenotomy vs. tenodesis, fixation constructs & location",
                     href: "biceps.html"
                 }
@@ -74,7 +72,7 @@ const currentFile = rawFile.endsWith(".html")
                 },
                 {
                     name: "🦾 TSA Economics (Executive Suite)",
-                    desc: "Revision multipliers, registries & APAC capacity",
+                    desc: "Revision multipliers, registries & regional capacity",
                     href: "arthroplasty.html"
                 }
             ]
@@ -179,7 +177,7 @@ const currentFile = rawFile.endsWith(".html")
             position: absolute;
             top: calc(100% + 6px);
             left: 0;
-            min-width: 295px;
+            min-width: 310px;
             max-width: 90vw;
             background: #ffffff;
             border: 1px solid #cbd5e1;
@@ -254,12 +252,12 @@ const currentFile = rawFile.endsWith(".html")
     const bar = document.createElement("div");
     bar.className = "ot-nav-shell";
 
-    // 1. Top-Left Global Section Dropdown ("Upper Extremity" vs "APAC Markets Comparison")
+    // 1. Top-Left Global Section Dropdown
     const globalGroup = document.createElement("div");
     globalGroup.className = "ot-dd-group";
     globalGroup.id = "global-section-switcher";
 
-    const currentGlobalLabel = isApacPage ? "🌏 APAC Markets Comparison" : "🦾 Upper Extremity";
+    const currentGlobalLabel = isMarketsPage ? "🌏 SEA & Greater China Markets" : "🦾 Upper Extremity";
 
     const globalBtn = document.createElement("button");
     globalBtn.type = "button";
@@ -271,7 +269,7 @@ const currentFile = rawFile.endsWith(".html")
     globalPanel.innerHTML = `<div class="ot-dd-header-note">Select Section</div>`;
 
     globalSections.forEach(sec => {
-        const isCurrent = (sec.id === "apac-markets" && isApacPage) || (sec.id === "upper-extremity" && !isApacPage);
+        const isCurrent = (sec.id === "regional-markets" && isMarketsPage) || (sec.id === "upper-extremity" && !isMarketsPage);
         const sLink = document.createElement("a");
         sLink.href = "./" + sec.href;
         sLink.className = "ot-dd-item" + (isCurrent ? " active-item" : "");
@@ -293,8 +291,8 @@ const currentFile = rawFile.endsWith(".html")
     globalGroup.appendChild(globalPanel);
     bar.appendChild(globalGroup);
 
-    // 2. Render Upper Extremity Sub-Dropdowns ONLY if NOT on apac_markets.html
-    if (!isApacPage) {
+    // 2. Render Upper Extremity Sub-Dropdowns ONLY if NOT on the regional markets page
+    if (!isMarketsPage) {
         const divider = document.createElement("div");
         divider.className = "ot-divider";
         bar.appendChild(divider);
