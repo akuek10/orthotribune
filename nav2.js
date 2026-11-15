@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
             label: "🔬 Implant Evidence",
             items: [
                 {
-                    name: "🦴 Cuff & Instability Overview (Home)",
+                    name: "🦴 Cuff & Instability Overview",
                     desc: "Core shoulder repair & instability summary",
                     href: "index.html"
                 },
