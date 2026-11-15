@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About OrthoTribune — Alvin Kuek</title>
+    <meta property="og:title" content="About OrthoTribune — Orthopaedic Evidence, Economics & Market Insights">
+    <meta property="og:description" content="An independent data and clinical synthesis project by Alvin Kuek examining orthopaedic implant evidence, total-cost-of-care economics, and APAC sports medicine markets.">
+    <meta property="og:url" content="https://orthotribunedata.com/about.html">
+    <meta property="og:type" content="website">
+    <style>
+        @view-transition {
+            navigation: auto;
+        }
+        @keyframes otDarkFadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.995); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #05070b;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 24px 14px 70px 14px;
+            opacity: 0;
+            animation: otDarkFadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transition: opacity 0.28s ease, background-color 0.35s ease;
+        }
+        body.ot-leaving {
+            opacity: 0 !important;
+            transform: translateY(-6px);
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #0b0f17;
+            padding: 28px 32px 44px 32px;
+            border-radius: 14px;
+            border: 1px solid #1e293b;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+        }
+
+        /* Dark-mode overrides for nav.js */
+        .ot-nav-shell {
+            background: transparent !important;
+            border-bottom-color: #1e293b !important;
+        }
+        .ot-global-btn {
+            background: #1e293b !important;
+            border-color: #38bdf8 !important;
+            color: #f8fafc !important;
+        }
+        .ot-global-btn:hover {
+            background: #283548 !important;
+        }
+        .ot-dd-panel {
+            background: #0f172a !important;
+            border-color: #334155 !important;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.75) !important;
+        }
+        .ot-dd-item:hover {
+            background: #1e293b !important;
+        }
+        .ot-dd-item.active-item {
+            background: #172554 !important;
+            border-left-color: #38bdf8 !important;
+        }
+        .ot-dd-item-title {
+            color: #f8fafc !important;
+        }
+        .ot-dd-item.active-item .ot-dd-item-title {
+            color: #38bdf8 !important;
+        }
+        .ot-dd-item-desc {
+            color: #94a3b8 !important;
+        }
+
+        /* Guarantee ONLY top-left global switcher is shown on About page */
+        .ot-nav-shell .ot-divider,
+        .ot-nav-shell #menu-evidence,
+        .ot-nav-shell #menu-economics,
+        .ot-nav-shell #menu-tools,
+        .ot-nav-shell .ot-dd-btn,
+        .ot-nav-shell .ot-dd-current-pill {
+            display: none !important;
+        }
+
+        /* Hero Logo & Editorial Intro */
+        .hero-box {
+            padding: 26px 0 30px 0;
+            border-bottom: 1px solid #1e293b;
+            margin-bottom: 30px;
+        }
+        .logo-wrap {
+            margin-bottom: 22px;
+        }
+        .logo-wrap img {
+            max-width: 340px;
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .eyebrow {
+            display: inline-block;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 14px;
+        }
+        h1 {
+            margin: 0 0 14px 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #f8fafc;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+        }
+        .lead {
+            margin: 0;
+            font-size: 15.5px;
+            line-height: 1.7;
+            color: #cbd5e1;
+            max-width: 820px;
+        }
+
+        /* Three Pillar Grid */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+        @media (max-width: 840px) {
+            .pillars-grid { grid-template-columns: 1fr; }
+        }
+        .pillar-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 20px 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .pillar-card:hover {
+            transform: translateY(-2px);
+            border-color: #334155;
+        }
+        .pillar-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+        .pillar-card p {
+            margin: 0;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: #9ca3af;
+        }
+
+        /* Author / Curator Card */
+        .author-card {
+            background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+            border: 1px solid #263348;
+            border-left: 4px solid #38bdf8;
+            border-radius: 12px;
+            padding: 24px 26px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .author-info {
+            max-width: 700px;
+        }
+        .author-info h2 {
+            margin: 0 0 6px 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+        .author-role {
+            font-size: 13px;
+            font-weight: 600;
+            color: #7dd3fc;
+            margin-bottom: 10px;
+        }
+        .author-bio {
+            margin: 0;
+            font-size: 13.5px;
+            line-height: 1.65;
+            color: #cbd5e1;
+        }
+        .li-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: #0a66c2;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            padding: 11px 18px;
+            border-radius: 8px;
+            border: 1px solid #38bdf8;
+            transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+            white-space: nowrap;
+        }
+        .li-btn:hover {
+            background: #004182;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(56, 189, 248, 0.25);
+        }
+
+        /* Editorial Note */
+        .disclaimer {
+            margin-top: 28px;
+            padding: 15px 18px;
+            background: #090d14;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Global Navigation -->
+        <div id="master-nav"></div>
+        <script src="./nav.js?v=7"></script>
+
+        <div class="hero-box">
+            <div class="logo-wrap">
+                <img src="./logo.png" alt="OrthoTribune Logo">
+            </div>
+            <span class="eyebrow">About the Project</span>
+            <h1>Where Orthopaedic Evidence Meets Spreadsheet Reality</h1>
+            <p class="lead">
+                Orthopaedic literature is rich in biomechanical pullout curves, cadaveric test rigs, and Level I p-values - yet remarkably quiet when someone in a hospital Value Analysis Committee asks what a marginal healing gain actually costs per avoided revision. OrthoTribune is a personal sandbox for translating dense clinical literature, implant microarchitecture, and regional market dynamics into interactive tools you can stress-test without a brochure in sight.
+            </p>
+        </div>
+
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <h3>1. Unvarnished Literature</h3>
+                <p>Separating established Level-I consensus from cadaveric nuance - explicitly flagging where implant hierarchies remain unproven and where biomechanical differences stay on the bench.</p>
+            </div>
+            <div class="pillar-card">
+                <h3>2. Episode &amp; VAC Economics</h3>
+                <p>Moving past unit ASP sticker shock to model total episode cost, selective risk stratification, and break-even thresholds calibrated to real-world reoperation multipliers.</p>
+            </div>
+            <div class="pillar-card">
+                <h3>3. SEA &amp; Greater China Lens</h3>
+                <p>Mapping procedural delivery, public-private splits, and reimbursement pathways across regions.</p>
+            </div>
+        </div>
+
+        <div class="author-card">
+            <div class="author-info">
+                <h2>Alvin K.</h2>
+                <div class="author-role">Regional Marketing &bull; Healthcare Data Analytics</div>
+                <p class="author-bio">
+                    Singapore-based Orthopaedic industry partner.
+                </p>
+            </div>
+            <a href="https://www.linkedin.com/in/alvin-kuek-574b5831?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="li-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                </svg>
+                Connect on LinkedIn
+            </a>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Editorial &amp; Independence Note:</strong> OrthoTribune is an independent educational and analytical portfolio project. Clinical syntheses, economic calculators, and market profiles reflect published peer-reviewed literature and publicly available regional healthcare benchmarks, and do not constitute formal medical advice or official institutional procurement policy.
+        </div>
+
+    </div>
+</body>
+</html>
