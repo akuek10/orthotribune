@@ -46,10 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     href: "graft_economics.html"
                 },
                 {
-                    name: "💪 Proximal Biceps (Coming Soon)",
-                    desc: "Tenodesis vs. tenotomy biomechanics",
-                    href: "biceps.html",
-                    disabled: true
+                    name: "💪 Proximal Biceps : Evidence & Economics",
+                    desc: "Tenotomy vs. tenodesis, fixation constructs & location",
+                    href: "biceps.html"
                 }
             ]
         },
