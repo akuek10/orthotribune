@@ -12,19 +12,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const globalSections = [
         {
             id: "upper-extremity",
-            name: "🦾 Upper Extremity",
+            name: "Upper Extremity",
             subtitle: "Implant Evidence, Economics & VAC Tools",
             href: "index.html"
         },
         {
             id: "regional-markets",
-            name: "🌏 SEA & Greater China Markets",
+            name: "SEA & Greater China Markets",
             subtitle: "Orthopaedic Sports Market Profile (SG, MY, TH, ID, TW, HK)",
             href: "apac_markets.html"
         },
         {
             id: "about-page",
-            name: "ℹ️ About",
+            name: "About",
             subtitle: "Project background & Methodology",
             href: "about.html"
         }
@@ -42,17 +42,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     href: "index.html"
                 },
                 {
-                    name: "🔬 Footprint Microarchitecture",
+                    name: "Footprint Microarchitecture",
                     desc: "Greater tuberosity BV/TV & glenoid bone density",
                     href: "anchor_footprints.html"
                 },
                 {
-                    name: "🧬 RC Graft Clinical Evidence & Indications",
+                    name: "RC Graft Clinical Evidence & Indications",
                     desc: "Structural healing & indication alignment",
                     href: "graft_economics.html"
                 },
                 {
-                    name: "💪 Proximal Biceps: Evidence & Economics",
+                    name: "Proximal Biceps: Evidence & Economics",
                     desc: "Tenotomy vs. tenodesis, fixation constructs & location",
                     href: "biceps.html"
                 }
@@ -68,17 +68,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     href: "economics.html"
                 },
                 {
-                    name: "🩹 RC Graft Economics",
+                    name: "RC Graft Economics",
                     desc: "hADM vs. bio-inductive cost-effectiveness",
                     href: "graft_economics 2.html"
                 },
                 {
-                    name: "📈 ROHI Selective Augmentation Economics",
+                    name: "ROHI Selective Augmentation Economics",
                     desc: "Risk-stratified graft value & reoperation buffer",
                     href: "rohi_economics 2.html"
                 },
                 {
-                    name: "🦾 TSA Economics (Executive Suite)",
+                    name: "TSA Economics (Executive Suite)",
                     desc: "Revision multipliers, registries & regional capacity",
                     href: "arthroplasty.html"
                 }
@@ -89,12 +89,12 @@ document.addEventListener("DOMContentLoaded", function () {
             label: "🧮 VAC Decision Tools",
             items: [
                 {
-                    name: "🇸🇬 SG Episode & Budget Calculator",
+                    name: "SG Episode & Budget Calculator",
                     desc: "MOH-calibrated hospital bill & patient OOP model",
                     href: "budget_calculator.html"
                 },
                 {
-                    name: "📋 Orthopaedic Value Dossier Generator",
+                    name: "Orthopaedic Value Dossier Generator",
                     desc: "Automated break-even & 4-pillar VAC report",
                     href: "value_dossier_v3.html"
                 }
