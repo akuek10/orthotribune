@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implant Design Mechanics, Rationale &amp; Economics - OrthoTribune</title>
+    <meta property="og:title" content="Implant Design Mechanics, Rationale & Economics - OrthoTribune">
+    <meta property="og:description" content="Brand-agnostic analysis of orthopaedic biomaterials, delivery systems, knotless fixation mechanics, SKU standardization, and OR efficiency break-even trade-offs.">
+    <meta property="og:url" content="https://orthotribunedata.com/design_economics.html">
+    <meta property="og:type" content="website">
+    <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 24px 14px 60px 14px; }
+        .container { max-width: 1200px; margin: 0 auto; background: #ffffff; padding: 28px 28px 36px 28px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
+        .header { margin-bottom: 22px; }
+        h1 { margin: 0 0 6px 0; font-size: 25px; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; }
+        .subtitle { margin: 0 0 8px 0; font-size: 14px; color: #475569; line-height: 1.5; }
+        .philosophy-banner { display: inline-block; background: #0f172a; color: #f8fafc; font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 6px; margin-bottom: 6px; letter-spacing: 0.01em; }
+        .philosophy-banner span { color: #7dd3fc; }
+        .author { margin: 4px 0 0 0; font-size: 13px; font-style: italic; color: #64748b; }
+
+        /* Section Titles */
+        .sec-title { font-size: 17px; font-weight: 700; color: #0f172a; margin: 28px 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 8px; }
+
+        /* Matrix Table */
+        .table-wrap { overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03); }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 820px; }
+        .data-table th { background: #0f172a; color: #ffffff; font-weight: 700; text-align: left; padding: 12px 14px; border-right: 1px solid #1e293b; }
+        .data-table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; border-right: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; color: #334155; }
+        .data-table tr:nth-child(even) td { background: #fcfdfe; }
+        .data-table tr:last-child td { border-bottom: none; }
+
+        .tag-pill { display: inline-block; padding: 2px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; margin-top: 4px; }
+        .tag-green { background: #dcfce7; color: #166534; }
+        .tag-amber { background: #fef9c3; color: #854d0e; }
+        .tag-blue { background: #e0f2fe; color: #075985; }
+
+        /* Value Chain Flow Strip */
+        .chain-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+        @media (max-width: 820px) { .chain-strip { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 480px) { .chain-strip { grid-template-columns: 1fr; } }
+        .chain-step { background: #f8fafc; border: 1px solid #cbd5e1; border-top: 3px solid #7EA8BE; border-radius: 8px; padding: 12px 14px; }
+        .chain-step-num { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #0369a1; margin-bottom: 3px; }
+        .chain-step-title { font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+        .chain-step-desc { font-size: 12px; color: #475569; line-height: 1.45; }
+
+        /* Interactive Simulator Box (Pareto 4-Input Break-Even Model) */
+        .sim-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 20px 22px; margin: 22px 0 26px 0; }
+        .sim-header { margin-bottom: 16px; }
+        .sim-header h3 { margin: 0 0 4px 0; font-size: 16px; color: #0f172a; }
+        .sim-header p { margin: 0; font-size: 13px; color: #475569; line-height: 1.45; }
+        .sim-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 22px; align-items: start; }
+        @media (max-width: 880px) { .sim-grid { grid-template-columns: 1fr; } }
+
+        .controls-box { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px 18px; }
+        .ctrl-group-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin: 0 0 12px 0; padding-bottom: 5px; border-bottom: 1px solid #f1f5f9; }
+        .ctrl-row { margin-bottom: 15px; }
+        .ctrl-row:last-child { margin-bottom: 0; }
+        .ctrl-label { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+        .ctrl-val { color: #0369a1; font-weight: 700; }
+        .ctrl-hint { font-size: 11px; color: #64748b; margin-top: 3px; line-height: 1.35; }
+        input[type=range] { width: 100%; accent-color: #0f172a; cursor: pointer; }
+
+        .results-box { display: flex; flex-direction: column; gap: 12px; }
+        .kpi-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        @media (max-width: 520px) { .kpi-row { grid-template-columns: 1fr; } }
+        .kpi-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 11px 14px; }
+        .kpi-card.highlight-be { border-left: 4px solid #0369a1; background: #f0f9ff; }
+        .kpi-title { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #64748b; margin-bottom: 3px; }
+        .kpi-num { font-size: 19px; font-weight: 800; color: #0f172a; }
+        .kpi-sub { font-size: 11px; color: #64748b; margin-top: 2px; line-height: 1.35; }
+        .verdict-banner { background: #ffffff; border: 1px solid #cbd5e1; border-left: 4px solid #7EA8BE; border-radius: 8px; padding: 12px 15px; font-size: 13px; line-height: 1.55; color: #1e293b; }
+
+        /* Future Roadmap Note inside Simulator */
+        .roadmap-strip { margin-top: 14px; padding: 10px 14px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; font-size: 12px; color: #475569; line-height: 1.5; }
+
+        /* Deep Dive Cards */
+        .domain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+        @media (max-width: 840px) { .domain-grid { grid-template-columns: 1fr; } }
+        .domain-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px 20px; }
+        .domain-card h4 { margin: 0 0 8px 0; font-size: 15px; color: #0f172a; }
+        .domain-card p { margin: 0 0 9px 0; font-size: 13px; line-height: 1.6; color: #334155; }
+        .domain-card p:last-child { margin-bottom: 0; }
+        .driver-note { background: #f1f5f9; padding: 9px 12px; border-radius: 6px; font-size: 12.5px; color: #1e293b; border-left: 3px solid #95B8A2; }
+
+        /* Interactive SKU Standardization Mini-Model inside Card D */
+        .sku-mini-box { margin-top: 12px; padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .sku-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; text-align: center; }
+        .sku-stat-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 4px; }
+        .sku-stat-val { font-size: 13.5px; font-weight: 700; color: #0f172a; }
+        .sku-stat-lbl { font-size: 10.5px; color: #64748b; }
+
+        .gov-note { margin-top: 24px; padding: 16px 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7EA8BE; border-radius: 8px; font-size: 12.5px; line-height: 1.6; color: #475569; }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Global Navigation -->
+        <div id="master-nav"></div>
+        <script src="./nav.js?v=8"></script>
+
+        <div class="header">
+            <h1>Implant Design Mechanics, Rationale &amp; Economics</h1>
+            <p class="subtitle">A brand-agnostic translation of orthopaedic engineering choices—biomaterials, knotless fixation mechanics, disposable delivery systems, and SKU standardization—into clinical utility and hospital episode economics.</p>
+            <div class="philosophy-banner">Core Principle: <span>Price is not cost. Cost is not value. Sensitivity testing replaces categorical claims.</span></div>
+            <p class="author">By Alvin Kuek</p>
+        </div>
+
+        <!-- 1. Engineering -> Clinical -> Cost Matrix -->
+        <div class="sec-title">1. Engineering Claim &rarr; Clinical Reality &rarr; Cost Driver Matrix</div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 19%;">Design Pillar</th>
+                        <th style="width: 27%;">Engineering Rationale</th>
+                        <th style="width: 27%;">Clinical &amp; Bench Reality</th>
+                        <th style="width: 27%;">Manufacturing &amp; Hospital Cost Driver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Biomaterials &amp; Lattice Architecture</strong><br><span class="tag-pill tag-blue">PEEK vs. Biocomposite vs. All-Suture vs. 3D Metal</span></td>
+                        <td>Tailor modulus of elasticity to cancellous bone, preserve future revision bone stock, or promote osseointegration via porous titanium lattices.</td>
+                        <td>Clinical outcomes are often similar between commonly used anchor materials in specific indications, although materials differ in degradation, bone response, imaging characteristics, and revision considerations. All-suture anchors can minimize initial bone removal compared with solid anchors, though biomechanical behavior depends heavily on bone quality, anchor design, and deployment technique.</td>
+                        <td>Powder-bed additive manufacturing (laser/electron-beam), post-processing, inspection, and validation create substantially different manufacturing economics from conventional machined or molded components—adding manufacturing and quality-control cost layers that may contribute to a higher cost base.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Suture &amp; Locking Geometry</strong><br><span class="tag-pill tag-green">Knotless Tensioning &amp; Flat Suture Tape</span></td>
+                        <td>Broaden tendon-bone footprint compression, reduce suture cut-through in degenerative tissue, and eliminate subacromial knot stacks.</td>
+                        <td>Systematic reviews show flat suture tape yields higher bench contact pressure, load to failure, and stiffness versus round sutures, though clinical re-tear rates have not consistently differed. Knotless mechanisms eliminate knot tying and may simplify tensioning and reduce knot-stack prominence, although clinical superiority over knotted constructs has not been consistently demonstrated.</td>
+                        <td>Complex braided multi-filament looms and precision internal locking cleats increase component tolerances and assembly steps, raising unit manufacturing cost relative to standard knotted anchors.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Delivery Systems</strong><br><span class="tag-pill tag-amber">Single-Use Disposable vs. Reusable Trays</span></td>
+                        <td>Pre-loaded, torque-calibrated single-use inserters aim to streamline scrub setup, standardize deployment feel, and avoid tip wear from repeated sterilization cycles.</td>
+                        <td>Eliminates intra-operative anchor loading and reusable tip fatigue, though clinical placement accuracy remains primarily surgeon- and anatomy-dependent.</td>
+                        <td>Single-use instrumentation shifts cost from central reprocessing (CSSD) and capital tray logistics toward recurring consumable spend; whether this is economically favorable depends on local OR utilization, CSSD cost structure, tray complexity, turnover constraints, and disposable acquisition price.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Portfolio &amp; SKU Architecture</strong><br><span class="tag-pill tag-amber">Line Extensions vs. Core SKU Matrix</span></td>
+                        <td>Offer tailored tip geometries, curved guides, and pre-loaded suture permutations for specific anatomical corridors.</td>
+                        <td>Curved/small-diameter guides solve genuine access constraints (e.g., inferior glenoid or subscapularis); minor handle restyling rarely alters clinical outcomes.</td>
+                        <td>Expanding from a compact core matrix to dozens of size/angle/suture permutations increases hospital consignment footprint, shelf-expiry write-offs, and tender complexity.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Value Chain Bridge -->
+        <div class="chain-strip">
+            <div class="chain-step">
+                <div class="chain-step-num">Stage 1 &bull; Factory Floor</div>
+                <div class="chain-step-title">Manufacturing Cost</div>
+                <div class="chain-step-desc">Raw polymer/alloy, additive powder-bed fusion, cleanroom assembly, metrology &amp; sterilization validation.</div>
+            </div>
+            <div class="chain-step">
+                <div class="chain-step-num">Stage 2 &bull; Commercial Channel</div>
+                <div class="chain-step-title">Transfer &amp; Channel Price</div>
+                <div class="chain-step-desc">R&amp;D recovery, regulatory filings, regional distributor margins, loaner sets &amp; clinical specialist support.</div>
+            </div>
+            <div class="chain-step">
+                <div class="chain-step-num">Stage 3 &bull; Procurement</div>
+                <div class="chain-step-title">Hospital Acquisition (ASP)</div>
+                <div class="chain-step-desc">Tender contracting, volume rebates, consignment stock agreements &amp; reimbursement ceiling alignment.</div>
+            </div>
+            <div class="chain-step">
+                <div class="chain-step-num">Stage 4 &bull; VAC / Sensitivity Lens</div>
+                <div class="chain-step-title">Break-Even Threshold</div>
+                <div class="chain-step-desc">Evaluating what OR efficiency, capacity utilization, or clinical risk reduction must hold true to justify the premium.</div>
+            </div>
+        </div>
+
+        <!-- 2. Pareto 4-Input Break-Even Simulator -->
+        <div class="sec-title">2. Interactive Sensitivity Model: Implant Premium vs. OR Efficiency</div>
+        <div class="sim-card">
+            <div class="sim-header">
+                <h3>Break-Even OR Efficiency Calculator</h3>
+                <p>Estimate the OR-time efficiency required to justify a higher implant acquisition cost. All values are illustrative and should be replaced with institution-specific inputs.</p>
+            </div>
+
+            <div class="sim-grid">
+                <div class="controls-box">
+                    <div class="ctrl-group-title">Core Sensitivity Inputs (4 Variables)</div>
+                    <div class="ctrl-row">
+                        <div class="ctrl-label"><span>1. Implants / Anchors per Case</span><span class="ctrl-val" id="val_anchors">4 implants</span></div>
+                        <input type="range" id="in_anchors" min="1" max="8" step="1" value="4">
+                    </div>
+                    <div class="ctrl-row">
+                        <div class="ctrl-label"><span>2. Acquisition Premium per Implant (USD)</span><span class="ctrl-val" id="val_asp">+$85 / implant</span></div>
+                        <input type="range" id="in_asp" min="0" max="250" step="5" value="85">
+                    </div>
+                    <div class="ctrl-row">
+                        <div class="ctrl-label"><span>3. Assumed OR Time Saved per Case</span><span class="ctrl-val" id="val_time">10 min</span></div>
+                        <input type="range" id="in_time" min="0" max="30" step="1" value="10">
+                    </div>
+                    <div class="ctrl-row">
+                        <div class="ctrl-label"><span>4. Illustrative OR Time Value (USD / min)</span><span class="ctrl-val" id="val_ormin">$22 / min</span></div>
+                        <input type="range" id="in_ormin" min="10" max="60" step="1" value="22">
+                        <div class="ctrl-hint">Illustrative economic value of released OR capacity; not necessarily an avoidable cash expenditure unless staff overtime is reduced or additional cases are scheduled.</div>
+                    </div>
+                </div>
+
+                <div class="results-box">
+                    <div class="kpi-row">
+                        <div class="kpi-card">
+                            <div class="kpi-title">Incremental Implant Cost</div>
+                            <div class="kpi-num" id="out_acq" style="color:#b91c1c;">+$340</div>
+                            <div class="kpi-sub">4 implants &times; +$85 premium</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-title">OR Capacity Value Recovered</div>
+                            <div class="kpi-num" id="out_or_val" style="color:#0369a1;">-$220</div>
+                            <div class="kpi-sub">Opportunity value (not automatic cash)</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-title">Net Economic Delta</div>
+                            <div class="kpi-num" id="out_net">+$120</div>
+                            <div class="kpi-sub" id="out_net_sub">Remaining gap after OR capacity value</div>
+                        </div>
+                        <div class="kpi-card highlight-be">
+                            <div class="kpi-title">Break-Even OR Time Required</div>
+                            <div class="kpi-num" id="out_be" style="color:#0369a1;">15.5 min</div>
+                            <div class="kpi-sub" id="out_be_sub">Implant premium &divide; OR min value</div>
+                        </div>
+                    </div>
+
+                    <div id="chart_design_econ" style="height:220px; width:100%; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px;"></div>
+
+                    <div class="verdict-banner" id="out_verdict"></div>
+                </div>
+            </div>
+
+            <div class="roadmap-strip">
+                <strong>Model Scope &amp; Progression:</strong> This core sensitivity model isolates <em>Implant Premium vs. OR Efficiency</em> (Level 1–2 VAC screening). Downstream institutional factors—such as CSSD tray reprocessing, loaner logistics, consignment inventory carrying costs, and revision complication multipliers—vary widely by hospital accounting structure and are modeled separately in OrthoTribune's Episode &amp; VAC calculators.
+            </div>
+        </div>
+
+        <!-- 3. Four Core Engineering & MedTech Economics Pillars -->
+        <div class="sec-title">3. Deep-Dive Perspectives for Surgeons, VACs &amp; Commercial Teams</div>
+        <div class="domain-grid">
+            <div class="domain-card">
+                <h4>A. Biomaterials &amp; Manufacturing Cost Layers</h4>
+                <p><strong>Why Materials Differ in Cost Structure:</strong> Machined or injection-molded PEEK offers high batch consistency and long shelf life. Biocomposite anchors (e.g., PLGA/&beta;-TCP or PLLA/HA) require tightly controlled hydrolysis-sensitive molding and moisture-barrier packaging. Porous metal implants produced via laser or electron-beam powder-bed fusion require support removal, heat treatment, surface finishing, metrology inspection, and sterilization validation—creating substantially different manufacturing economics from conventional machined components.</p>
+                <div class="driver-note"><strong>Analytical Framework:</strong> The economic and clinical rationale for advanced materials is strongest when the material-specific property addresses a defined clinical problem—for example, compromised bone stock, revision constraints, or osseointegration requirements—rather than routine primary cases with dense tuberosity bone.</div>
+            </div>
+
+            <div class="domain-card">
+                <h4>B. Knotless Tensioning &amp; Flat Suture Tape</h4>
+                <p><strong>Mechanical Rationale vs. Clinical Evidence:</strong> Systematic reviews confirm that flat UHMWPE suture tape yields higher contact pressure, ultimate load, and stiffness on the bench compared with round sutures, while knotless locking mechanisms eliminate knot tying and reduce subacromial knot-stack prominence. However, clinical meta-analyses comparing knotless and knotted suture-bridge repairs have not consistently demonstrated statistically significant differences in functional scores or re-tear rates.</p>
+                <div class="driver-note"><strong>Economic Distinction:</strong> Because clinical re-tear rates appear similar in routine cohorts, economic attractiveness depends largely on whether streamlined tensioning achieves the break-even OR time threshold in multi-anchor repairs.</div>
+            </div>
+
+            <div class="domain-card">
+                <h4>C. Single-Use Disposable vs. Reusable Tray Logistics</h4>
+                <p><strong>Cost Shifting vs. Cash Saving:</strong> Systematic reviews comparing reusable and disposable surgical instruments show that reusable sets are often lower-cost in general surgery when reprocessing infrastructure is fixed, whereas single-use instrumentation can generate net economic advantages in specific orthopaedic procedures (such as TKA or lumbar fusion) where multi-tray CSSD reprocessing, loaner transport, and room-turnover bottlenecks are high.</p>
+                <div class="driver-note"><strong>Procurement Nuance:</strong> Whether shifting from reusable trays to single-use kits is economically favorable depends on local OR utilization, CSSD staffing structure (fixed vs. variable), tray complexity, and disposable acquisition price.</div>
+            </div>
+
+            <div class="domain-card">
+                <h4>D. SKU Proliferation &amp; Interactive Standardization Model</h4>
+                <p><strong>Inventory Carrying &amp; Expiry Exposure:</strong> Expanding a single anchor platform across multiple diameters, eyelet angles, and suture permutations fragments consignment shelf space and increases obsolescence write-offs.</p>
+                <div class="sku-mini-box">
+                    <div class="ctrl-label" style="margin-bottom:4px;">
+                        <span>Illustrative Core SKU Standardization Rate</span>
+                        <span class="ctrl-val" id="val_std">75% of routine volume</span>
+                    </div>
+                    <input type="range" id="in_std" min="40" max="100" step="5" value="75">
+                    <div class="sku-stats">
+                        <div class="sku-stat-item">
+                            <div class="sku-stat-val" id="out_skus">11 SKUs</div>
+                            <div class="sku-stat-lbl">Active Shelf SKUs</div>
+                        </div>
+                        <div class="sku-stat-item">
+                            <div class="sku-stat-val" id="out_inv">$38,500</div>
+                            <div class="sku-stat-lbl">Consignment Value</div>
+                        </div>
+                        <div class="sku-stat-item">
+                            <div class="sku-stat-val" id="out_exp">$3,080 / yr</div>
+                            <div class="sku-stat-lbl">Est. Expiry / Carrying Cost</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gov-note">
+            <strong>Methodological &amp; Governance Note (As of 2026):</strong> Clinical and biomechanical syntheses reflect peer-reviewed systematic reviews and network meta-analyses on anchor biomaterials, suture tape geometry, knotless vs. knotted repairs, and single-use vs. reusable surgical instrumentation. All simulator figures are illustrative sensitivity parameters designed to help clinicians and hospital committees test what operational assumptions must hold true to justify an acquisition premium.
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cfg = { displayModeBar: false, responsive: true };
+
+            const elAnchors = document.getElementById("in_anchors");
+            const elAsp = document.getElementById("in_asp");
+            const elTime = document.getElementById("in_time");
+            const elOrMin = document.getElementById("in_ormin");
+
+            function formatDollar(val) {
+                if (val > 0) return "+$" + Math.round(val).toLocaleString();
+                if (val < 0) return "-$" + Math.abs(Math.round(val)).toLocaleString();
+                return "$0";
+            }
+
+            function updateModel() {
+                const nAnchors = parseInt(elAnchors.value, 10);
+                const aspDiff = parseInt(elAsp.value, 10);
+                const timeSaved = parseInt(elTime.value, 10);
+                const orRate = parseInt(elOrMin.value, 10);
+
+                document.getElementById("val_anchors").textContent = nAnchors + (nAnchors === 1 ? " implant" : " implants");
+                document.getElementById("val_asp").textContent = "+$" + aspDiff + " / implant";
+                document.getElementById("val_time").textContent = timeSaved + " min";
+                document.getElementById("val_ormin").textContent = "$" + orRate + " / min";
+
+                // Core Pareto Calculations
+                const implantPremium = nAnchors * aspDiff;
+                const orValueRecovered = timeSaved * orRate;
+                const netDelta = implantPremium - orValueRecovered;
+                const breakEvenMin = orRate > 0 ? (implantPremium / orRate) : 0;
+
+                document.getElementById("out_acq").textContent = "+$" + implantPremium.toLocaleString();
+                document.getElementById("out_acq").nextElementSibling.textContent = `${nAnchors} ${nAnchors === 1 ? "implant" : "implants"} × +$${aspDiff} premium`;
+
+                document.getElementById("out_or_val").textContent = orValueRecovered > 0 ? "-$" + orValueRecovered.toLocaleString() : "$0";
+
+                const netEl = document.getElementById("out_net");
+                netEl.textContent = formatDollar(netDelta);
+                netEl.style.color = netDelta > 0 ? "#b91c1c" : (netDelta < 0 ? "#15803d" : "#0f172a");
+                document.getElementById("out_net_sub").textContent = netDelta > 0
+                    ? "Unrecovered premium at assumed OR time"
+                    : (netDelta < 0 ? "Surplus capacity value recovered" : "Exact capacity break-even");
+
+                const beRounded = Math.round(breakEvenMin);
+                document.getElementById("out_be").textContent = breakEvenMin.toFixed(1) + " min";
+                document.getElementById("out_be_sub").textContent = `$${implantPremium.toLocaleString()} ÷ $${orRate}/min`;
+
+                // Interpretation Banner
+                const verdictEl = document.getElementById("out_verdict");
+                if (implantPremium === 0) {
+                    verdictEl.innerHTML = `With <strong>$0 incremental implant premium</strong>, any OR time saved (${timeSaved} min) represents pure workflow efficiency gain.`;
+                } else {
+                    const comparison = timeSaved >= breakEvenMin
+                        ? `Your assumed saving of <strong>${timeSaved} minutes</strong> meets or exceeds this threshold.`
+                        : `At <strong>${timeSaved} minutes</strong> saved, an additional <strong>${(breakEvenMin - timeSaved).toFixed(1)} minutes</strong> of OR efficiency (or downstream clinical/tray offset) would be needed to close the remaining $${netDelta.toLocaleString()} gap.`;
+                    verdictEl.innerHTML = `At this implant premium (<strong>+$${implantPremium.toLocaleString()}/case</strong>), the technology would need to release approximately <strong>${beRounded} minutes</strong> (${breakEvenMin.toFixed(1)} min) of OR capacity at $${orRate}/min to achieve economic neutrality. ${comparison}`;
+                }
+
+                Plotly.react("chart_design_econ", [
+                    {
+                        x: ["Implant Premium", "OR Capacity Value", "Net Economic Delta"],
+                        y: [implantPremium, -orValueRecovered, netDelta],
+                        type: "bar",
+                        width: [0.45, 0.45, 0.45],
+                        marker: {
+                            color: [
+                                "#D8A49B",
+                                "#7EA8BE",
+                                netDelta <= 0 ? "#16a34a" : "#dc2626"
+                            ]
+                        },
+                        text: [
+                            formatDollar(implantPremium),
+                            formatDollar(-orValueRecovered),
+                            formatDollar(netDelta)
+                        ],
+                        textposition: "outside",
+                        hovertemplate: "<b>%{x}</b>: %{text}<extra></extra>"
+                    }
+                ], {
+                    margin: { l: 48, r: 16, t: 24, b: 38 },
+                    plot_bgcolor: "rgba(0,0,0,0)",
+                    paper_bgcolor: "white",
+                    showlegend: false,
+                    yaxis: { title: "USD ($ / Case)", zeroline: true, zerolinecolor: "#94a3b8", gridcolor: "#f1f5f9" },
+                    xaxis: { tickfont: { size: 11.5 } }
+                }, cfg);
+            }
+
+            // SKU Standardization Mini-Model
+            const elStd = document.getElementById("in_std");
+            function updateSkuModel() {
+                const stdPct = parseInt(elStd.value, 10);
+                document.getElementById("val_std").textContent = stdPct + "% of routine volume";
+                const activeSkus = Math.round(24 - ((stdPct - 40) / 60) * 18);
+                const consignmentVal = activeSkus * 3500;
+                const expiryRate = 0.04 + ((100 - stdPct) / 60) * 0.10;
+                const annualCarrying = Math.round(consignmentVal * expiryRate);
+
+                document.getElementById("out_skus").textContent = activeSkus + " SKUs";
+                document.getElementById("out_inv").textContent = "$" + consignmentVal.toLocaleString();
+                document.getElementById("out_exp").textContent = "$" + annualCarrying.toLocaleString() + " / yr";
+            }
+
+            [elAnchors, elAsp, elTime, elOrMin].forEach(el => el.addEventListener("input", updateModel));
+            elStd.addEventListener("input", updateSkuModel);
+
+            updateModel();
+            updateSkuModel();
+        });
+    </script>
+</body>
+</html>
