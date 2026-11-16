@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
             id: "about-page",
             name: "About OrthoTribune",
-            subtitle: "Project background, methodology & Alvin Kuek",
+            subtitle: "Project background & methodology",
             href: "about.html"
         }
     ];
