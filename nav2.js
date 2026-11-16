@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     href: "graft_economics.html"
                 },
                 {
-                    name: "Proximal Biceps: Evidence & Economics",
+                    name: "Proximal Biceps: Evidence & Trade-Offs",
                     desc: "Tenotomy vs. tenodesis, fixation constructs & location",
                     href: "biceps.html"
                 }
