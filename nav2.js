@@ -23,6 +23,12 @@ document.addEventListener("DOMContentLoaded", function () {
             href: "apac_markets.html"
         },
         {
+            id: "design-economics",
+            name: "Implant Design & MedTech Economics",
+            subtitle: "Engineering rationale, manufacturing drivers & hospital value",
+            href: "design_economics.html"
+        },
+        {
             id: "about-page",
             name: "About",
             subtitle: "Project background & Methodology",
