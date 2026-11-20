@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APAC Value-Based Care &amp; Singapore AVBC - OrthoTribune</title>
+    <meta property="og:title" content="APAC Value-Based Care & Singapore AVBC: Why MedTech Must Speak Health Economics - OrthoTribune">
+    <meta property="og:description" content="How Asia-Pacific health systems—led by Singapore's Appropriate and Value-Based Care (AVBC) framework—are reshaping medical device HTA, Integrated Shield Plans, and hospital procurement.">
+    <meta property="og:url" content="https://orthotribunedata.com/apac_vbc.html">
+    <meta property="og:type" content="website">
+    <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 24px 14px 60px 14px; }
+        .container { max-width: 1160px; margin: 0 auto; background: #ffffff; padding: 28px 30px 40px 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
+        .header { margin-bottom: 22px; }
+        h1 { margin: 0 0 8px 0; font-size: 25px; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; line-height: 1.25; }
+        .subtitle { margin: 0 0 10px 0; font-size: 14.5px; color: #475569; line-height: 1.55; max-width: 920px; }
+        .thesis-banner { display: inline-block; background: #0f172a; color: #f8fafc; font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 6px; margin-bottom: 6px; }
+        .thesis-banner span { color: #7dd3fc; }
+        .author { margin: 4px 0 0 0; font-size: 13px; font-style: italic; color: #64748b; }
+
+        /* Section Titles */
+        .sec-title { font-size: 17px; font-weight: 700; color: #0f172a; margin: 28px 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 8px; }
+
+        /* Visual Graphic 1: AVBC Ecosystem Architecture (Clean Vector SVG Diagram) */
+        .diagram-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 18px 20px 14px 20px; margin: 18px 0 26px 0; }
+        .diagram-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+        .diagram-header h2 { margin: 0; font-size: 15.5px; font-weight: 700; color: #0f172a; }
+        .diagram-header span { font-size: 12px; color: #64748b; }
+        .svg-wrap { width: 100%; overflow-x: auto; }
+        .svg-wrap svg { width: 100%; min-width: 720px; height: auto; display: block; }
+
+        /* Visual Graphic 2: Interactive Plotly Paradigm Shift & HTA Gatekeeper Chart */
+        .visual-split { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; margin-bottom: 26px; align-items: stretch; }
+        @media (max-width: 860px) { .visual-split { grid-template-columns: 1fr; } }
+        .chart-box { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; }
+        .chart-title { font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0; }
+        .chart-sub { font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 1.4; }
+
+        /* 3-Column Macro Shift Cards */
+        .macro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        @media (max-width: 840px) { .macro-grid { grid-template-columns: 1fr; } }
+        .macro-card { background: #f8fafc; border: 1px solid #cbd5e1; border-top: 3px solid #0f172a; border-radius: 10px; padding: 18px 18px; }
+        .macro-card.sg-focus { border-top-color: #0369a1; background: #f0f9ff; border-color: #bae6fd; }
+        .macro-eyebrow { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #0369a1; margin-bottom: 5px; }
+        .macro-card h3 { margin: 0 0 8px 0; font-size: 15px; color: #0f172a; }
+        .macro-card p { margin: 0; font-size: 13px; line-height: 1.55; color: #334155; }
+
+        /* Stakeholder Impact Table */
+        .table-wrap { overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03); }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 780px; }
+        .data-table th { background: #0f172a; color: #ffffff; font-weight: 700; text-align: left; padding: 12px 14px; border-right: 1px solid #1e293b; }
+        .data-table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; border-right: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; color: #334155; }
+        .data-table tr:nth-child(even) td { background: #fcfdfe; }
+        .data-table tr:last-child td { border-bottom: none; }
+
+        .tag-pill { display: inline-block; padding: 2px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; margin-top: 4px; }
+        .tag-blue { background: #e0f2fe; color: #075985; }
+        .tag-green { background: #dcfce7; color: #166534; }
+        .tag-amber { background: #fef9c3; color: #854d0e; }
+
+        /* HTA 4-Pillar Grid */
+        .hta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
+        @media (max-width: 780px) { .hta-grid { grid-template-columns: 1fr; } }
+        .hta-card { background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #7EA8BE; border-radius: 9px; padding: 16px 18px; }
+        .hta-card h4 { margin: 0 0 6px 0; font-size: 14.5px; color: #0f172a; }
+        .hta-card p { margin: 0; font-size: 13px; line-height: 1.55; color: #475569; }
+
+        /* Commercial Imperative Callout */
+        .imperative-box { background: #0f172a; color: #f8fafc; border-radius: 12px; padding: 22px 24px; margin-top: 26px; }
+        .imperative-box h3 { margin: 0 0 10px 0; font-size: 17px; color: #7dd3fc; }
+        .imperative-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; }
+        @media (max-width: 820px) { .imperative-grid { grid-template-columns: 1fr; } }
+        .imp-item { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 14px 15px; }
+        .imp-item strong { display: block; font-size: 13.5px; color: #ffffff; margin-bottom: 5px; }
+        .imp-item span { font-size: 12.5px; line-height: 1.5; color: #cbd5e1; }
+
+        .gov-note { margin-top: 24px; padding: 15px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7EA8BE; border-radius: 8px; font-size: 12px; line-height: 1.6; color: #475569; }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Global Navigation -->
+        <div id="master-nav"></div>
+        <script src="./nav.js?v=9"></script>
+
+        <div class="header">
+            <h1>Asia's Shift to Value-Based Care &amp; Singapore's AVBC Playbook</h1>
+            <p class="subtitle">Why medical device manufacturers can no longer rely on engineering specifications alone - and how Singapore's Appropriate and Value-Based Care (AVBC) framework is setting the regional standard for implant evaluation, payer scrutiny, and episode-of-care accountability.</p>
+            <div class="thesis-banner">Commercial Reality: <span>In an AVBC environment, an implant without a defensible economic dossier is treated as a commodity.</span></div>
+        </div>
+
+        <!-- VISUAL GRAPHIC 1: Clean Vector Architecture Diagram -->
+        <div class="diagram-card">
+            <div class="diagram-header">
+                <h2>At-a-Glance: How Singapore's AVBC Architecture Governs Implant Adoption</h2>
+                <span>Policy-to-Procurement Flow (MOH / ACE &rarr; Providers &rarr; Insurers &rarr; Patients)</span>
+            </div>
+            <div class="svg-wrap">
+                <svg viewBox="0 0 980 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Singapore AVBC Value Gatekeeping Flow Diagram">
+                    <defs>
+                        <marker id="arrowSlate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569"/>
+                        </marker>
+                        <marker id="arrowBlue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#0369a1"/>
+                        </marker>
+                    </defs>
+
+                    <!-- Stage 1: Policy & HTA Core (Left) -->
+                    <rect x="12" y="24" width="225" height="202" rx="10" fill="#0f172a"/>
+                    <text x="28" y="50" fill="#7dd3fc" font-size="11" font-weight="700" letter-spacing="0.8">1. NATIONAL VALUE GATE</text>
+                    <text x="28" y="72" fill="#ffffff" font-size="15" font-weight="700">MOH &amp; ACE (AVBC)</text>
+                    <line x1="28" y1="84" x2="221" y2="84" stroke="#334155" stroke-width="1"/>
+                    <text x="28" y="106" fill="#e2e8f0" font-size="12" font-weight="600">&bull; Medical Device HTA</text>
+                    <text x="38" y="122" fill="#94a3b8" font-size="11">In vivo outcomes &amp; ICER</text>
+                    <text x="28" y="146" fill="#e2e8f0" font-size="12" font-weight="600">&bull; Implant Subsidy List (ISL)</text>
+                    <text x="38" y="162" fill="#94a3b8" font-size="11">Risk-stratified subsidy tiers</text>
+                    <text x="28" y="186" fill="#e2e8f0" font-size="12" font-weight="600">&bull; Surgical Fee Benchmarks</text>
+                    <text x="38" y="202" fill="#94a3b8" font-size="11">Public &amp; private bill transparency</text>
+
+                    <!-- Arrows from Stage 1 to Stage 2 -->
+                    <path d="M 237 64 L 285 64" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowBlue)"/>
+                    <path d="M 237 125 L 285 125" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowBlue)"/>
+                    <path d="M 237 186 L 285 186" stroke="#0369a1" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+                    <!-- Stage 2: Three Ecosystem Pillars (Center) -->
+                    <!-- Box 2A: Providers -->
+                    <rect x="292" y="24" width="335" height="58" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+                    <rect x="292" y="24" width="6" height="58" rx="3" fill="#0369a1"/>
+                    <text x="310" y="46" fill="#0f172a" font-size="13" font-weight="700">Public &amp; Private Hospitals (VACs)</text>
+                    <text x="310" y="65" fill="#475569" font-size="11.5">Peer care scorecards, bundled episodes &amp; OT/LOS scrutiny</text>
+
+                    <!-- Box 2B: Insurers -->
+                    <rect x="292" y="96" width="335" height="58" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+                    <rect x="292" y="96" width="6" height="58" rx="3" fill="#7EA8BE"/>
+                    <text x="310" y="118" fill="#0f172a" font-size="13" font-weight="700">Integrated Shield Plan (ISP) Insurers</text>
+                    <text x="310" y="137" fill="#475569" font-size="11.5">Panel networks, pre-authorization &amp; outlier bill checks</text>
+
+                    <!-- Box 2C: Patients -->
+                    <rect x="292" y="168" width="335" height="58" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+                    <rect x="292" y="168" width="6" height="58" rx="3" fill="#95B8A2"/>
+                    <text x="310" y="190" fill="#0f172a" font-size="13" font-weight="700">Patients &amp; Co-Payers</text>
+                    <text x="310" y="209" fill="#475569" font-size="11.5">Financial counseling, historical bills &amp; OOP co-pay sensitivity</text>
+
+                    <!-- Converging Bracket/Arrows to Stage 3 -->
+                    <path d="M 627 53 L 662 53 L 662 125 L 692 125" fill="none" stroke="#475569" stroke-width="1.8" marker-end="url(#arrowSlate)"/>
+                    <path d="M 627 125 L 692 125" fill="none" stroke="#475569" stroke-width="1.8"/>
+                    <path d="M 627 197 L 662 197 L 662 125" fill="none" stroke="#475569" stroke-width="1.8"/>
+
+                    <!-- Stage 3: MedTech Commercial Mandate (Right) -->
+                    <rect x="700" y="24" width="268" height="202" rx="10" fill="#f0f9ff" stroke="#0369a1" stroke-width="1.5"/>
+                    <text x="716" y="50" fill="#0369a1" font-size="11" font-weight="700" letter-spacing="0.8">3. MEDTECH IMPERATIVE</text>
+                    <text x="716" y="72" fill="#0f172a" font-size="15" font-weight="700">Value-Driven Adoption</text>
+                    <line x1="716" y1="84" x2="952" y2="84" stroke="#bae6fd" stroke-width="1.2"/>
+                    <text x="716" y="107" fill="#0f172a" font-size="12" font-weight="700">1. Episode Math &gt; Bench Specs</text>
+                    <text x="728" y="123" fill="#334155" font-size="11">OT minutes, LOS &amp; revision offsets</text>
+                    <text x="716" y="147" fill="#0f172a" font-size="12" font-weight="700">2. Risk-Stratified Formularies</text>
+                    <text x="728" y="163" fill="#334155" font-size="11">Target high-risk cohorts to cap BI</text>
+                    <text x="716" y="187" fill="#0f172a" font-size="12" font-weight="700">3. Local HTA &amp; Registry Proof</text>
+                    <text x="728" y="203" fill="#334155" font-size="11">ISL &amp; ISP panel reimbursement fit</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- VISUAL GRAPHIC 2: Interactive Plotly Visuals (Commercial Shift + HTA Gatekeeper Chart) -->
+        <div class="visual-split">
+            <div class="chart-box">
+                <div>
+                    <div class="chart-title">Commercial Paradigm Shift: Legacy Volume vs. AVBC Era</div>
+                    <div class="chart-sub">Illustrative shift in hospital &amp; payer decision drivers when evaluating premium orthopaedic implants.</div>
+                </div>
+                <div id="chart_avbc_shift" style="height:245px; width:100%;"></div>
+            </div>
+
+            <div class="chart-box">
+                <div>
+                    <div class="chart-title">Annex 4.2 MedTech HTA Evidence Hurdles</div>
+                    <div class="chart-sub">What separates a "technical feature" from an HTA- and VAC-defensible value proposition.</div>
+                </div>
+                <div id="chart_hta_radar" style="height:245px; width:100%;"></div>
+            </div>
+        </div>
+
+        <!-- 1. Regional Macro Context -->
+        <div class="sec-title">1. Why APAC Healthcare Systems Are Pivoting from Volume to Value</div>
+        <div class="macro-grid">
+            <div class="macro-card">
+                <div class="macro-eyebrow">Regional Structural Pressure</div>
+                <h3>Demographic &amp; Inflation Squeeze</h3>
+                <p>Rapidly ageing populations across East and Southeast Asia—paired with double-digit medical inflation and rising chronic musculoskeletal caseloads—are forcing ministries and insurers to curb open-ended fee-for-service implant utilization.</p>
+            </div>
+            <div class="macro-card sg-focus">
+                <div class="macro-eyebrow">Singapore Bellwether &bull; MOH / ACE</div>
+                <h3>Appropriate &amp; Value-Based Care (AVBC)</h3>
+                <p>Singapore's Ministry of Health (MOH) and Agency for Care Effectiveness (ACE) operationalize AVBC by linking clinical appropriateness guidelines, Health Technology Assessment (HTA), Implant Subsidy Lists (ISL), and public-private fee benchmarks.</p>
+            </div>
+            <div class="macro-card">
+                <div class="macro-eyebrow">Regional Spillover</div>
+                <h3>Taiwan, Hong Kong &amp; ASEAN</h3>
+                <p>Parallel cost-containment mechanisms—from Taiwan NHI's balance-billing caps and Hong Kong HA's cluster tender formularies to private payer pre-authorization in Malaysia and Thailand—echo Singapore's value-gatekeeping trajectory.</p>
+            </div>
+        </div>
+
+        <!-- 2. How Singapore's AVBC Framework Reshapes the Ecosystem (Chapter 6 Synthesis) -->
+        <div class="sec-title">2. How AVBC Aligns Providers, Insurers &amp; Patients Around Value</div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 22%;">Stakeholder</th>
+                        <th style="width: 38%;">AVBC Policy Lever &amp; Transparency Mechanism</th>
+                        <th style="width: 40%;">Direct Impact on Orthopaedic Implant Adoption</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Public &amp; Private Healthcare Providers</strong><br><span class="tag-pill tag-blue">Fee Benchmarks &amp; Outcome Tracking</span></td>
+                        <td>Published MOH surgical/inpatient fee benchmarks, clinician peer-comparison scorecards on appropriate care, and bundled episode payment models penalize unexplained variation and avoidable readmissions.</td>
+                        <td>Hospital Value Analysis Committees (VACs) require proof that higher-ASP implants either reduce reoperation rates, shorten inpatient length of stay (day-surgery migration), or measurably improve OT efficiency.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Integrated Shield Plan (ISP) Insurers</strong><br><span class="tag-pill tag-amber">Pre-Authorization &amp; Co-Payment Design</span></td>
+                        <td>Insurers leverage MOH fee benchmarks, panel specialist networks, and medical necessity reviews to scrutinize high-cost surgical consumables and curb outlier billing.</td>
+                        <td>Devices lacking formal HTA endorsement or clear clinical necessity risk claim friction, balance-billing exposure, or exclusion from preferred panel reimbursement pathways.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Patients &amp; Co-Payers</strong><br><span class="tag-pill tag-green">Informed Financial Consent</span></td>
+                        <td>Mandatory financial counseling, published historical bill sizes, and tiered co-payment/deductible structures make patients sensitive to out-of-pocket (OOP) implant top-ups.</td>
+                        <td>When an implant sits outside subsidized or standard-panel tiers, surgeons and patients weigh incremental out-of-pocket cost directly against tangible functional or recovery benefits.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 3. Medical Device HTA Evaluation Criteria (Annex 4.2 Synthesis) -->
+        <div class="sec-title">3. What MedTech HTA Evaluators Actually Scrutinize</div>
+        <div class="hta-grid">
+            <div class="hta-card">
+                <h4>1. Comparative Clinical Effectiveness (In Vivo vs. Bench)</h4>
+                <p>Cadaveric pullout loads or material claims do not satisfy HTA review. Evaluators look for comparative human evidence—ideally RCTs or large registry cohorts—demonstrating lower revision rates, faster functional recovery, or reduced complications against the current standard of care.</p>
+            </div>
+            <div class="hta-card">
+                <h4>2. Cost-Effectiveness &amp; Incremental Cost-Utility (ICER)</h4>
+                <p>Does the incremental device cost yield commensurate clinical gain (e.g., QALYs gained or revisions avoided)? Where clinical outcomes are non-inferior to legacy implants, premium pricing requires offsetting downstream savings in OT time, bed-days, or complication management.</p>
+            </div>
+            <div class="hta-card">
+                <h4>3. Budget Impact &amp; Eligible Target Subgroup</h4>
+                <p>HTA bodies model total health-system expenditure over 3–5 years. Defining a risk-stratified target subgroup (e.g., massive/degenerative cuff tears, poor bone density, or revision cases) is far more likely to gain subsidy or formulary approval than broad, unselected indication claims.</p>
+            </div>
+            <div class="hta-card">
+                <h4>4. Organizational, Learning-Curve &amp; System Feasibility</h4>
+                <p>Evaluators assess capital equipment requirements, CSSD sterilization load, surgeon learning curves, and whether the device enables care-setting shifts (such as moving procedures from inpatient wards to ambulatory day-surgery centres).</p>
+            </div>
+        </div>
+
+        <!-- 4. Strategic Imperative for MedTech Implant Companies -->
+        <div class="imperative-box">
+            <h3>Why MedTech Implant Companies Must Lead with Health Economics</h3>
+            <p style="margin:0; font-size:13.5px; color:#e2e8f0; line-height:1.6;">
+                As AVBC principles spread across Singapore and neighbouring APAC markets, commercial success shifts from <em>feature-selling to individual surgeons</em> toward <em>building economic consensus across surgeons, hospital VACs, and payers</em>:
+            </p>
+            <div class="imperative-grid">
+                <div class="imp-item">
+                    <strong>1. Translate Features into Episode Math</strong>
+                    <span>Frame biomechanical innovations (knotless tensioning, suture tape, porous lattices) in terms of break-even OT minutes, bed-day avoidance, and revision buffers - not just bench Newtons.</span>
+                </div>
+                <div class="imp-item">
+                    <strong>2. Champion Risk-Stratified Adoption</strong>
+                    <span>Equip surgeons and VACs with patient-selection criteria (e.g., bone quality or tear chronicity) that protect hospital budgets while securing access for high-risk cases.</span>
+                </div>
+                <div class="imp-item">
+                    <strong>3. Protect Payer &amp; Subsidy Alignment</strong>
+                    <span>Proactively generate local real-world registry data and budget-impact dossiers to support HTA reviews, Implant Subsidy List inclusion, and frictionless insurer pre-authorization.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="gov-note">
+            <strong>Editorial &amp; Governance Note (As of 2026):</strong> Synthesized from Singapore's Appropriate and Value-Based Care (AVBC) framework primer (including private healthcare provider, Integrated Shield Plan, and patient transparency mechanisms in Chapter 6, and Medical Technology HTA evaluation domains in Annex 4.2) alongside broader APAC reimbursement trends. Visual charts represent conceptual decision-driver shifts rather than fixed empirical weights.
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cfg = { displayModeBar: false, responsive: true };
+
+            // Chart 1: Horizontal Grouped Comparison of Decision Drivers
+            const drivers = [
+                "Payer & ISP Panel Scrutiny",
+                "Total Episode & Revision Cost",
+                "Risk-Stratified Patient Criteria",
+                "In Vivo Comparative Evidence",
+                "Surgeon Preference Alone"
+            ];
+
+            Plotly.newPlot("chart_avbc_shift", [
+                {
+                    y: drivers,
+                    x: [25, 30, 20, 45, 90],
+                    name: "Legacy Fee-for-Service Era",
+                    type: "bar",
+                    orientation: "h",
+                    marker: { color: "#cbd5e1" },
+                    hovertemplate: "<b>%{y}</b><br>Legacy Era Influence: %{x}/100<extra></extra>"
+                },
+                {
+                    y: drivers,
+                    x: [88, 92, 85, 90, 45],
+                    name: "AVBC / Value-Gatekeeping Era",
+                    type: "bar",
+                    orientation: "h",
+                    marker: { color: "#0369a1" },
+                    hovertemplate: "<b>%{y}</b><br>AVBC Era Influence: %{x}/100<extra></extra>"
+                }
+            ], {
+                barmode: "group",
+                margin: { l: 175, r: 16, t: 10, b: 36 },
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: "white",
+                legend: { orientation: "h", y: 1.15, x: 0, font: { size: 11 } },
+                xaxis: { range: [0, 105], title: "Relative Decision Weight (Illustrative)", titlefont: { size: 11 }, gridcolor: "#f1f5f9" },
+                yaxis: { tickfont: { size: 11 } }
+            }, cfg);
+
+            // Chart 2: Annex 4.2 HTA Readiness Radar (Feature-Only Pitch vs. Health-Econ Dossier)
+            const axes = [
+                "In Vivo Clinical<br>Outcomes",
+                "ICER / Episode<br>Cost Offset",
+                "Risk-Stratified<br>Budget Impact",
+                "Care-Setting /<br>OT Feasibility",
+                "Local Registry /<br>Benchmark Fit",
+                "In Vivo Clinical<br>Outcomes"
+            ];
+
+            Plotly.newPlot("chart_hta_radar", [
+                {
+                    type: "scatterpolar",
+                    r: [35, 20, 15, 45, 20, 35],
+                    theta: axes,
+                    fill: "toself",
+                    fillcolor: "rgba(216, 164, 155, 0.28)",
+                    line: { color: "#D8A49B", width: 2 },
+                    name: "Bench / Feature-Only Pitch"
+                },
+                {
+                    type: "scatterpolar",
+                    r: [88, 85, 90, 82, 85, 88],
+                    theta: axes,
+                    fill: "toself",
+                    fillcolor: "rgba(126, 168, 190, 0.30)",
+                    line: { color: "#0369a1", width: 2.5 },
+                    name: "AVBC / HTA-Ready Dossier"
+                }
+            ], {
+                polar: {
+                    radialaxis: { visible: true, range: [0, 100], tickfont: { size: 9 }, gridcolor: "#e2e8f0" },
+                    angularaxis: { tickfont: { size: 10.5 } }
+                },
+                margin: { l: 46, r: 46, t: 24, b: 24 },
+                paper_bgcolor: "white",
+                showlegend: true,
+                legend: { orientation: "h", y: -0.15, x: 0.05, font: { size: 11 } }
+            }, cfg);
+        });
+    </script>
+</body>
+</html>
