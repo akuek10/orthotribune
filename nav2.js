@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const isMarketsPage = (currentFile === "apac_markets.html" || currentFile === "sea_gc_markets.html" || window.location.pathname.toLowerCase().includes("apac_markets"));
     const isAboutPage = (currentFile === "about.html" || window.location.pathname.toLowerCase().includes("about"));
     const isDesignPage = (currentFile === "design_economics.html" || window.location.pathname.toLowerCase().includes("design_economics"));
+    const isAvbcPage = (currentFile === "apac_vbc.html" || window.location.pathname.toLowerCase().includes("apac_vbc"));
+    
 
     // Top-Left Global Section Switcher
     const globalSections = [
@@ -309,6 +311,8 @@ document.addEventListener("DOMContentLoaded", function () {
         currentGlobalLabel = "SEA & Greater China Markets";
     } else if (isDesignPage) {
         currentGlobalLabel = "Implant Design & MedTech Economics";
+    } else if (isAvbcPage) {
+        currentGlobalLabel = "APAC Value-Based Care & SG AVBC";
     } else if (isAboutPage) {
         currentGlobalLabel = "About OrthoTribune";
     }
@@ -325,9 +329,10 @@ document.addEventListener("DOMContentLoaded", function () {
     globalSections.forEach(sec => {
         const isCurrent =
             (sec.id === "regional-markets" && isMarketsPage) ||
+            (sec.id === "apac-vbc" && isAvbcPage) ||
             (sec.id === "design-economics" && isDesignPage) ||
             (sec.id === "about-page" && isAboutPage) ||
-            (sec.id === "upper-extremity" && !isMarketsPage && !isAboutPage && !isDesignPage);
+            (sec.id === "upper-extremity" && !isMarketsPage && !isAboutPage && !isDesignPage && !isAvbcPage);
 
         const sLink = document.createElement("a");
         sLink.href = "./" + sec.href;
@@ -357,7 +362,7 @@ document.addEventListener("DOMContentLoaded", function () {
     bar.appendChild(globalGroup);
 
     // 2. Render Upper Extremity Sub-Dropdowns ONLY on Upper Extremity pages
-    if (!isMarketsPage && !isAboutPage && !isDesignPage) {
+    if (!isMarketsPage && !isAboutPage && !isDesignPage && !isAvbcPage) {
         const divider = document.createElement("div");
         divider.className = "ot-divider";
         bar.appendChild(divider);
