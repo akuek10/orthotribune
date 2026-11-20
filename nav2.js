@@ -30,6 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
             href: "design_economics.html"
         },
         {
+            id: "apac-vbc",
+            name: "APAC Value-Based Care & SG AVBC",
+            subtitle: "HTA criteria, payer shifts & why MedTech needs health economics",
+            href: "apac_vbc.html"
+        },
+        {
             id: "about-page",
             name: "About OrthoTribune",
             subtitle: "Project background & methodology",
