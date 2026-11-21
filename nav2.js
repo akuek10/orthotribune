@@ -38,6 +38,12 @@ document.addEventListener("DOMContentLoaded", function () {
             href: "apac_vbc.html"
         },
         {
+            id: "animation-suite",
+            name: "Studio Animation Suite",
+            subtitle: "Visual 3D overview of implant solutions & planning considerations",
+            href: "animation-suite/RSA/index.html"
+        },
+        {
             id: "about-page",
             name: "About OrthoTribune",
             subtitle: "Project background & methodology",
