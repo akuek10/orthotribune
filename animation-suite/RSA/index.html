@@ -48,7 +48,8 @@
 
     // --- OrthoTribune Navigation & Animation Suite Catalog ---
     const ORTHOTRIBUNE_PORTAL_LINKS = [
-      { id: 'home', label: 'Home / Portal', href: '/index.html', icon: Globe, desc: 'Main clinical & VAC intelligence hub' },
+      { id: 'vac', label: 'VAC Simulators', href: '/value_dossier_v3.html', icon: Calculator, desc: 'Episode-of-care hospital value models' },
+      { id: 'apac', label: 'APAC Markets', href: '/apac_markets.html', icon: BarChart3, desc: 'Regional sports medicine & implant growth' },
       { id: 'about', label: 'About OrthoTribune', href: '/about.html', icon: User, desc: 'Methodology, philosophy & background' },
     ];
 
@@ -426,19 +427,16 @@
             opacity: Math.min(0.85, boneOpacity + 0.15)
           });
 
-      // Intact spherical humeral head centered directly at nativeCOR (0,0,0 of pivot)
       const headGeo = new THREE.SphereGeometry(0.54, 28, 22);
       const headMesh = new THREE.Mesh(headGeo, boneMat);
       headMesh.position.set(0, 0, 0);
       root.add(headMesh);
 
-      // Superior cuff-tear arthropathy (CTA) acetabularization wear patch on superior head
       const wearCapGeo = new THREE.SphereGeometry(0.548, 22, 14, 0, Math.PI * 2, 0, Math.PI * 0.28);
       const wearCap = new THREE.Mesh(wearCapGeo, cartilageWearMat);
       wearCap.position.set(0, 0, 0);
       root.add(wearCap);
 
-      // Anatomical neck & shaft descending laterally from the intact head at native 135° inclination
       const shaftGroup = new THREE.Group();
       shaftGroup.position.set(0.36, -0.28, 0);
       root.add(shaftGroup);
@@ -457,14 +455,12 @@
       const humBoneMesh = new THREE.Mesh(humBoneGeo, boneMat);
       shaftGroup.add(humBoneMesh);
 
-      // Prominent Greater Tuberosity (collides with acromion around ~62° abduction in CTA)
       const gtGeo = new THREE.SphereGeometry(0.28, 20, 16);
       gtGeo.scale(1.1, 1.4, 0.95);
       const gtMesh = new THREE.Mesh(gtGeo, boneMat);
       gtMesh.position.set(0.24, 0.16, -0.08);
       shaftGroup.add(gtMesh);
 
-      // Lesser Tuberosity
       const ltGeo = new THREE.SphereGeometry(0.20, 18, 14);
       ltGeo.scale(0.95, 1.2, 0.95);
       const ltMesh = new THREE.Mesh(ltGeo, boneMat);
@@ -474,7 +470,7 @@
       return root;
     }
 
-    // --- Post-Op RSA Humerus + Implant Builder ---
+    // --- Post-Op RSA Humerus + Visible UHMWPE Poly Liner + Implant Builder ---
     function createPostOpRSAHumerusGroup(cfg, boneOpacity) {
       const root = new THREE.Group();
 
@@ -506,17 +502,28 @@
         roughness: 0.28
       });
 
+      // Distinct clinical UHMWPE polyethylene insert material (ice-blue/white polymer with crisp rim)
       const polyMat = new THREE.MeshPhysicalMaterial({
-        color: 0xf8fafc,
-        roughness: 0.2,
-        metalness: 0.02,
-        clearcoat: 0.45
+        color: cfg.linerType === 'constrained' ? 0xbae6fd : 0xe0f2fe,
+        emissive: 0x0284c7,
+        emissiveIntensity: 0.14,
+        roughness: 0.22,
+        metalness: 0.04,
+        clearcoat: 0.5,
+        side: THREE.DoubleSide
+      });
+
+      const polyRimEdgeMat = new THREE.MeshStandardMaterial({
+        color: cfg.linerType === 'constrained' ? 0x38bdf8 : 0x7dd3fc,
+        emissive: 0x0369a1,
+        emissiveIntensity: 0.35,
+        roughness: 0.25
       });
 
       const nsaRad = THREE.MathUtils.degToRad(cfg.nsa);
       const retroRad = THREE.MathUtils.degToRad(cfg.humeralVersion);
       const sphereRadius = (cfg.glenosphereDiam / 39) * 0.52;
-      const polyThickOffset = cfg.polyThickness * 0.018;
+      const polyThickOffset = cfg.polyThickness * 0.022;
       const trayOffset = cfg.humeralType === 'onlay' ? 0.145 : 0.028;
       const socketDist = sphereRadius + polyThickOffset + trayOffset;
 
@@ -524,20 +531,47 @@
       cupPivot.rotation.set(retroRad, 0, -(Math.PI / 2 - (Math.PI - nsaRad)));
       root.add(cupPivot);
 
-      // UHMWPE Liner
-      const rimAngle = cfg.linerType === 'constrained' ? Math.PI * 0.44 : cfg.linerType === 'combo' ? Math.PI * 0.32 : Math.PI * 0.37;
-      const linerGeo = new THREE.SphereGeometry(sphereRadius + 0.04, 32, 24, 0, Math.PI * 2, 0, rimAngle);
-      linerGeo.rotateZ(Math.PI / 2);
+      // --- Visible UHMWPE Polyethylene Insert ---
+      // Positioned cleanly between glenosphere (+X = 0) and metallic tray/cup (+X = socketDist)
+      // Constrained liner wraps deeper around the glenosphere equator (higher rim & jump height)
+      const isConstrained = cfg.linerType === 'constrained';
+      const rimArc = isConstrained ? Math.PI * 0.46 : Math.PI * 0.35;
+      const outerPolyRadius = sphereRadius + 0.065 + (cfg.polyThickness * 0.012);
+
+      // Outer convex polyethylene shell facing the metallic tray/cup (+X) and opening toward the glenosphere (-X)
+      const linerGeo = new THREE.SphereGeometry(outerPolyRadius, 36, 24, 0, Math.PI * 2, 0, rimArc);
+      // SphereGeometry cap sits at +Y pole; rotating Z by -PI/2 places the dome at +X and the open rim facing -X (glenosphere)!
+      linerGeo.rotateZ(-Math.PI / 2);
       const linerMesh = new THREE.Mesh(linerGeo, polyMat);
-      linerMesh.position.set(0.02, 0, 0);
+      linerMesh.position.set(0.015 + polyThickOffset * 0.45, 0, 0);
       cupPivot.add(linerMesh);
+
+      // Thick cylindrical polyethylene spacer collar when +3mm or +6mm poly thickness is chosen
+      if (cfg.polyThickness > 0) {
+        const spacerH = cfg.polyThickness * 0.022;
+        const spacerR = outerPolyRadius * Math.sin(rimArc) * 0.94;
+        const spacerGeo = new THREE.CylinderGeometry(spacerR, spacerR * 0.92, spacerH, 32);
+        spacerGeo.rotateZ(-Math.PI / 2);
+        const spacerMesh = new THREE.Mesh(spacerGeo, polyMat);
+        spacerMesh.position.set(sphereRadius + spacerH / 2 - 0.01, 0, 0);
+        cupPivot.add(spacerMesh);
+      }
+
+      // Highlighted circumferential polyethylene lip ring so the UHMWPE rim is unmistakably visible from every angle
+      const lipRadius = outerPolyRadius * Math.sin(rimArc);
+      const lipXOffset = (0.015 + polyThickOffset * 0.45) + outerPolyRadius * Math.cos(rimArc);
+      const lipGeo = new THREE.TorusGeometry(lipRadius, isConstrained ? 0.028 : 0.018, 12, 36);
+      lipGeo.rotateY(Math.PI / 2);
+      const lipMesh = new THREE.Mesh(lipGeo, polyRimEdgeMat);
+      lipMesh.position.set(lipXOffset, 0, 0);
+      cupPivot.add(lipMesh);
 
       // Inlay SutureCup vs Proud Two-Tier Onlay Tray
       if (cfg.humeralType === 'inlay') {
         const cupGeo = new THREE.CylinderGeometry(0.41, 0.30, 0.24, 28);
         cupGeo.rotateZ(-Math.PI / 2);
         const cupMesh = new THREE.Mesh(cupGeo, tiMat);
-        cupMesh.position.set(socketDist - 0.02, 0, 0);
+        cupMesh.position.set(socketDist - 0.01, 0, 0);
         cupPivot.add(cupMesh);
 
         const collarGeo = new THREE.TorusGeometry(0.41, 0.022, 10, 28);
@@ -549,18 +583,18 @@
         const lowerCollarGeo = new THREE.CylinderGeometry(0.42, 0.39, 0.075, 28);
         lowerCollarGeo.rotateZ(-Math.PI / 2);
         const lowerCollar = new THREE.Mesh(lowerCollarGeo, darkCollarMat);
-        lowerCollar.position.set(socketDist - 0.025, 0, 0);
+        lowerCollar.position.set(socketDist - 0.02, 0, 0);
         cupPivot.add(lowerCollar);
 
         const upperTrayGeo = new THREE.CylinderGeometry(0.46, 0.43, 0.085, 28);
         upperTrayGeo.rotateZ(-Math.PI / 2);
         const upperTray = new THREE.Mesh(upperTrayGeo, tiMat);
-        upperTray.position.set(socketDist - 0.105, 0, 0);
+        upperTray.position.set(socketDist - 0.10, 0, 0);
         cupPivot.add(upperTray);
       }
 
       // Dynamic Surgical Neck Osteotomy Cut Plane Ring
-      const cutPlaneX = cfg.humeralType === 'onlay' ? socketDist + 0.015 : socketDist - 0.11;
+      const cutPlaneX = cfg.humeralType === 'onlay' ? socketDist + 0.02 : socketDist - 0.11;
       const osteoRing = new THREE.Mesh(new THREE.RingGeometry(0.32, 0.47, 32), osteotomyMat);
       osteoRing.rotation.set(0, Math.PI / 2, 0);
       osteoRing.position.set(cutPlaneX, 0, 0);
@@ -568,7 +602,7 @@
 
       // Humeral Shaft & Metaphysis descending along anatomical shaft axis
       const shaftGroup = new THREE.Group();
-      shaftGroup.position.set(socketDist + 0.05, 0, 0);
+      shaftGroup.position.set(socketDist + 0.055, 0, 0);
       shaftGroup.rotation.set(0, 0, Math.PI - nsaRad);
       cupPivot.add(shaftGroup);
 
@@ -641,7 +675,7 @@
         nsa: 135,                   // 135 | 145 | 155
         humeralVersion: 20,         // 0 | 10 | 20 | 30
         polyThickness: 0,           // 0 | 3 | 6
-        linerType: 'standard',      // 'standard' | 'constrained' | 'combo'
+        linerType: 'standard',      // 'standard' | 'constrained'
         // Glenoid
         deformity: 'walchB2',       // 'neutral' | 'walchB2' | 'favardE3'
         correctionMode: 'augment',  // 'reaming' | 'augment'
@@ -663,7 +697,6 @@
 
       // --- Biomechanical & COR Calculations ---
       const biomech = useMemo(() => {
-        // Native CTA superiorly migrated humeral head COR
         const nativeCOR = { x: 0.62, y: 0.24, z: 0.0 };
 
         const reamRecess = (cfg.deformity !== 'neutral' && cfg.correctionMode === 'reaming') ? -2.8 : 0;
@@ -694,7 +727,7 @@
         const overhangBonus = cfg.infOverhang * 3.5 + (cfg.baseplatePos === 'inferior' ? 6 : 0);
         const latBonus = Math.max(0, latOffsetMm) * 1.4;
         const diamBonus = (cfg.glenosphereDiam - 36) * 1.8;
-        const constrainedPenalty = cfg.linerType === 'constrained' ? -15 : cfg.linerType === 'combo' ? 4 : 0;
+        const constrainedPenalty = cfg.linerType === 'constrained' ? -15 : 0;
 
         const maxAdduction = Math.max(0, Math.min(35, Math.round(10 + nsaNotchBonus + overhangBonus + latBonus * 0.6 + constrainedPenalty)));
         const maxAbduction = Math.max(75, Math.min(155, Math.round(118 + (cfg.nsa === 135 ? 10 : 4) + latBonus + diamBonus + constrainedPenalty)));
@@ -702,7 +735,6 @@
         const maxER90 = Math.max(30, Math.min(95, Math.round(58 + (cfg.humeralVersion - 15) * 0.8 + latBonus + constrainedPenalty * 0.7)));
         const maxIR = Math.max(20, Math.min(85, Math.round(56 - (cfg.humeralVersion - 15) * 0.85 + latBonus * 0.8 + constrainedPenalty * 0.7)));
 
-        // Pre-op CTA Impingement-Free ROM Limits
         const preOpLimits = {
           adduction: 18,
           abduction: 62,
@@ -711,11 +743,11 @@
           ir: 34
         };
 
-        const notchScore = (cfg.nsa === 155 ? 45 : cfg.nsa === 145 ? 20 : 5) - (cfg.infOverhang * 6) - (cfg.baseplatePos === 'inferior' ? 12 : 0) - Math.max(0, latOffsetMm) * 2.2;
+        const notchScore = (cfg.nsa === 155 ? 45 : cfg.nsa === 145 ? 20 : 5) - (cfg.infOverhang * 6) - (cfg.baseplatePos === 'inferior' ? 12 : 0) - Math.max(0, latOffsetMm) * 2.2 + (cfg.linerType === 'constrained' ? 10 : 0);
         const notchRisk = notchScore >= 25 ? 'HIGH' : notchScore >= 8 ? 'MODERATE' : 'LOW';
 
         const sphereR = cfg.glenosphereDiam / 2;
-        const socketDepthRatio = cfg.linerType === 'constrained' ? 0.44 : cfg.linerType === 'combo' ? 0.26 : 0.33;
+        const socketDepthRatio = cfg.linerType === 'constrained' ? 0.45 : 0.33;
         const jumpHeightMm = Math.round((sphereR * socketDepthRatio + cfg.polyThickness * 0.25) * 10) / 10;
 
         const deltoidTensionPct = Math.round(100 + distalizationMm * 1.6 + Math.max(0, latOffsetMm) * 1.8 + cfg.polyThickness * 1.5);
@@ -907,10 +939,8 @@
             setMotionAngle(currentDeg);
           }
 
-          // Rotate Post-Op RSA pivot around activeCOR
           applyPivotRotation(rsaPivotRef.current, st.motionMode, currentDeg);
 
-          // Rotate Pre-Op CTA pivot around nativeCOR (capped at Pre-Op CTA subacromial/capsular block in Ghost mode)
           const preOpLimit = st.biomech.preOpLimits[st.motionMode];
           const preOpDeg = st.constructView === 'ghost' ? Math.min(currentDeg, preOpLimit) : currentDeg;
           applyPivotRotation(preOpPivotRef.current, st.motionMode, preOpDeg);
@@ -948,7 +978,6 @@
         const root = new THREE.Group();
         root.userData.isDynamicConstruct = true;
 
-        // 1. High-Realism Sculpted Scapula CT Mesh (no deformity wear highlight in pure Pre-Op CTA if preferred, or show native pathology)
         const scapula = createScapulaGroup(
           boneOpacity,
           cfg.deformity,
@@ -959,7 +988,6 @@
         );
         root.add(scapula);
 
-        // 2. Post-Op RSA Glenoid & Humeral Construct (shown in 'postop' and 'ghost' modes)
         if (constructView === 'postop' || constructView === 'ghost') {
           const glenoidImplant = createGlenoidImplantGroup(cfg, biomech.activeCOR);
           root.add(glenoidImplant);
@@ -972,7 +1000,6 @@
           rsaPivotRef.current = rsaPivot;
         }
 
-        // 3. Dedicated Intact Pre-Op CTA Humerus (solid in 'preop', translucent cyan wireframe in 'ghost')
         if (constructView === 'preop' || constructView === 'ghost') {
           const prePivot = new THREE.Group();
           prePivot.position.set(biomech.nativeCOR.x, biomech.nativeCOR.y, biomech.nativeCOR.z);
@@ -982,7 +1009,6 @@
           preOpPivotRef.current = prePivot;
         }
 
-        // 4. Center of Rotation (COR) Visualizers
         if (showCOR) {
           const natSphere = new THREE.Mesh(
             new THREE.SphereGeometry(0.085, 16, 16),
@@ -1008,7 +1034,6 @@
           }
         }
 
-        // 5. Axial CT Reference Slice Plane
         if (showCTSlice) {
           const slicePlane = new THREE.Mesh(
             new THREE.PlaneGeometry(3.4, 2.4),
@@ -1035,7 +1060,6 @@
         scene.add(root);
       }, [cfg, boneOpacity, showCOR, showCTSlice, constructView, biomech]);
 
-      // Apply Camera Preset
       const handleCameraPreset = (preset) => {
         setCameraPreset(preset);
         const cam = cameraRef.current;
@@ -1609,22 +1633,22 @@
 
                   <div>
                     <div className="flex justify-between text-[11px] font-semibold text-slate-300 mb-1.5">
-                      <span>Polyethylene Liner Constraint</span>
-                      <span className="text-slate-400">Jump Height: {biomech.jumpHeightMm}mm</span>
+                      <span>UHMWPE Polyethylene Liner</span>
+                      <span className="text-sky-300">Jump Height: {biomech.jumpHeightMm}mm</span>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 gap-2">
                       {[
-                        { id: 'standard', label: 'Standard', sub: 'Balanced' },
-                        { id: 'constrained', label: 'Constrained', sub: '-15° ROM' },
-                        { id: 'combo', label: 'Combo Liner', sub: 'Mismatch' }
+                        { id: 'standard', label: 'Standard Liner', sub: 'Full impingement-free arc' },
+                        { id: 'constrained', label: 'Constrained (+3mm Lip)', sub: '+Jump height, -15° ROM' }
                       ].map((l) => (
                         <button
                           key={l.id}
                           onClick={() => {
                             if (constructView === 'preop') setConstructView('postop');
                             updateCfg('linerType', l.id);
+                            handleCameraPreset('inlayOnlay');
                           }}
-                          className={`p-2 rounded-xl border text-center min-h-[48px] ${
+                          className={`p-2.5 rounded-xl border text-left min-h-[52px] transition ${
                             cfg.linerType === l.id
                               ? 'bg-sky-500/15 border-sky-400 text-white'
                               : 'bg-slate-900/70 border-slate-800 text-slate-300'
