@@ -1121,26 +1121,6 @@ useEffect(() => {
         dom.addEventListener('wheel', onWheel, { passive: false });
 
         const onResize = () => {
-  if (!container || !renderer || !camera) return;
-  const w = container.clientWidth || container.parentElement?.clientWidth || window.innerWidth;
-  const h = container.clientHeight || container.parentElement?.clientHeight || Math.round(window.innerHeight * 0.46);
-  if (w > 0 && h > 0) {
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-    renderer.render(scene, camera);
-  }
-};
-onResize();
-window.addEventListener('resize', onResize);
-
-let resizeObserver;
-if (typeof ResizeObserver !== 'undefined') {
-  resizeObserver = new ResizeObserver(onResize);
-  resizeObserver.observe(container);
-};
-
-        const onResize = () => {
           if (!container || !renderer || !camera) return;
           camera.aspect = container.clientWidth / container.clientHeight;
           camera.updateProjectionMatrix();
