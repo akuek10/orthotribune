@@ -958,6 +958,29 @@
         };
       }, []);
 
+      useEffect(() => {
+  const handlePageShow = (event) => {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  };
+  const handleContextLost = (event) => {
+    event.preventDefault();
+    window.location.reload();
+  };
+  const canvas = mountRef.current?.querySelector('canvas');
+  window.addEventListener('pageshow', handlePageShow);
+  if (canvas) {
+    canvas.addEventListener('webglcontextlost', handleContextLost);
+  }
+  return () => {
+    window.removeEventListener('pageshow', handlePageShow);
+    if (canvas) {
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
+    }
+  };
+}, []);
+
       // --- Three.js Scene Setup ---
       const mountRef = useRef(null);
       const sceneRef = useRef(null);
