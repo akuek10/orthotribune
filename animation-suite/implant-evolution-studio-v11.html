@@ -981,6 +981,44 @@
   };
 }, []);
 
+useEffect(() => {
+  const triggerViewportRefresh = () => {
+    window.dispatchEvent(new Event('resize'));
+    const renderer = rendererRef.current;
+    const scene = sceneRef.current;
+    const camera = cameraRef.current;
+    if (renderer && scene && camera) {
+      renderer.render(scene, camera);
+    }
+  };
+
+  const handlePageShow = (event) => {
+    if (event.persisted) {
+      window.location.reload();
+      return;
+    }
+    triggerViewportRefresh();
+  };
+
+  const handleContextLost = (event) => {
+    event.preventDefault();
+    window.location.reload();
+  };
+
+  window.addEventListener('pageshow', handlePageShow);
+  const canvas = mountRef.current?.querySelector('canvas');
+  if (canvas) {
+    canvas.addEventListener('webglcontextlost', handleContextLost);
+  }
+
+  return () => {
+    window.removeEventListener('pageshow', handlePageShow);
+    if (canvas) {
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
+    }
+  };
+}, []);
+      
       // --- Three.js Scene Setup ---
       const mountRef = useRef(null);
       const sceneRef = useRef(null);
@@ -1081,6 +1119,26 @@
         window.addEventListener('pointermove', onPointerMove);
         window.addEventListener('pointerup', onPointerUp);
         dom.addEventListener('wheel', onWheel, { passive: false });
+
+        const onResize = () => {
+  if (!container || !renderer || !camera) return;
+  const w = container.clientWidth || container.parentElement?.clientWidth || window.innerWidth;
+  const h = container.clientHeight || container.parentElement?.clientHeight || Math.round(window.innerHeight * 0.46);
+  if (w > 0 && h > 0) {
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+    renderer.render(scene, camera);
+  }
+};
+onResize();
+window.addEventListener('resize', onResize);
+
+let resizeObserver;
+if (typeof ResizeObserver !== 'undefined') {
+  resizeObserver = new ResizeObserver(onResize);
+  resizeObserver.observe(container);
+};
 
         const onResize = () => {
           if (!container || !renderer || !camera) return;
