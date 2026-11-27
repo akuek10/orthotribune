@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
             id: "animation-suite",
             name: "Studio Animation Suite",
             subtitle: "Visual 3D overview of implant solutions & planning considerations",
-            href: "animation-suite/RSA/index.html"
+            href: "animation-suite/implant-evolution-studio-v11.html"
         },
         {
             id: "about-page",
