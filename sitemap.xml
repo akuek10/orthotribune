@@ -49,17 +49,27 @@
 <changefreq>monthly</changefreq>
 <priority>0.8</priority>
 </url>
-  <url>
-    <loc>https://orthotribunedata.com/about.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>[https://orthotribunedata.com/design_economics.html](https://orthotribunedata.com/design_economics.html)</loc>
-    <changefreq>monthly</changefreq><priority>0.8</priority>
-  </url> 
-  <url>
-    <loc>[https://orthotribunedata.com/apac_vbc.html](https://orthotribunedata.com/apac_vbc.html)</loc>
-    <changefreq>monthly</changefreq><priority>0.8</priority>
-  </url>
+<url>
+<loc>https://orthotribunedata.com/animation-suite/implant-evolution-studio-v11</loc>
+<changefreq>monthly</changefreq>
+<priority>0.8</priority>
+</url>
+<url>
+<loc>https://orthotribunedata.com/animation-suite/rsa</loc>
+<changefreq>monthly</changefreq>
+<priority>0.8</priority>
+</url>
+<url>
+<loc>https://orthotribunedata.com/about.html</loc>
+<changefreq>monthly</changefreq>
+<priority>0.8</priority>
+</url>
+<url>
+<loc>https://orthotribunedata.com/design_economics.html</loc>
+<changefreq>monthly</changefreq><priority>0.8</priority>
+</url> 
+<url>
+<loc>https://orthotribunedata.com/apac_vbc.html</loc>
+<changefreq>monthly</changefreq><priority>0.8</priority>
+</url>
 </urlset>
