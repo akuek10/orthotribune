@@ -44,6 +44,12 @@
       ChevronRight, BarChart3, Calculator, Globe, User
     } from 'lucide-react';
 
+    <script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js';
+  window.THREE = THREE;
+  window.dispatchEvent(new Event('three-ready'));
+</script>
+
     // --- OrthoTribune Navigation & Animation Suite Catalog (Aligned with RSA Construct Studio) ---
     const ORTHOTRIBUNE_PORTAL_LINKS = [
       { id: 'vac', label: 'VAC Simulators', href: '/value_dossier_v3.html', icon: Calculator, desc: 'Episode-of-care hospital value models' },
