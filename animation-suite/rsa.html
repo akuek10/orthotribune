@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>RSA Construct Studio | OrthoTribune Animation Suite</title>
+  <meta name="description" content="Interactive 3D Reverse Shoulder Arthroplasty (RSA) construct studio for COR shift, NSA, retroversion, glenoid augments, and ROM." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/three@0.168.0/build/three.min.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
+  <style>
+    html, body, #root {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #070B14;
+      color: #F1F5F9;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo } = React;
+    const { createRoot } = ReactDOM;
+
+    const Icon = ({ children, className = "w-4 h-4" }) => (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        {children}
+      </svg>
+    );
+    const Layers = ({ className }) => <Icon className={className}><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></Icon>;
+    const AlertTriangle = ({ className }) => <Icon className={className}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></Icon>;
+    const CheckCircle2 = ({ className }) => <Icon className={className}><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></Icon>;
+    const Crosshair = ({ className }) => <Icon className={className}><circle cx="12" cy="12" r="10" /><line x1="22" x2="18" y1="12" y2="12" /><line x1="6" x2="2" y1="12" y2="12" /><line x1="12" x2="12" y1="6" y2="2" /><line x1="12" x2="12" y1="22" y2="18" /></Icon>;
+    const Menu = ({ className }) => <Icon className={className}><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></Icon>;
+    const X = ({ className }) => <Icon className={className}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></Icon>;
+    const ExternalLink = ({ className }) => <Icon className={className}><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></Icon>;
+    const ChevronRight = ({ className }) => <Icon className={className}><path d="m9 18 6-6-6-6" /></Icon>;
+    const BarChart3 = ({ className }) => <Icon className={className}><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></Icon>;
+    const Calculator = ({ className }) => <Icon className={className}><rect width="16" height="20" x="4" y="2" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="16" x2="16" y1="14" y2="18" /><path d="M16 10h.01" /><path d="M12 10h.01" /><path d="M8 10h.01" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M12 18h.01" /><path d="M8 18h.01" /></Icon>;
+    const User = ({ className }) => <Icon className={className}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></Icon>;
+
+    // --- OrthoTribune Navigation & Animation Suite Catalog ---
+    const ORTHOTRIBUNE_PORTAL_LINKS = [
+      { id: 'vac', label: 'VAC Simulators', href: '/value_dossier_v3.html', icon: Calculator, desc: 'Hospital value & cost models' },
+      { id: 'apac', label: 'APAC Markets', href: '/apac_markets.html', icon: BarChart3, desc: 'Regional orthopaedic market insights' },
+      { id: 'about', label: 'About OrthoTribune', href: '/about.html', icon: User, desc: 'Methodology & background' },
+    ];
+
+    const ANIMATION_SUITE_MODULES = [
+      {
+        id: 'rsa-construct',
+        title: 'RSA Construct Studio',
+        status: 'CURRENT',
+        tag: 'Arthroplasty Biomechanics',
+        summary: '3D CT & construct explorer for COR shift, NSA, retroversion, glenoid augments, and ROM.',
+        parameters: ['COR Shift', '135°–155° NSA & Retroversion', 'Posterior Wedge Augments', 'ROM & Notching']
+      },
+      {
+        id: 'implant-evolution',
+        title: 'Implant Engineering Evolution',
+        status: 'ACTIVE',
+        href: '/animation-suite/implant-evolution-studio-v11.html',
+        tag: 'Reverse TSA & Suture Anchors',
+        summary: '3D hardware evolution from Grammont 155° to 135° SutureCup with posterior augments and suture anchors.',
+        parameters: ['Grammont 155° → 135° SutureCup', 'Posterior Half/Full Augments', 'Eccentric Glenosphere', 'Anchor Footprint']
+      },
+      {
+        id: 'rc-repair',
+        title: 'RC Repair & Patch Augmentation',
+        status: 'COMING SOON',
+        tag: 'Rotator Cuff Footprint',
+        summary: 'Footprint coverage and repair construct comparison across single-row, suture-bridge, and patches.',
+        parameters: ['Footprint Coverage', 'Suture-Bridge Tension', 'Patch Augmentation', 'Cyclic Load']
+      },
+      {
+        id: 'tendon-transfer',
+        title: 'Tendon Transfer Biomechanics',
+        status: 'COMING SOON',
+        tag: 'Cuff Reconstruction',
+        summary: 'Line-of-pull and moment-arm comparison for Lower Trapezius and Latissimus Dorsi transfers.',
+        parameters: ['Line-of-Pull Vector', 'ER Moment Arm', 'Graft Tension', 'Head Centering']
+      },
+      {
+        id: 'muscle-advancement',
+        title: 'Muscle Advancement & Release',
+        status: 'COMING SOON',
+        tag: 'Massive Retracted Tears',
+        summary: 'Stepwise mobilization model for supraspinatus/infraspinatus advancement and interval slides.',
+        parameters: ['Excursion Gain', 'Nerve Tension Limit', 'Interval Slides', 'Tension Reduction']
+      }
+    ];
+
+    // --- Error Boundary ---
+    class ErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { hasError: false, message: '' };
+      }
+      static getDerivedStateFromError(error) {
+        return { hasError: true, message: error?.message || '3D Viewport error' };
+      }
+      render() {
+        if (this.state.hasError) {
+          return (
+            <div className="h-full w-full flex items-center justify-center bg-[#070B14] p-6 text-center">
+              <div className="max-w-sm rounded-2xl border border-rose-500/30 bg-[#0F172A] p-6 shadow-2xl">
+                <AlertTriangle className="w-10 h-10 text-rose-400 mx-auto mb-3" />
+                <h2 className="text-base font-semibold text-white mb-1">3D Viewport Recovery</h2>
+                <p className="text-xs text-slate-400 mb-4">{this.state.message}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-4 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-medium transition"
+                >
+                  Reload Studio
+                </button>
+              </div>
+            </div>
+          );
+        }
+        return this.props.children;
+      }
+    }
+
+    // --- Procedural PBR Textures ---
+    function createBrushedMetalTexture(baseHex, streakHex) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = baseHex;
+      ctx.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 420; i++) {
+        const y = Math.random() * 256;
+        ctx.fillStyle = i % 2 === 0 ? streakHex : 'rgba(255,255,255,0.06)';
+        ctx.fillRect(0, y, 256, 1 + Math.random() * 1.5);
+      }
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    function createPorousTrabecularTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#64748b';
+      ctx.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 2400; i++) {
+        const x = Math.random() * 256;
+        const y = Math.random() * 256;
+        const r = 0.8 + Math.random() * 1.6;
+        ctx.fillStyle = i % 3 === 0 ? '#1e293b' : i % 3 === 1 ? '#cbd5e1' : '#94a3b8';
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(3, 3);
+      return tex;
+    }
+
+    // --- Sculpted Scapula CT Mesh ---
+    function createScapulaGroup(boneOpacity, deformity, correctionMode, augmentType, notchRisk) {
+      const group = new THREE.Group();
+
+      const boneMat = new THREE.MeshPhysicalMaterial({
+        color: 0xddd0bc,
+        roughness: 0.56,
+        metalness: 0.04,
+        transparent: true,
+        opacity: boneOpacity,
+        depthWrite: boneOpacity > 0.85,
+        side: THREE.DoubleSide
+      });
+
+      const subchondralMat = new THREE.MeshPhysicalMaterial({
+        color: 0xcab99e,
+        roughness: 0.45,
+        metalness: 0.06,
+        transparent: true,
+        opacity: Math.min(0.95, boneOpacity + 0.14),
+        depthWrite: boneOpacity > 0.8
+      });
+
+      const wireMat = new THREE.LineBasicMaterial({
+        color: 0x38bdf8,
+        transparent: true,
+        opacity: Math.max(0.14, (1 - boneOpacity) * 0.5)
+      });
+
+      const bladeShape = new THREE.Shape();
+      bladeShape.moveTo(-0.08, 0.32);
+      bladeShape.quadraticCurveTo(-1.15, 0.95, -2.35, 1.38);
+      bladeShape.quadraticCurveTo(-2.52, -0.55, -2.58, -2.68);
+      bladeShape.quadraticCurveTo(-1.35, -1.78, -0.36, -0.82);
+      bladeShape.quadraticCurveTo(-0.18, -0.45, -0.08, 0.32);
+
+      const bladeGeo = new THREE.ExtrudeGeometry(bladeShape, {
+        depth: 0.12,
+        bevelEnabled: true,
+        bevelThickness: 0.045,
+        bevelSize: 0.055,
+        bevelSegments: 3
+      });
+      const bladeMesh = new THREE.Mesh(bladeGeo, boneMat);
+      bladeMesh.position.set(-0.22, 0, -0.06);
+      group.add(bladeMesh);
+
+      const bladeEdges = new THREE.LineSegments(new THREE.EdgesGeometry(bladeGeo, 24), wireMat);
+      bladeEdges.position.set(-0.22, 0, -0.06);
+      group.add(bladeEdges);
+
+      const pillarCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-1.35, -1.95, -0.02),
+        new THREE.Vector3(-0.78, -1.25, 0.01),
+        new THREE.Vector3(-0.36, -0.68, 0.02),
+        new THREE.Vector3(-0.12, -0.42, 0.02)
+      ]);
+      group.add(new THREE.Mesh(new THREE.TubeGeometry(pillarCurve, 28, 0.165, 16, false), boneMat));
+
+      if (notchRisk === 'HIGH' || notchRisk === 'MODERATE') {
+        const notchMat = new THREE.MeshStandardMaterial({
+          color: notchRisk === 'HIGH' ? 0xf43f5e : 0xf59e0b,
+          emissive: notchRisk === 'HIGH' ? 0x9f1239 : 0x78350f,
+          emissiveIntensity: 0.65,
+          transparent: true,
+          opacity: notchRisk === 'HIGH' ? 0.72 : 0.45,
+          roughness: 0.35
+        });
+        const notchZone = new THREE.Mesh(new THREE.SphereGeometry(0.145, 18, 16), notchMat);
+        notchZone.scale.set(1.2, 1.45, 1.1);
+        notchZone.position.set(-0.14, -0.46, 0.02);
+        group.add(notchZone);
+      }
+
+      const vaultPoints = [
+        new THREE.Vector2(0.01, -0.68),
+        new THREE.Vector2(0.24, -0.62),
+        new THREE.Vector2(0.32, -0.38),
+        new THREE.Vector2(0.39, -0.14),
+        new THREE.Vector2(0.47, 0.02),
+        new THREE.Vector2(0.45, 0.06),
+        new THREE.Vector2(0.01, 0.06)
+      ];
+      const vaultGeo = new THREE.LatheGeometry(vaultPoints, 32);
+      vaultGeo.rotateZ(-Math.PI / 2);
+      vaultGeo.scale(1.0, 1.08, 0.88);
+      const vaultMesh = new THREE.Mesh(vaultGeo, boneMat);
+      vaultMesh.position.set(0.02, 0, 0);
+      group.add(vaultMesh);
+
+      const rimGeo = new THREE.TorusGeometry(0.44, 0.058, 16, 36);
+      rimGeo.rotateY(Math.PI / 2);
+      rimGeo.scale(1.0, 1.08, 0.88);
+      const rimMesh = new THREE.Mesh(rimGeo, subchondralMat);
+      rimMesh.position.set(0.06, 0, 0);
+      group.add(rimMesh);
+
+      if (deformity !== 'neutral' && correctionMode === 'reaming') {
+        const reamGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.11, 32);
+        reamGeo.rotateZ(-Math.PI / 2);
+        const reamMat = new THREE.MeshStandardMaterial({
+          color: 0xf43f5e,
+          transparent: true,
+          opacity: 0.42,
+          roughness: 0.45
+        });
+        const reamMesh = new THREE.Mesh(reamGeo, reamMat);
+        reamMesh.position.set(0.02, 0, 0);
+        group.add(reamMesh);
+      }
+
+      const spineCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-2.36, 0.92, -0.14),
+        new THREE.Vector3(-1.45, 0.76, -0.32),
+        new THREE.Vector3(-0.68, 0.74, -0.44),
+        new THREE.Vector3(-0.24, 0.84, -0.42)
+      ]);
+      group.add(new THREE.Mesh(new THREE.TubeGeometry(spineCurve, 24, 0.135, 14, false), boneMat));
+
+      const acromionShape = new THREE.Shape();
+      acromionShape.moveTo(-0.35, -0.22);
+      acromionShape.quadraticCurveTo(0.18, -0.28, 0.48, -0.05);
+      acromionShape.quadraticCurveTo(0.52, 0.22, 0.16, 0.28);
+      acromionShape.quadraticCurveTo(-0.28, 0.24, -0.35, -0.22);
+      const acromionGeo = new THREE.ExtrudeGeometry(acromionShape, {
+        depth: 0.11,
+        bevelEnabled: true,
+        bevelThickness: 0.03,
+        bevelSize: 0.03,
+        bevelSegments: 2
+      });
+      acromionGeo.rotateX(Math.PI / 2);
+      const acromionMesh = new THREE.Mesh(acromionGeo, boneMat);
+      acromionMesh.position.set(0.08, 0.96, -0.16);
+      acromionMesh.rotation.set(0.08, -0.16, -0.14);
+      group.add(acromionMesh);
+
+      const coracoidCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-0.18, 0.44, 0.14),
+        new THREE.Vector3(0.02, 0.65, 0.34),
+        new THREE.Vector3(0.28, 0.58, 0.48),
+        new THREE.Vector3(0.44, 0.44, 0.52)
+      ]);
+      group.add(new THREE.Mesh(new THREE.TubeGeometry(coracoidCurve, 20, 0.105, 14, false), boneMat));
+
+      return group;
+    }
+
+    // --- Glenoid Implant with Posterior Half/Full Wedge Slope (Ant -> Post) ---
+    function createGlenoidImplantGroup(cfg, corPos) {
+      const group = new THREE.Group();
+
+      const brushedTex = createBrushedMetalTexture('#94a3b8', 'rgba(15,23,42,0.16)');
+      const porousTex = createPorousTrabecularTexture();
+
+      const tiMat = new THREE.MeshStandardMaterial({
+        color: 0xb8c4d4,
+        map: brushedTex,
+        metalness: 0.85,
+        roughness: 0.24
+      });
+      const porousGoldMat = new THREE.MeshStandardMaterial({
+        color: 0xd97706,
+        map: porousTex,
+        bumpMap: porousTex,
+        bumpScale: 0.016,
+        metalness: 0.74,
+        roughness: 0.45
+      });
+      const cobaltChromeMat = new THREE.MeshPhysicalMaterial({
+        color: 0xf1f5f9,
+        metalness: 0.95,
+        roughness: 0.08,
+        clearcoat: 0.55
+      });
+
+      const reamRecess = (cfg.deformity !== 'neutral' && cfg.correctionMode === 'reaming') ? -0.11 : 0;
+      const infShift = cfg.baseplatePos === 'inferior' ? -0.11 : 0;
+      const bpRadius = cfg.baseplateDiam === 25 ? 0.36 : 0.42;
+      const bpX = 0.08 + reamRecess;
+
+      const bpGeo = new THREE.CylinderGeometry(bpRadius, bpRadius, 0.09, 36);
+      bpGeo.rotateZ(-Math.PI / 2);
+      const bpMesh = new THREE.Mesh(bpGeo, tiMat);
+      bpMesh.position.set(bpX, infShift, 0);
+      group.add(bpMesh);
+
+      if (cfg.correctionMode === 'augment' && cfg.augmentType !== 'flat') {
+        const isHalf = cfg.augmentType === 'half';
+        const maxWedgeDepth = 0.22;
+        const minWedgeDepth = 0.03;
+
+        const augShape = new THREE.Shape();
+        if (isHalf) {
+          augShape.moveTo(0, -bpRadius * 0.96);
+          augShape.absarc(0, 0, bpRadius * 0.96, -Math.PI / 2, Math.PI / 2, false);
+          augShape.closePath();
+        } else {
+          augShape.absarc(0, 0, bpRadius * 0.96, 0, Math.PI * 2, false);
+        }
+
+        const wedgeGeo = new THREE.ExtrudeGeometry(augShape, {
+          depth: maxWedgeDepth,
+          bevelEnabled: false,
+          curveSegments: 36
+        });
+
+        wedgeGeo.rotateY(-Math.PI / 2);
+        if (isHalf) {
+          wedgeGeo.scale(1, 1, -1);
+        }
+
+        const pos = wedgeGeo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+          const px = pos.getX(i);
+          const pz = pos.getZ(i);
+          if (px < -0.001) {
+            const tSlope = isHalf
+              ? Math.max(0, Math.min(1, -pz / (bpRadius * 0.96)))
+              : Math.max(0, Math.min(1, (bpRadius * 0.96 - pz) / (2 * bpRadius * 0.96)));
+            const localDepth = minWedgeDepth + tSlope * (maxWedgeDepth - minWedgeDepth);
+            pos.setX(i, -localDepth);
+          }
+        }
+        wedgeGeo.computeVertexNormals();
+
+        const wedgeMesh = new THREE.Mesh(wedgeGeo, porousGoldMat);
+        wedgeMesh.position.set(bpX - 0.045, infShift, 0);
+        group.add(wedgeMesh);
+      }
+
+      const postLen = cfg.centralFixation === 'shortPeg' ? 0.34 : cfg.centralFixation === 'longPost' ? 0.58 : 0.52;
+      const postGeo = new THREE.CylinderGeometry(0.065, 0.055, postLen, 18);
+      postGeo.rotateZ(-Math.PI / 2);
+      const postMesh = new THREE.Mesh(postGeo, porousGoldMat);
+      postMesh.position.set(bpX - postLen / 2, infShift, 0);
+      group.add(postMesh);
+
+      const screwCount = cfg.peripheralScrews;
+      const splay = cfg.screwTrajectory === 'divergent' ? 0.24 : 0.04;
+      const screwAngles = screwCount === 2 ? [0, Math.PI] : [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
+      screwAngles.forEach((ang) => {
+        const sGeo = new THREE.CylinderGeometry(0.032, 0.028, 0.48, 12);
+        sGeo.rotateZ(-Math.PI / 2);
+        const sMesh = new THREE.Mesh(sGeo, tiMat);
+        const rOff = bpRadius * 0.65;
+        const sy = infShift + Math.cos(ang) * rOff;
+        const sz = Math.sin(ang) * rOff;
+        sMesh.position.set(bpX - 0.24, sy, sz);
+        sMesh.rotation.set(0, Math.sin(ang) * splay, -Math.cos(ang) * splay);
+        group.add(sMesh);
+      });
+
+      const latOffset = cfg.glenoidLat * 0.026;
+      if (latOffset > 0.005) {
+        const latGeo = new THREE.CylinderGeometry(bpRadius * 0.92, bpRadius * 0.92, latOffset, 28);
+        latGeo.rotateZ(-Math.PI / 2);
+        const latMesh = new THREE.Mesh(latGeo, tiMat);
+        latMesh.position.set(bpX + 0.045 + latOffset / 2, infShift, 0);
+        group.add(latMesh);
+      }
+
+      const sphereRadius = (cfg.glenosphereDiam / 39) * 0.52;
+      const sphereGeo = new THREE.SphereGeometry(sphereRadius, 36, 28, 0, Math.PI * 2, 0, Math.PI * 0.62);
+      sphereGeo.rotateZ(-Math.PI / 2);
+      const sphereMesh = new THREE.Mesh(sphereGeo, cobaltChromeMat);
+      sphereMesh.position.set(corPos.x, corPos.y, corPos.z);
+      group.add(sphereMesh);
+
+      return group;
+    }
+
+    // --- Intact Pre-Op CTA Humerus ---
+    function createPreOpCTAHumerusGroup(boneOpacity, isGhostOverlay) {
+      const root = new THREE.Group();
+
+      const boneMat = isGhostOverlay
+        ? new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.28 })
+        : new THREE.MeshPhysicalMaterial({ color: 0xddd0bc, roughness: 0.58, metalness: 0.04, transparent: true, opacity: boneOpacity, depthWrite: boneOpacity > 0.85 });
+
+      const cartilageWearMat = isGhostOverlay
+        ? new THREE.MeshBasicMaterial({ color: 0xf59e0b, wireframe: true, transparent: true, opacity: 0.35 })
+        : new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.4, transparent: true, opacity: Math.min(0.85, boneOpacity + 0.15) });
+
+      root.add(new THREE.Mesh(new THREE.SphereGeometry(0.54, 28, 22), boneMat));
+
+      const wearCap = new THREE.Mesh(new THREE.SphereGeometry(0.548, 22, 14, 0, Math.PI * 2, 0, Math.PI * 0.28), cartilageWearMat);
+      root.add(wearCap);
+
+      const shaftGroup = new THREE.Group();
+      shaftGroup.position.set(0.36, -0.28, 0);
+      root.add(shaftGroup);
+
+      const humPoints = [
+        new THREE.Vector2(0.01, -2.75),
+        new THREE.Vector2(0.22, -2.72),
+        new THREE.Vector2(0.24, -1.75),
+        new THREE.Vector2(0.28, -1.15),
+        new THREE.Vector2(0.32, -0.65),
+        new THREE.Vector2(0.42, -0.10),
+        new THREE.Vector2(0.38, 0.25),
+        new THREE.Vector2(0.01, 0.25)
+      ];
+      shaftGroup.add(new THREE.Mesh(new THREE.LatheGeometry(humPoints, 32), boneMat));
+
+      const gtGeo = new THREE.SphereGeometry(0.28, 20, 16);
+      gtGeo.scale(1.1, 1.4, 0.95);
+      const gtMesh = new THREE.Mesh(gtGeo, boneMat);
+      gtMesh.position.set(0.24, 0.16, -0.08);
+      shaftGroup.add(gtMesh);
+
+      const ltGeo = new THREE.SphereGeometry(0.20, 18, 14);
+      ltGeo.scale(0.95, 1.2, 0.95);
+      const ltMesh = new THREE.Mesh(ltGeo, boneMat);
+      ltMesh.position.set(0.14, 0.12, 0.24);
+      shaftGroup.add(ltMesh);
+
+      return root;
+    }
+
+    // --- Post-Op RSA Humerus with Concave Inlay SutureCup Bowl ---
+    function createPostOpRSAHumerusGroup(cfg, boneOpacity) {
+      const root = new THREE.Group();
+
+      const brushedTex = createBrushedMetalTexture('#94a3b8', 'rgba(15,23,42,0.16)');
+      const porousTex = createPorousTrabecularTexture();
+
+      const boneMat = new THREE.MeshPhysicalMaterial({
+        color: 0xddd0bc,
+        roughness: 0.58,
+        metalness: 0.04,
+        transparent: true,
+        opacity: boneOpacity,
+        depthWrite: boneOpacity > 0.85
+      });
+
+      const tiMat = new THREE.MeshStandardMaterial({
+        color: 0xb8c4d4,
+        map: brushedTex,
+        metalness: 0.85,
+        roughness: 0.24
+      });
+
+      const porousTiMat = new THREE.MeshStandardMaterial({
+        color: 0x8b9bb0,
+        map: porousTex,
+        bumpMap: porousTex,
+        bumpScale: 0.016,
+        metalness: 0.72,
+        roughness: 0.56
+      });
+
+      const darkCollarMat = new THREE.MeshStandardMaterial({
+        color: 0x1e293b,
+        metalness: 0.85,
+        roughness: 0.28
+      });
+
+      const polyMat = new THREE.MeshPhysicalMaterial({
+        color: 0xf8fafc,
+        emissive: 0x0284c7,
+        emissiveIntensity: 0.08,
+        roughness: 0.22,
+        metalness: 0.02,
+        clearcoat: 0.45,
+        side: THREE.DoubleSide
+      });
+
+      const nsaRad = THREE.MathUtils.degToRad(cfg.nsa);
+      const retroRad = THREE.MathUtils.degToRad(cfg.humeralVersion);
+      const sphereRadius = (cfg.glenosphereDiam / 39) * 0.52;
+      const polyThickOffset = cfg.polyThickness * 0.022;
+      const trayOffset = cfg.humeralType === 'onlay' ? 0.145 : 0.028;
+      const socketDist = sphereRadius + polyThickOffset + trayOffset;
+
+      const cupPivot = new THREE.Group();
+      cupPivot.rotation.order = 'YXZ';
+      cupPivot.rotation.set(0, retroRad, -(Math.PI / 2 - (Math.PI - nsaRad)));
+      root.add(cupPivot);
+
+      const isConstrained = cfg.linerType === 'constrained';
+      const rimArc = isConstrained ? Math.PI * 0.45 : Math.PI * 0.35;
+      const outerPolyRadius = sphereRadius + 0.068 + (cfg.polyThickness * 0.012);
+
+      const linerGeo = new THREE.SphereGeometry(outerPolyRadius, 36, 24, 0, Math.PI * 2, 0, rimArc);
+      linerGeo.rotateZ(-Math.PI / 2);
+      const linerMesh = new THREE.Mesh(linerGeo, polyMat);
+      linerMesh.position.set(0.015 + polyThickOffset * 0.45, 0, 0);
+      cupPivot.add(linerMesh);
+
+      if (cfg.polyThickness > 0) {
+        const spacerH = cfg.polyThickness * 0.022;
+        const spacerR = outerPolyRadius * Math.sin(rimArc) * 0.94;
+        const spacerGeo = new THREE.CylinderGeometry(spacerR, spacerR * 0.92, spacerH, 32);
+        spacerGeo.rotateZ(-Math.PI / 2);
+        const spacerMesh = new THREE.Mesh(spacerGeo, polyMat);
+        spacerMesh.position.set(sphereRadius + spacerH / 2 - 0.01, 0, 0);
+        cupPivot.add(spacerMesh);
+      }
+
+      const lipRadius = outerPolyRadius * Math.sin(rimArc);
+      const lipXOffset = (0.015 + polyThickOffset * 0.45) + outerPolyRadius * Math.cos(rimArc);
+      const lipGeo = new THREE.TorusGeometry(lipRadius, isConstrained ? 0.026 : 0.018, 12, 36);
+      lipGeo.rotateY(Math.PI / 2);
+      const lipMesh = new THREE.Mesh(lipGeo, polyMat);
+      lipMesh.position.set(lipXOffset, 0, 0);
+      cupPivot.add(lipMesh);
+
+      if (cfg.humeralType === 'inlay') {
+        const cupInnerR = outerPolyRadius + 0.008;
+        const cupOuterR = cupInnerR + 0.052;
+        const bowlArc = Math.PI * 0.36;
+
+        const bowlProfile = [];
+        const segs = 24;
+        for (let i = 0; i <= segs; i++) {
+          const th = (i / segs) * bowlArc;
+          bowlProfile.push(new THREE.Vector2(Math.sin(th) * cupInnerR, Math.cos(th) * cupInnerR));
+        }
+        bowlProfile.push(new THREE.Vector2(Math.sin(bowlArc) * (cupOuterR + 0.032), Math.cos(bowlArc) * cupInnerR));
+        bowlProfile.push(new THREE.Vector2(Math.sin(bowlArc) * (cupOuterR + 0.032), Math.cos(bowlArc) * cupOuterR + 0.02));
+        for (let i = segs; i >= 0; i--) {
+          const th = (i / segs) * bowlArc;
+          const rOut = Math.max(0.20, Math.sin(th) * cupOuterR);
+          bowlProfile.push(new THREE.Vector2(rOut, Math.cos(th) * cupOuterR));
+        }
+
+        const concaveCupGeo = new THREE.LatheGeometry(bowlProfile, 44);
+        concaveCupGeo.rotateZ(-Math.PI / 2);
+
+        const cupGroup = new THREE.Group();
+        cupGroup.position.set(0.015 + polyThickOffset * 0.45, 0, 0);
+        cupPivot.add(cupGroup);
+        cupGroup.add(new THREE.Mesh(concaveCupGeo, tiMat));
+
+        const rimX = Math.cos(bowlArc) * (cupInnerR + 0.01);
+        const rimR = Math.sin(bowlArc) * (cupOuterR + 0.012);
+        for (let e = 0; e < 8; e++) {
+          const ang = (e / 8) * Math.PI * 2;
+          const holeDot = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.018, 0.018, 0.06, 12).rotateZ(-Math.PI / 2),
+            darkCollarMat
+          );
+          holeDot.position.set(rimX, Math.cos(ang) * rimR, Math.sin(ang) * rimR);
+          cupGroup.add(holeDot);
+        }
+      } else {
+        const lowerCollarGeo = new THREE.CylinderGeometry(0.42, 0.39, 0.075, 28);
+        lowerCollarGeo.rotateZ(-Math.PI / 2);
+        const lowerCollar = new THREE.Mesh(lowerCollarGeo, darkCollarMat);
+        lowerCollar.position.set(socketDist - 0.02, 0, 0);
+        cupPivot.add(lowerCollar);
+
+        const upperTrayGeo = new THREE.CylinderGeometry(0.46, 0.43, 0.085, 28);
+        upperTrayGeo.rotateZ(-Math.PI / 2);
+        const upperTray = new THREE.Mesh(upperTrayGeo, tiMat);
+        upperTray.position.set(socketDist - 0.10, 0, 0);
+        cupPivot.add(upperTray);
+      }
+
+      const shaftGroup = new THREE.Group();
+      shaftGroup.position.set(socketDist + 0.055, 0, 0);
+      shaftGroup.rotation.order = 'ZYX';
+      shaftGroup.rotation.set(0, -retroRad, Math.PI - nsaRad);
+      cupPivot.add(shaftGroup);
+
+      const stemLen = cfg.stemType === 'short' ? 1.15 : 2.15;
+      const stemGeo = new THREE.CylinderGeometry(0.16, 0.085, stemLen, 20);
+      const stemMesh = new THREE.Mesh(stemGeo, cfg.humeralType === 'inlay' ? porousTiMat : tiMat);
+      stemMesh.position.set(0.18, -stemLen / 2 - 0.05, 0);
+      shaftGroup.add(stemMesh);
+
+      if (cfg.stemType === 'fracture') {
+        const finGeo = new THREE.BoxGeometry(0.40, 0.44, 0.045);
+        const finMesh = new THREE.Mesh(finGeo, tiMat);
+        finMesh.position.set(0.18, -0.28, 0);
+        shaftGroup.add(finMesh);
+      }
+
+      const humPoints = [
+        new THREE.Vector2(0.01, -2.85),
+        new THREE.Vector2(0.22, -2.82),
+        new THREE.Vector2(0.24, -1.85),
+        new THREE.Vector2(0.28, -1.25),
+        new THREE.Vector2(0.31, -0.75),
+        new THREE.Vector2(0.39, -0.22),
+        new THREE.Vector2(0.41, 0.02),
+        new THREE.Vector2(0.01, 0.02)
+      ];
+      const humBoneMesh = new THREE.Mesh(new THREE.LatheGeometry(humPoints, 32), boneMat);
+      humBoneMesh.position.set(0.22, -0.02, 0);
+      shaftGroup.add(humBoneMesh);
+
+      const gtGeo = new THREE.SphereGeometry(0.26, 20, 16);
+      gtGeo.scale(1.05, 1.35, 0.92);
+      const gtMesh = new THREE.Mesh(gtGeo, boneMat);
+      gtMesh.position.set(0.42, -0.24, -0.10);
+      shaftGroup.add(gtMesh);
+
+      const ltGeo = new THREE.SphereGeometry(0.19, 18, 14);
+      ltGeo.scale(0.95, 1.2, 0.95);
+      const ltMesh = new THREE.Mesh(ltGeo, boneMat);
+      ltMesh.position.set(0.35, -0.26, 0.22);
+      shaftGroup.add(ltMesh);
+
+      return root;
+    }
+
+    function App() {
+      const [navOpen, setNavOpen] = useState(false);
+      const [previewModule, setPreviewModule] = useState(null);
+
+      const [activeTab, setActiveTab] = useState('humeral');
+      const [cameraPreset, setCameraPreset] = useState('ap');
+      const [boneOpacity, setBoneOpacity] = useState(0.55);
+      const [showCOR, setShowCOR] = useState(true);
+      const [showCTSlice, setShowCTSlice] = useState(false);
+      const [constructView, setConstructView] = useState('postop');
+
+      const [motionMode, setMotionMode] = useState('abduction');
+      const [motionAngle, setMotionAngle] = useState(45);
+
+      const [cfg, setCfg] = useState({
+        humeralType: 'inlay',
+        stemType: 'short',
+        nsa: 135,
+        humeralVersion: 20,
+        polyThickness: 0,
+        linerType: 'standard',
+        deformity: 'walchB2',
+        correctionMode: 'augment',
+        augmentType: 'half',
+        augmentOrient: 'posterior',
+        baseplatePos: 'inferior',
+        glenoidLat: 3,
+        glenosphereDiam: 39,
+        infOverhang: 2,
+        baseplateDiam: 29,
+        centralFixation: 'longPost',
+        peripheralScrews: 4,
+        screwTrajectory: 'divergent',
+        boneQuality: 'normal'
+      });
+
+      const updateCfg = (key, val) => setCfg((prev) => ({ ...prev, [key]: val }));
+
+      const biomech = useMemo(() => {
+        const nativeCOR = { x: 0.62, y: 0.24, z: 0.0 };
+        const reamRecess = (cfg.deformity !== 'neutral' && cfg.correctionMode === 'reaming') ? -2.8 : 0;
+        const latOffsetMm = cfg.glenoidLat + reamRecess;
+        const infShiftMm = (cfg.baseplatePos === 'inferior' ? -2.8 : 0) - cfg.infOverhang;
+
+        const activeCOR = {
+          x: 0.14 + (latOffsetMm * 0.026),
+          y: infShiftMm * 0.026,
+          z: 0.0
+        };
+
+        const corLateralShiftMm = Math.round(((activeCOR.x - nativeCOR.x) / 0.026) * 10) / 10;
+        const corInferiorShiftMm = Math.round(((activeCOR.y - nativeCOR.y) / 0.026) * 10) / 10;
+
+        const humeralLatMm = (cfg.humeralType === 'onlay' ? 5.5 : 1.0) + cfg.polyThickness + (cfg.nsa === 135 ? 3.5 : cfg.nsa === 145 ? 1.5 : 0);
+        const totalLatMm = Math.round((latOffsetMm + humeralLatMm) * 10) / 10;
+        const distalizationMm = Math.round((Math.abs(infShiftMm) + (cfg.humeralType === 'onlay' ? 4.5 : 1.0) + (cfg.nsa === 155 ? 4.0 : cfg.nsa === 145 ? 2.0 : 0)) * 10) / 10;
+
+        let philosophy = '135° Lateralized RSA';
+        if (cfg.nsa === 155 && totalLatMm < 9) {
+          philosophy = 'Grammont (155° Medialized)';
+        } else if (cfg.nsa === 155) {
+          philosophy = '155° Lateralized / Augmented';
+        } else if (cfg.nsa === 145) {
+          philosophy = totalLatMm >= 12 ? '145° Lateralized Construct' : '145° Hybrid RSA';
+        } else {
+          philosophy = (cfg.correctionMode === 'augment' && cfg.augmentType !== 'flat')
+            ? '135° Augmented Lateralized RSA'
+            : '135° Lateralized RSA';
+        }
+
+        const nsaNotchBonus = cfg.nsa === 135 ? 16 : cfg.nsa === 145 ? 8 : -10;
+        const overhangBonus = cfg.infOverhang * 3.5 + (cfg.baseplatePos === 'inferior' ? 6 : 0);
+        const latBonus = Math.max(0, latOffsetMm) * 1.4;
+        const diamBonus = (cfg.glenosphereDiam - 36) * 1.8;
+        const constrainedPenalty = cfg.linerType === 'constrained' ? -15 : 0;
+
+        const maxAdduction = Math.max(0, Math.min(24, Math.round(8 + nsaNotchBonus * 0.6 + overhangBonus * 0.7 + latBonus * 0.4 + constrainedPenalty * 0.5)));
+        const maxAbduction = Math.max(75, Math.min(132, Math.round(112 + (cfg.nsa === 135 ? 6 : 2) + latBonus * 0.65 + diamBonus * 0.8 + constrainedPenalty)));
+        const maxER0 = Math.max(12, Math.min(45, Math.round(26 + (cfg.humeralVersion - 15) * 0.55 + latBonus * 0.75 + constrainedPenalty * 0.5)));
+        const maxER90 = Math.max(20, Math.min(54, Math.round(36 + (cfg.humeralVersion - 15) * 0.5 + latBonus * 0.65 + constrainedPenalty * 0.5)));
+        const maxIR = Math.max(18, Math.min(50, Math.round(42 - (cfg.humeralVersion - 15) * 0.65 + latBonus * 0.45 + constrainedPenalty * 0.5)));
+
+        const preOpLimits = { adduction: 12, abduction: 62, er0: 15, er90: 24, ir: 32 };
+
+        const notchScore = (cfg.nsa === 155 ? 45 : cfg.nsa === 145 ? 20 : 5) - (cfg.infOverhang * 6) - (cfg.baseplatePos === 'inferior' ? 12 : 0) - Math.max(0, latOffsetMm) * 2.2 + (cfg.linerType === 'constrained' ? 10 : 0);
+        const notchRisk = notchScore >= 25 ? 'HIGH' : notchScore >= 8 ? 'MODERATE' : 'LOW';
+
+        const sphereR = cfg.glenosphereDiam / 2;
+        const socketDepthRatio = cfg.linerType === 'constrained' ? 0.45 : 0.33;
+        const jumpHeightMm = Math.round((sphereR * socketDepthRatio + cfg.polyThickness * 0.25) * 10) / 10;
+
+        const deltoidTensionPct = Math.round(100 + distalizationMm * 1.6 + Math.max(0, latOffsetMm) * 1.8 + cfg.polyThickness * 1.5);
+        const acromialStress = deltoidTensionPct > 142 ? 'ELEVATED' : deltoidTensionPct > 125 ? 'MODERATE' : 'OPTIMAL';
+
+        const bonePreservedPct = cfg.deformity === 'neutral' ? 96 : cfg.correctionMode === 'reaming' ? 64 : cfg.augmentType === 'flat' ? 78 : 93;
+
+        let fixPoints = 0;
+        if (cfg.baseplateDiam === 29) fixPoints += 2; else fixPoints += 1;
+        if (cfg.centralFixation === 'longPost') fixPoints += 3; else if (cfg.centralFixation === 'compScrew') fixPoints += 2; else fixPoints += 1;
+        if (cfg.peripheralScrews === 4) fixPoints += 2; else fixPoints += 1;
+        if (cfg.screwTrajectory === 'divergent') fixPoints += 2; else fixPoints += 1;
+        if (cfg.boneQuality === 'normal') fixPoints += 2; else fixPoints -= 1;
+        if (cfg.glenoidLat >= 9) fixPoints -= 1;
+
+        const fixationConfidence = fixPoints >= 9 ? 'HIGH' : fixPoints >= 6 ? 'MODERATE' : 'LOW';
+
+        return {
+          nativeCOR,
+          activeCOR,
+          corLateralShiftMm,
+          corInferiorShiftMm,
+          totalLatMm,
+          distalizationMm,
+          philosophy,
+          maxAdduction,
+          maxAbduction,
+          maxER0,
+          maxER90,
+          maxIR,
+          preOpLimits,
+          notchRisk,
+          jumpHeightMm,
+          deltoidTensionPct,
+          acromialStress,
+          bonePreservedPct,
+          fixationConfidence
+        };
+      }, [cfg]);
+
+      const mountRef = useRef(null);
+      const sceneRef = useRef(null);
+      const cameraRef = useRef(null);
+      const rendererRef = useRef(null);
+      const rsaPivotRef = useRef(null);
+      const preOpPivotRef = useRef(null);
+      const stateRef = useRef({ motionMode, motionAngle, biomech, constructView });
+
+      useEffect(() => {
+        stateRef.current = { motionMode, motionAngle, biomech, constructView };
+      }, [motionMode, motionAngle, biomech, constructView]);
+
+      useEffect(() => {
+        const handlePageShow = (event) => {
+          if (event.persisted) {
+            window.location.reload();
+          }
+        };
+        const handleContextLost = (event) => {
+          event.preventDefault();
+          window.location.reload();
+        };
+        window.addEventListener('pageshow', handlePageShow);
+        const canvas = mountRef.current?.querySelector('canvas');
+        if (canvas) {
+          canvas.addEventListener('webglcontextlost', handleContextLost);
+        }
+        return () => {
+          window.removeEventListener('pageshow', handlePageShow);
+          if (canvas) {
+            canvas.removeEventListener('webglcontextlost', handleContextLost);
+          }
+        };
+      }, []);
+
+      useEffect(() => {
+        const container = mountRef.current;
+        if (!container) return;
+
+        let renderer;
+        try {
+          renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+        } catch (err) {
+          return;
+        }
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.2;
+        container.appendChild(renderer.domElement);
+        rendererRef.current = renderer;
+
+        const scene = new THREE.Scene();
+        sceneRef.current = scene;
+
+        const camera = new THREE.PerspectiveCamera(36, container.clientWidth / container.clientHeight, 0.1, 100);
+        camera.position.set(0.3, 0.2, 5.4);
+        cameraRef.current = camera;
+
+        scene.add(new THREE.AmbientLight(0xdbeafe, 1.0));
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        keyLight.position.set(4, 6, 6);
+        scene.add(keyLight);
+
+        const rimLight = new THREE.DirectionalLight(0x38bdf8, 0.8);
+        rimLight.position.set(-5, -2, -4);
+        scene.add(rimLight);
+
+        const grid = new THREE.GridHelper(8, 16, 0x1e293b, 0x0f172a);
+        grid.rotation.set(Math.PI / 2, 0, 0);
+        grid.position.set(0, 0, -2.2);
+        scene.add(grid);
+
+        let isDragging = false;
+        let prevX = 0;
+        let prevY = 0;
+        let spherical = { theta: 0.12, phi: Math.PI / 2 - 0.06, radius: 5.3 };
+
+        const updateCamFromSpherical = () => {
+          spherical.phi = Math.max(0.2, Math.min(Math.PI - 0.2, spherical.phi));
+          spherical.radius = Math.max(2.1, Math.min(9.0, spherical.radius));
+          const x = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
+          const y = spherical.radius * Math.cos(spherical.phi);
+          const z = spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
+          camera.position.set(x, y, z);
+          camera.lookAt(0.15, -0.15, 0);
+        };
+        updateCamFromSpherical();
+
+        camera.userData.setSpherical = (theta, phi, radius) => {
+          spherical = { theta, phi, radius };
+          updateCamFromSpherical();
+        };
+
+        const onPointerDown = (e) => {
+          isDragging = true;
+          prevX = e.clientX;
+          prevY = e.clientY;
+        };
+        const onPointerMove = (e) => {
+          if (!isDragging) return;
+          const dx = e.clientX - prevX;
+          const dy = e.clientY - prevY;
+          prevX = e.clientX;
+          prevY = e.clientY;
+          spherical.theta -= dx * 0.008;
+          spherical.phi -= dy * 0.008;
+          updateCamFromSpherical();
+        };
+        const onPointerUp = () => { isDragging = false; };
+        const onWheel = (e) => {
+          e.preventDefault();
+          spherical.radius += e.deltaY * 0.003;
+          updateCamFromSpherical();
+        };
+
+        const dom = renderer.domElement;
+        dom.addEventListener('pointerdown', onPointerDown);
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
+        dom.addEventListener('wheel', onWheel, { passive: false });
+
+        const onResize = () => {
+          if (!container || !renderer || !camera) return;
+          const w = container.clientWidth || container.parentElement?.clientWidth || window.innerWidth;
+          const h = container.clientHeight || container.parentElement?.clientHeight || Math.round(window.innerHeight * 0.46);
+          if (w > 0 && h > 0) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+          }
+        };
+        onResize();
+        window.addEventListener('resize', onResize);
+        let resizeObserver;
+        if (typeof ResizeObserver !== 'undefined') {
+          resizeObserver = new ResizeObserver(onResize);
+          resizeObserver.observe(container);
+        }
+
+        const applyPivotRotation = (pivot, mode, deg) => {
+          if (!pivot) return;
+          pivot.rotation.order = 'ZYX';
+          const rad = THREE.MathUtils.degToRad(deg);
+
+          if (mode === 'adduction') {
+            pivot.rotation.set(0, 0, -THREE.MathUtils.degToRad(deg * 0.75));
+          } else if (mode === 'abduction') {
+            pivot.rotation.set(0, 0, THREE.MathUtils.degToRad(deg * 0.72));
+          } else if (mode === 'er0') {
+            pivot.rotation.set(0, rad, THREE.MathUtils.degToRad(10));
+          } else if (mode === 'er90') {
+            pivot.rotation.set(0, rad, THREE.MathUtils.degToRad(65));
+          } else if (mode === 'ir') {
+            pivot.rotation.set(0, -rad, THREE.MathUtils.degToRad(10));
+          }
+        };
+
+        let animId;
+        const animate = () => {
+          animId = requestAnimationFrame(animate);
+          const st = stateRef.current;
+
+          applyPivotRotation(rsaPivotRef.current, st.motionMode, st.motionAngle);
+
+          const preOpLimit = st.biomech.preOpLimits[st.motionMode];
+          const preOpDeg = st.constructView === 'ghost' ? Math.min(st.motionAngle, preOpLimit) : st.motionAngle;
+          applyPivotRotation(preOpPivotRef.current, st.motionMode, preOpDeg);
+
+          renderer.render(scene, camera);
+        };
+        animate();
+
+        return () => {
+          cancelAnimationFrame(animId);
+          dom.removeEventListener('pointerdown', onPointerDown);
+          window.removeEventListener('pointermove', onPointerMove);
+          window.removeEventListener('pointerup', onPointerUp);
+          dom.removeEventListener('wheel', onWheel);
+          window.removeEventListener('resize', onResize);
+          if (resizeObserver) resizeObserver.disconnect();
+          renderer.dispose();
+          if (container.contains(dom)) container.removeChild(dom);
+        };
+      }, []);
+
+      useEffect(() => {
+        const scene = sceneRef.current;
+        if (!scene) return;
+
+        const toRemove = [];
+        scene.children.forEach((child) => {
+          if (child.userData.isDynamicConstruct) toRemove.push(child);
+        });
+        toRemove.forEach((obj) => scene.remove(obj));
+
+        rsaPivotRef.current = null;
+        preOpPivotRef.current = null;
+
+        const root = new THREE.Group();
+        root.userData.isDynamicConstruct = true;
+
+        const scapula = createScapulaGroup(
+          boneOpacity,
+          cfg.deformity,
+          constructView === 'preop' ? 'none' : cfg.correctionMode,
+          cfg.augmentType,
+          constructView === 'preop' ? 'LOW' : biomech.notchRisk
+        );
+        root.add(scapula);
+
+        if (constructView === 'postop' || constructView === 'ghost') {
+          const glenoidImplant = createGlenoidImplantGroup(cfg, biomech.activeCOR);
+          root.add(glenoidImplant);
+
+          const rsaPivot = new THREE.Group();
+          rsaPivot.position.set(biomech.activeCOR.x, biomech.activeCOR.y, biomech.activeCOR.z);
+          const postOpHum = createPostOpRSAHumerusGroup(cfg, boneOpacity);
+          rsaPivot.add(postOpHum);
+          root.add(rsaPivot);
+          rsaPivotRef.current = rsaPivot;
+        }
+
+        if (constructView === 'preop' || constructView === 'ghost') {
+          const prePivot = new THREE.Group();
+          prePivot.position.set(biomech.nativeCOR.x, biomech.nativeCOR.y, biomech.nativeCOR.z);
+          const preOpHum = createPreOpCTAHumerusGroup(boneOpacity, constructView === 'ghost');
+          prePivot.add(preOpHum);
+          root.add(prePivot);
+          preOpPivotRef.current = prePivot;
+        }
+
+        if (showCOR) {
+          const natSphere = new THREE.Mesh(
+            new THREE.SphereGeometry(0.085, 16, 16),
+            new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true })
+          );
+          natSphere.position.set(biomech.nativeCOR.x, biomech.nativeCOR.y, biomech.nativeCOR.z);
+          root.add(natSphere);
+
+          if (constructView !== 'preop') {
+            const actSphere = new THREE.Mesh(
+              new THREE.SphereGeometry(0.075, 16, 16),
+              new THREE.MeshBasicMaterial({ color: 0xf59e0b })
+            );
+            actSphere.position.set(biomech.activeCOR.x, biomech.activeCOR.y, biomech.activeCOR.z);
+            root.add(actSphere);
+
+            const lineGeo = new THREE.BufferGeometry().setFromPoints([
+              new THREE.Vector3(biomech.nativeCOR.x, biomech.nativeCOR.y, biomech.nativeCOR.z),
+              new THREE.Vector3(biomech.activeCOR.x, biomech.activeCOR.y, biomech.activeCOR.z)
+            ]);
+            const lineMat = new THREE.LineBasicMaterial({ color: 0xf59e0b });
+            root.add(new THREE.Line(lineGeo, lineMat));
+          }
+        }
+
+        if (showCTSlice) {
+          const slicePlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(3.4, 2.4),
+            new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.12, side: THREE.DoubleSide })
+          );
+          slicePlane.rotation.set(Math.PI / 2, 0, 0);
+          slicePlane.position.set(0.1, 0.0, 0.0);
+          root.add(slicePlane);
+
+          const sliceBorder = new THREE.LineSegments(
+            new THREE.EdgesGeometry(new THREE.PlaneGeometry(3.4, 2.4)),
+            new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.45 })
+          );
+          sliceBorder.rotation.set(Math.PI / 2, 0, 0);
+          sliceBorder.position.set(0.1, 0.0, 0.0);
+          root.add(sliceBorder);
+        }
+
+        scene.add(root);
+      }, [cfg, boneOpacity, showCOR, showCTSlice, constructView, biomech]);
+
+      const handleCameraPreset = (preset) => {
+        setCameraPreset(preset);
+        const cam = cameraRef.current;
+        if (!cam || !cam.userData.setSpherical) return;
+        if (preset === 'ap') cam.userData.setSpherical(0.12, Math.PI / 2 - 0.06, 5.3);
+        else if (preset === 'axillary') cam.userData.setSpherical(0.1, 0.26, 5.1);
+        else if (preset === 'scapularY') cam.userData.setSpherical(Math.PI / 2 - 0.15, Math.PI / 2, 5.3);
+        else if (preset === 'enface') cam.userData.setSpherical(Math.PI / 2, Math.PI / 2 - 0.05, 4.4);
+        else if (preset === 'inlayOnlay') cam.userData.setSpherical(0.28, Math.PI / 2 - 0.12, 2.85);
+        else if (preset === 'notch') cam.userData.setSpherical(0.18, Math.PI / 2 + 0.14, 3.6);
+      };
+
+      const postOpLimit =
+        motionMode === 'adduction' ? biomech.maxAdduction :
+        motionMode === 'abduction' ? biomech.maxAbduction :
+        motionMode === 'er0' ? biomech.maxER0 :
+        motionMode === 'er90' ? biomech.maxER90 : biomech.maxIR;
+      const preOpLimit = biomech.preOpLimits[motionMode];
+      const currentLimit = constructView === 'preop' ? preOpLimit : postOpLimit;
+      const isImpinging = motionAngle > currentLimit;
+
+      return (
+        <div className="h-full w-full flex flex-col lg:flex-row bg-[#070B14] text-slate-100 select-none overflow-hidden">
+          {navOpen && (
+            <div className="fixed inset-0 z-50 flex">
+              <div className="fixed inset-0 bg-black/70 backdrop-blur-xs" onClick={() => setNavOpen(false)} />
+              <aside className="relative z-10 w-80 max-w-[86vw] h-full bg-[#0B1120] border-r border-slate-800 flex flex-col overflow-y-auto shadow-2xl">
+                <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-bold tracking-wider text-white">
+                      ORTHO<span className="text-sky-400">TRIBUNE</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400">Clinical Evidence & VAC Intelligence</div>
+                  </div>
+                  <button
+                    onClick={() => setNavOpen(false)}
+                    className="p-2 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white"
+                    aria-label="Close Menu"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="p-3 border-b border-slate-800/80">
+                  <a
+                    href="/"
+                    className="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-300 hover:bg-sky-500/25 text-xs font-semibold transition"
+                  >
+                    <span>← Back to OrthoTribune.com</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+
+                <div className="p-3 border-b border-slate-800/80">
+                  <div className="px-2 pb-2 text-[10px] font-bold uppercase tracking-widest text-sky-400">
+                    Animation Suite Studios
+                  </div>
+                  <div className="space-y-1.5">
+                    {ANIMATION_SUITE_MODULES.map((mod) => {
+                      const isCurrent = mod.id === 'rsa-construct';
+                      const isLiveLink = mod.status === 'ACTIVE' && mod.href;
+
+                      if (isLiveLink) {
+                        return (
+                          <a
+                            key={mod.id}
+                            href={mod.href}
+                            className="block w-full text-left p-2.5 rounded-xl border bg-slate-900/60 border-slate-800/80 text-slate-300 hover:border-sky-500/40 hover:text-white transition"
+                          >
+                            <div className="flex items-center justify-between gap-2 mb-0.5">
+                              <span className="text-xs font-semibold leading-tight">{mod.title}</span>
+                              <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                {mod.status}
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-slate-400">{mod.tag}</div>
+                          </a>
+                        );
+                      }
+
+                      return (
+                        <button
+                          key={mod.id}
+                          onClick={() => {
+                            if (isCurrent) {
+                              setPreviewModule(null);
+                              setNavOpen(false);
+                            } else {
+                              setPreviewModule(mod);
+                              setNavOpen(false);
+                            }
+                          }}
+                          className={`w-full text-left p-2.5 rounded-xl border transition ${
+                            isCurrent
+                              ? 'bg-sky-500/15 border-sky-500/40 text-white'
+                              : 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:border-slate-700'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-0.5">
+                            <span className="text-xs font-semibold leading-tight">{mod.title}</span>
+                            <span
+                              className={`shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                                isCurrent
+                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                  : 'bg-slate-800 text-slate-400'
+                              }`}
+                            >
+                              {isCurrent ? 'ACTIVE' : mod.status}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-slate-400">{mod.tag}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="p-3 flex-1">
+                  <div className="px-2 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    OrthoTribune Sections
+                  </div>
+                  <div className="space-y-1">
+                    {ORTHOTRIBUNE_PORTAL_LINKS.map((item) => {
+                      const IconComp = item.icon;
+                      return (
+                        <a
+                          key={item.id}
+                          href={item.href}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-800/70 transition group"
+                        >
+                          <div className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 group-hover:text-sky-400">
+                            <IconComp className="w-4 h-4" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-medium text-slate-200 group-hover:text-white">{item.label}</div>
+                            <div className="text-[10px] text-slate-500 truncate">{item.desc}</div>
+                          </div>
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300" />
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              </aside>
+            </div>
+          )}
+
+          <header className="lg:hidden shrink-0 h-11 px-2.5 bg-[#0B1120] border-b border-slate-800/90 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <button
+                onClick={() => setNavOpen(true)}
+                className="p-2 rounded-lg bg-slate-800/90 border border-slate-700/80 text-slate-200 active:scale-95 transition"
+                aria-label="Open OrthoTribune Menu"
+              >
+                <Menu className="w-4 h-4" />
+              </button>
+              <span className="text-xs font-bold tracking-wide text-white truncate">RSA CONSTRUCT STUDIO</span>
+            </div>
+
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-semibold text-amber-300">
+                {constructView === 'preop' ? 'Pre-Op' : `COR ${biomech.corLateralShiftMm}mm`}
+              </span>
+              <span
+                className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                  isImpinging
+                    ? 'bg-rose-500/20 border-rose-500/40 text-rose-300'
+                    : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300'
+                }`}
+              >
+                {isImpinging ? 'LIMIT' : 'CLEAR'}
+              </span>
+            </div>
+          </header>
+
+          <section className="relative w-full h-[46%] lg:h-full lg:w-[60%] xl:w-[63%] bg-gradient-to-b from-[#070B14] via-[#0A1120] to-[#070B14] border-b lg:border-b-0 lg:border-r border-slate-800/90 flex flex-col">
+            <div className="hidden lg:flex items-center justify-between gap-3 px-4 py-3 border-b border-slate-800/70 bg-[#0B1120]/80 backdrop-blur-md z-10">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setNavOpen(true)}
+                  className="p-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-slate-200 transition"
+                  title="OrthoTribune Navigation"
+                >
+                  <Menu className="w-4 h-4" />
+                </button>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-sm font-bold tracking-wide text-white">RSA CONSTRUCT STUDIO</h1>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-500/15 text-sky-300 border border-sky-500/30">
+                      OrthoTribune Animation Suite
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    Right shoulder COR, NSA, glenoid augments & ROM
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-right">
+                  <div className="text-[10px] text-slate-400">COR Shift</div>
+                  <div className="text-xs font-bold text-amber-300">
+                    {biomech.corLateralShiftMm} mm Lat • {biomech.corInferiorShiftMm} mm Inf
+                  </div>
+                </div>
+                <div
+                  className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 ${
+                    isImpinging
+                      ? 'bg-rose-500/20 border-rose-500/40 text-rose-300'
+                      : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300'
+                  }`}
+                >
+                  {isImpinging ? <AlertTriangle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                  <span>{isImpinging ? `LIMIT > ${currentLimit}°` : `MAX ${currentLimit}°`}</span>
+                </div>
+              </div>
+            </div>
+
+            {previewModule && (
+              <div className="mx-3 mt-2.5 p-3 rounded-xl bg-[#0F172A]/95 border border-sky-500/40 shadow-xl z-20 flex items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-bold">
+                      UPCOMING STUDIO
+                    </span>
+                    <span className="text-xs font-bold text-white">{previewModule.title}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 mb-1.5">{previewModule.summary}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {previewModule.parameters.map((p) => (
+                      <span key={p} className="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 border border-slate-700">
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  onClick={() => setPreviewModule(null)}
+                  className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white shrink-0"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            <div className="px-2.5 py-1.5 flex items-center justify-between gap-2 z-10 overflow-x-auto no-scrollbar">
+              <div className="flex items-center gap-1 shrink-0">
+                {[
+                  { id: 'ap', label: 'AP Grashey' },
+                  { id: 'axillary', label: 'Axillary' },
+                  { id: 'scapularY', label: 'Scapular Y' },
+                  { id: 'enface', label: 'En-Face' },
+                  { id: 'inlayOnlay', label: 'Cup / Tray' },
+                  { id: 'notch', label: 'Inf. Notch' }
+                ].map((cam) => (
+                  <button
+                    key={cam.id}
+                    onClick={() => handleCameraPreset(cam.id)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition ${
+                      cameraPreset === cam.id
+                        ? 'bg-sky-500 text-slate-950 font-semibold'
+                        : 'bg-slate-900/85 text-slate-300 border border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    {cam.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  onClick={() => setShowCOR((v) => !v)}
+                  className={`px-2 py-1 rounded-lg text-[11px] font-medium border flex items-center gap-1 transition ${
+                    showCOR
+                      ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
+                      : 'bg-slate-900/85 border-slate-800 text-slate-400'
+                  }`}
+                >
+                  <Crosshair className="w-3 h-3" />
+                  <span>COR</span>
+                </button>
+                <button
+                  onClick={() => setShowCTSlice((v) => !v)}
+                  className={`px-2 py-1 rounded-lg text-[11px] font-medium border flex items-center gap-1 transition ${
+                    showCTSlice
+                      ? 'bg-sky-500/20 border-sky-500/40 text-sky-300'
+                      : 'bg-slate-900/85 border-slate-800 text-slate-400'
+                  }`}
+                >
+                  <Layers className="w-3 h-3" />
+                  <span>CT Slice</span>
+                </button>
+              </div>
+            </div>
+
+            {constructView === 'ghost' && (
+              <div className="mx-3 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-sky-500/30 flex items-center justify-between text-[10px] z-10">
+                <span className="text-sky-300 font-medium">● Pre-Op ({preOpLimit}°)</span>
+                <span className="text-amber-300 font-medium">● Post-Op RSA ({postOpLimit}°)</span>
+              </div>
+            )}
+
+            <div ref={mountRef} className="flex-1 w-full min-h-0 cursor-grab active:cursor-grabbing" />
+
+            <div className="px-3 py-2 bg-[#0B1120]/90 border-t border-slate-800/80 flex items-center gap-3 z-10">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between text-[10px] mb-0.5">
+                  <span className="uppercase font-semibold text-slate-400 truncate">
+                    {motionMode === 'adduction' ? 'Adduction' :
+                     motionMode === 'abduction' ? 'Abduction' :
+                     motionMode === 'er0' ? 'ER (0°)' :
+                     motionMode === 'er90' ? 'ER (90°)' : 'Internal Rotation'}
+                  </span>
+                  <span className={`font-bold ${isImpinging ? 'text-rose-400' : 'text-sky-300'}`}>
+                    {motionAngle}° / {currentLimit}°
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={motionMode === 'abduction' ? 135 : 80}
+                  value={motionAngle}
+                  onChange={(e) => setMotionAngle(Number(e.target.value))}
+                  className="w-full h-1.5 bg-slate-800 rounded-lg accent-sky-400 cursor-pointer"
+                />
+              </div>
+
+              <div className="w-24 sm:w-32 shrink-0">
+                <div className="flex items-center justify-between text-[10px] text-slate-400 mb-0.5">
+                  <span>CT Bone</span>
+                  <span>{Math.round(boneOpacity * 100)}%</span>
+                </div>
+                <input
+                  type="range"
+                  min={0.15}
+                  max={0.95}
+                  step={0.05}
+                  value={boneOpacity}
+                  onChange={(e) => setBoneOpacity(Number(e.target.value))}
+                  className="w-full h-1.5 bg-slate-800 rounded-lg accent-amber-400 cursor-pointer"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="flex-1 lg:h-full lg:w-[40%] xl:w-[37%] flex flex-col bg-[#0B1120] overflow-hidden">
+            <div className="px-3.5 py-2.5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between gap-2 shrink-0">
+              <div className="min-w-0">
+                <div className="text-[10px] uppercase tracking-wider text-slate-400">Construct</div>
+                <div className="text-xs font-bold text-white truncate">
+                  {constructView === 'preop' ? 'Pre-Op CTA' : biomech.philosophy}
+                </div>
+              </div>
+              <div className="flex items-center gap-1 shrink-0 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                {[
+                  { id: 'preop', label: 'Pre-Op' },
+                  { id: 'postop', label: 'RSA' },
+                  { id: 'ghost', label: 'Ghost' }
+                ].map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => setConstructView(m.id)}
+                    className={`px-2 py-1 rounded text-[10px] font-semibold transition ${
+                      constructView === m.id
+                        ? 'bg-sky-500 text-slate-950'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-4 border-b border-slate-800 bg-[#090E1A] shrink-0">
+              {[
+                { id: 'humeral', label: '1. Humeral' },
+                { id: 'glenoid', label: '2. Glenoid' },
+                { id: 'fixation', label: '3. Fixation' },
+                { id: 'rom', label: '4. ROM' }
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setActiveTab(t.id)}
+                  className={`py-2.5 text-[11px] font-semibold border-b-2 transition ${
+                    activeTab === t.id
+                      ? 'border-sky-400 text-sky-300 bg-sky-500/5'
+                      : 'border-transparent text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-3.5 space-y-4">
+              {activeTab === 'humeral' && (
+                <>
+                  <div>
+                    <div className="flex justify-between text-[11px] font-semibold text-slate-300 mb-1.5">
+                      <span>Humeral Design</span>
+                      <span className="text-sky-400">{cfg.humeralType === 'onlay' ? 'Onlay Tray' : 'Concave SutureCup'}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { id: 'inlay', title: 'Inlay SutureCup', desc: 'Concave bowl + suture rim' },
+                        { id: 'onlay', title: 'Onlay Tray', desc: 'Two-tier tray above cut' }
+                      ].map((opt) => (
+                        <button
+                          key={opt.id}
+                          onClick={() => {
+                            if (constructView === 'preop') setConstructView('postop');
+                            updateCfg('humeralType', opt.id);
+                            handleCameraPreset('inlayOnlay');
+                          }}
+                          className={`p-2.5 rounded-xl border text-left min-h-[54px] transition ${
+                            cfg.humeralType === opt.id
+                              ? 'bg-sky-500/15 border-sky-400 text-white'
+                              : 'bg-slate-900/70 border-slate-800 text-slate-300'
+                          }`}
+                        >
+                          <div className="text-xs font-bold">{opt.title}</div>
+                          <div className="text-[10px] text-slate-400">{opt.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-[11px] font-semibold text-slate-300 mb-1.5">
+                      <span>Neck-Shaft Angle (NSA)</span>
+                      <span className="text-sky-300">{cfg.nsa}°</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { val: 135, sub: '135°' },
+                        { val: 145, sub: '145°' },
+                        { val: 155, sub: '155°' }
+                      ].map((n) => (
+                        <button
+                          key={n.val}
+                          onClick={() => {
+                            if (constructView === 'preop') setConstructView('postop');
+                            updateCfg('nsa', n.val);
+                            if (n.val === 155) {
+                              setMotionMode('adduction');
+                              handleCameraPreset('notch');
+                            }
+                          }}
+                          className={`py-2 px-2 rounded-xl border text-center min-h-[44px] transition ${
+                            cfg.nsa === n.val
+                              ? 'bg-sky-500/15 border-sky-400 text-white'
+                              : 'bg-slate-900/70 border-slate-800 text-slate-300'
+                          }`}
+                        >
+                          <div className="text-xs font-bold">{n.sub}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-[11px] font-semibold text-slate-300 mb-1.5">
+                      <span>Humeral Retroversion</span>
+                      <span className="text-amber-300">{cfg.humeralVersion}°</span>
+                    </div>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[0, 10, 20, 30].map((deg) => (
+                        <button
+                          key={deg}
+                          onClick={() => {
+                            if (constructView === 'preop') setConstructView('postop');
+                            updateCfg('humeralVersion', deg);
+                          }}
+                          className={`py-2 rounded-xl border text-xs font-bold min-h-[44px] transition ${
+                            cfg.humeralVersion === deg
+                              ? 'bg-sky-500/15 border-sky-400 text-white'
+                              : 'bg-slate-900/70 border-slate-800 text-slate-300'
+                          }`}
+                        >
+                          {deg}°
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Stem</div>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[
+                          { id: 'short', label: 'Short' },
+                          { id: 'standard', label: 'Long' },
+                          { id: 'fracture', label: 'Fx' }
+                        ].map((s) => (
+                          <button
+                            key={s.id}
+                            onClick={() => {
+                              if (constructView === 'preop') setConstructView('postop');
+                              updateCfg('stemType', s.id);
+                            }}
+                            className={`py-2 rounded-xl border text-[11px] font-semibold min-h-[44px] ${
+                              cfg.stemType === s.id
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            {s.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Poly Liner</div>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[0, 3, 6].map((mm) => (
+                          <button
+                            key={mm}
+                            onClick={() => {
+                              if (constructView === 'preop') setConstructView('postop');
+                              updateCfg('polyThickness', mm);
+                            }}
+                            className={`py-2 rounded-xl border text-[11px] font-semibold min-h-[44px] ${
+                              cfg.polyThickness === mm
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            +{mm}mm
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-[11px] font-semibold text-slate-300 mb-1.5">
+                      <span>Liner Rim</span>
+                      <span className="text-sky-300">Jump: {biomech.jumpHeightMm}mm</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { id: 'standard', label: 'Standard', sub: 'Full arc' },
+                        { id: 'constrained', label: 'Constrained', sub: '-15° ROM' }
+                      ].map((l) => (
+                        <button
+                          key={l.id}
+                          onClick={() => {
+                            if (constructView === 'preop') setConstructView('postop');
+                            updateCfg('linerType', l.id);
+                            handleCameraPreset('inlayOnlay');
+                          }}
+                          className={`p-2.5 rounded-xl border text-left min-h-[50px] transition ${
+                            cfg.linerType === l.id
+                              ? 'bg-sky-500/15 border-sky-400 text-white'
+                              : 'bg-slate-900/70 border-slate-800 text-slate-300'
+                          }`}
+                        >
+                          <div className="text-xs font-bold">{l.label}</div>
+                          <div className="text-[10px] text-slate-400">{l.sub}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {activeTab === 'glenoid' && (
+                <>
+                  <div>
+                    <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Glenoid Wear</div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { id: 'neutral', label: 'Neutral A1', sub: '0°' },
+                        { id: 'walchB2', label: 'Walch B2', sub: 'Posterior' },
+                        { id: 'favardE3', label: 'Favard E3', sub: 'Superior' }
+                      ].map((d) => (
+                        <button
+                          key={d.id}
+                          onClick={() => updateCfg('deformity', d.id)}
+                          className={`p-2 rounded-xl border text-center min-h-[48px] ${
+                            cfg.deformity === d.id
+                              ? 'bg-sky-500/15 border-sky-400 text-white'
+                              : 'bg-slate-900/70 border-slate-800 text-slate-300'
+                          }`}
+                        >
+                          <div className="text-xs font-bold">{d.label}</div>
+                          <div className="text-[10px] text-slate-400">{d.sub}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Correction</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { id: 'reaming', title: 'Reaming', desc: 'Medializes COR' },
+                        { id: 'augment', title: 'Wedge Augment', desc: 'Ant → Post slope' }
+                      ].map((c) => (
+                        <button
+                          key={c.id}
+                          onClick={() => {
+                            if (constructView === 'preop') setConstructView('postop');
+                            updateCfg('correctionMode', c.id);
+                          }}
+                          className={`p-2.5 rounded-xl border text-left min-h-[52px] ${
+                            cfg.correctionMode === c.id
+                              ? 'bg-sky-500/15 border-sky-400 text-white'
+                              : 'bg-slate-900/70 border-slate-800 text-slate-300'
+                          }`}
+                        >
+                          <div className="text-xs font-bold">{c.title}</div>
+                          <div className="text-[10px] text-slate-400">{c.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {cfg.correctionMode === 'augment' && (
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Posterior Wedge Augment</div>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[
+                          { id: 'flat', label: 'Flat' },
+                          { id: 'half', label: 'Half Wedge' },
+                          { id: 'full', label: 'Full Wedge' }
+                        ].map((w) => (
+                          <button
+                            key={w.id}
+                            onClick={() => {
+                              if (constructView === 'preop') setConstructView('postop');
+                              updateCfg('augmentType', w.id);
+                            }}
+                            className={`py-2 rounded-xl border text-[11px] font-semibold min-h-[44px] ${
+                              cfg.augmentType === w.id
+                                ? 'bg-amber-500/20 border-amber-400 text-amber-200'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            {w.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Glenosphere</div>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[36, 39, 42].map((d) => (
+                          <button
+                            key={d}
+                            onClick={() => {
+                              if (constructView === 'preop') setConstructView('postop');
+                              updateCfg('glenosphereDiam', d);
+                            }}
+                            className={`py-2 rounded-xl border text-[11px] font-bold min-h-[44px] ${
+                              cfg.glenosphereDiam === d
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            {d}mm
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Overhang</div>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[0, 2, 4].map((ov) => (
+                          <button
+                            key={ov}
+                            onClick={() => {
+                              if (constructView === 'preop') setConstructView('postop');
+                              updateCfg('infOverhang', ov);
+                            }}
+                            className={`py-2 rounded-xl border text-[11px] font-bold min-h-[44px] ${
+                              cfg.infOverhang === ov
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            +{ov}mm
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Lateralization</div>
+                      <div className="grid grid-cols-4 gap-1">
+                        {[0, 3, 6, 9].map((lat) => (
+                          <button
+                            key={lat}
+                            onClick={() => {
+                              if (constructView === 'preop') setConstructView('postop');
+                              updateCfg('glenoidLat', lat);
+                            }}
+                            className={`py-2 rounded-xl border text-[11px] font-bold min-h-[44px] ${
+                              cfg.glenoidLat === lat
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            +{lat}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Baseplate</div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { id: 'center', label: 'Center' },
+                          { id: 'inferior', label: 'Inf. Flush' }
+                        ].map((p) => (
+                          <button
+                            key={p.id}
+                            onClick={() => {
+                              if (constructView === 'preop') setConstructView('postop');
+                              updateCfg('baseplatePos', p.id);
+                            }}
+                            className={`py-2 rounded-xl border text-[11px] font-semibold min-h-[44px] ${
+                              cfg.baseplatePos === p.id
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            {p.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {activeTab === 'fixation' && (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Baseplate Ø</div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[25, 29].map((d) => (
+                          <button
+                            key={d}
+                            onClick={() => updateCfg('baseplateDiam', d)}
+                            className={`py-2 rounded-xl border text-xs font-bold min-h-[44px] ${
+                              cfg.baseplateDiam === d
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            {d} mm
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Screws</div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[2, 4].map((cnt) => (
+                          <button
+                            key={cnt}
+                            onClick={() => updateCfg('peripheralScrews', cnt)}
+                            className={`py-2 rounded-xl border text-xs font-bold min-h-[44px] ${
+                              cfg.peripheralScrews === cnt
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            {cnt} Screws
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Central Fixation</div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { id: 'shortPeg', label: 'Short Peg' },
+                        { id: 'longPost', label: 'Long Post' },
+                        { id: 'compScrew', label: 'Comp. Screw' }
+                      ].map((f) => (
+                        <button
+                          key={f.id}
+                          onClick={() => updateCfg('centralFixation', f.id)}
+                          className={`p-2 rounded-xl border text-center min-h-[44px] ${
+                            cfg.centralFixation === f.id
+                              ? 'bg-sky-500/15 border-sky-400 text-white'
+                              : 'bg-slate-900/70 border-slate-800 text-slate-300'
+                          }`}
+                        >
+                          <div className="text-xs font-bold">{f.label}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Trajectory</div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { id: 'parallel', label: 'Parallel' },
+                          { id: 'divergent', label: 'Divergent' }
+                        ].map((tr) => (
+                          <button
+                            key={tr.id}
+                            onClick={() => updateCfg('screwTrajectory', tr.id)}
+                            className={`py-2 rounded-xl border text-[11px] font-semibold min-h-[44px] ${
+                              cfg.screwTrajectory === tr.id
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            {tr.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Bone Quality</div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { id: 'normal', label: 'Normal' },
+                          { id: 'osteopenic', label: 'Osteopenic' }
+                        ].map((bq) => (
+                          <button
+                            key={bq.id}
+                            onClick={() => updateCfg('boneQuality', bq.id)}
+                            className={`py-2 rounded-xl border text-[11px] font-semibold min-h-[44px] ${
+                              cfg.boneQuality === bq.id
+                                ? 'bg-sky-500/15 border-sky-400 text-white'
+                                : 'bg-slate-900/70 border-slate-800 text-slate-400'
+                            }`}
+                          >
+                            {bq.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {activeTab === 'rom' && (
+                <>
+                  <div>
+                    <div className="text-[11px] font-semibold text-slate-300 mb-1.5">Motion Plane</div>
+                    <div className="grid grid-cols-5 gap-1.5">
+                      {[
+                        { id: 'adduction', label: 'Add' },
+                        { id: 'abduction', label: 'Abd' },
+                        { id: 'er0', label: 'ER 0°' },
+                        { id: 'er90', label: 'ER 90°' },
+                        { id: 'ir', label: 'IR' }
+                      ].map((m) => (
+                        <button
+                          key={m.id}
+                          onClick={() => setMotionMode(m.id)}
+                          className={`py-2 px-1 rounded-xl border text-[11px] font-semibold min-h-[44px] ${
+                            motionMode === m.id
+                              ? 'bg-sky-500 text-slate-950 font-bold border-sky-400'
+                              : 'bg-slate-900/70 border-slate-800 text-slate-300'
+                          }`}
+                        >
+                          {m.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2.5">
+                    <div className="text-[11px] font-bold text-slate-200">ROM Limits: Pre-Op vs. RSA</div>
+                    {[
+                      { label: 'Abduction', pre: biomech.preOpLimits.abduction, post: biomech.maxAbduction, max: 140 },
+                      { label: 'Adduction', pre: biomech.preOpLimits.adduction, post: biomech.maxAdduction, max: 30 },
+                      { label: 'ER (0° Abd)', pre: biomech.preOpLimits.er0, post: biomech.maxER0, max: 55 },
+                      { label: 'ER (90° Abd)', pre: biomech.preOpLimits.er90, post: biomech.maxER90, max: 65 },
+                      { label: 'Internal Rot', pre: biomech.preOpLimits.ir, post: biomech.maxIR, max: 60 }
+                    ].map((row) => (
+                      <div key={row.label}>
+                        <div className="flex justify-between text-[11px] mb-1">
+                          <span className="text-slate-300">{row.label}</span>
+                          <span>
+                            <span className="text-slate-500 mr-2">Pre: {row.pre}°</span>
+                            <span className="text-sky-300 font-bold">RSA: {row.post}°</span>
+                          </span>
+                        </div>
+                        <div className="h-2 rounded-full bg-slate-800 overflow-hidden relative">
+                          <div
+                            className="h-full bg-sky-400 rounded-full transition-all"
+                            style={{ width: `${Math.min(100, (row.post / row.max) * 100)}%` }}
+                          />
+                          <div
+                            className="absolute top-0 bottom-0 w-0.5 bg-amber-400"
+                            style={{ left: `${Math.min(100, (row.pre / row.max) * 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="p-2.5 bg-[#080D18] border-t border-slate-800 grid grid-cols-4 gap-1.5 shrink-0">
+              <div className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800/80 text-center">
+                <div className="text-[9px] uppercase text-slate-400">Notch</div>
+                <div className={`text-xs font-bold ${
+                  biomech.notchRisk === 'HIGH' ? 'text-rose-400' : biomech.notchRisk === 'MODERATE' ? 'text-amber-300' : 'text-emerald-400'
+                }`}>
+                  {biomech.notchRisk}
+                </div>
+              </div>
+
+              <div className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800/80 text-center">
+                <div className="text-[9px] uppercase text-slate-400">Lateral</div>
+                <div className="text-xs font-bold text-sky-300">+{biomech.totalLatMm}mm</div>
+              </div>
+
+              <div className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800/80 text-center">
+                <div className="text-[9px] uppercase text-slate-400">Deltoid</div>
+                <div className={`text-xs font-bold ${biomech.acromialStress === 'ELEVATED' ? 'text-amber-300' : 'text-emerald-300'}`}>
+                  {biomech.deltoidTensionPct}%
+                </div>
+              </div>
+
+              <div className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800/80 text-center">
+                <div className="text-[9px] uppercase text-slate-400">Bone / Fix</div>
+                <div className="text-xs font-bold text-slate-200">
+                  {biomech.bonePreservedPct}% • {biomech.fixationConfidence[0]}
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      );
+    }
+
+    const root = createRoot(document.getElementById('root'));
+    root.render(
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    );
+  </script>
+</body>
+</html>
